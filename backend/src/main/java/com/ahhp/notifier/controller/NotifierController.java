@@ -2,6 +2,7 @@ package com.ahhp.notifier.controller;
 
 import com.ahhp.notifier.entity.User;
 import com.ahhp.notifier.repository.UserRepository;
+import com.ahhp.notifier.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,9 +41,10 @@ public class NotifierController {
     public boolean validatePassword(@RequestBody User user, @PathVariable String email) {
         boolean result = false;
         List<User> users = userRepository.findByEmail(email);
-        if (users.isEmpty()) {
+        String hashedString = SecurityUtils.hashPassword(user.getPassword());
+        if (users.isEmpty()) { // email not registered
             return result;
-        } else if (users.get(0).getPassword().equals(user.getPassword())) {
+        } else if (users.get(0).getPassword().equals(hashedString)) { // correct password
             result = true;
             return result;
         } else { return result; }
@@ -54,6 +56,8 @@ public class NotifierController {
         Response validate = validateEmail(email);
         if (!validate.isCreated()) { // account not created
             if ((validate.isValid() && (newUser.getPassword().length()>0))) { // valid email address AND nonempty pw
+                String hashedString = SecurityUtils.hashPassword(newUser.getPassword());
+                newUser.setPassword(hashedString); // hash the password
                 userRepository.save(newUser);
                 result = true;
                 return result;

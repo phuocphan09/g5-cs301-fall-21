@@ -1,0 +1,3 @@
+2021-12-17 21:50:35 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "USER[*] SELECT * FROM USER"; expected "UPDATE, USE"; SQL statement:
+USER SELECT * FROM USER [42001-200]

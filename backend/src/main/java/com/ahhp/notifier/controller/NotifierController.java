@@ -14,13 +14,7 @@ public class NotifierController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/users")
-    // Get all users at once.
-    public List<User> getAll() {
-        return userRepository.findAll();
-    }
-
-    @GetMapping ("/validateemail/{email}")
+    @GetMapping ("/v1/validateemail/{email}")
      public Response validateEmail(@PathVariable String email) {
         final Response response = new Response();
         response.setValid(false);
@@ -37,7 +31,7 @@ public class NotifierController {
         }
     }
 
-    @GetMapping ("/validatepassword/{email}")
+    @GetMapping ("/v1/validatepassword/{email}")
     public boolean validatePassword(@RequestBody User user, @PathVariable String email) {
         boolean result = false;
         List<User> users = userRepository.findByEmail(email);
@@ -47,16 +41,17 @@ public class NotifierController {
         } else if (users.get(0).getPassword().equals(hashedString)) { // correct password
             result = true;
             return result;
-        } else { return result; }
+        } else { return result; } // email not registered/incorrect password
     }
 
-    @PutMapping ("/createaccount/{email}")
+    @PostMapping ("/v1/createaccount/{email}")
     public boolean createAccount (@RequestBody User newUser, @PathVariable String email) {
         boolean result = false;
         Response validate = validateEmail(email);
         if (!validate.isCreated()) { // account not created
             if ((validate.isValid() && (newUser.getPassword().length()>0))) { // valid email address AND nonempty pw
                 String hashedString = SecurityUtils.hashPassword(newUser.getPassword());
+                newUser.setEmail(email); // set the email from url
                 newUser.setPassword(hashedString); // hash the password
                 userRepository.save(newUser);
                 result = true;
@@ -70,7 +65,13 @@ public class NotifierController {
         }
     }
 
-    @PutMapping ("/removeaccount/{email}")
+    @GetMapping("/v1/users") // Debug
+    // Get all users at once.
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
+
+    @PutMapping ("/v1/removeaccount/{email}") // debug
     public boolean removeAccount (@RequestBody User user, @PathVariable String email) {
         boolean result = false;
         Response validate = validateEmail(email);

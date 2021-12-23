@@ -14,8 +14,8 @@ public class NotifierController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping ("/v1/validateemail/{email}")
-     public Response validateEmail(@PathVariable String email) {
+    @GetMapping ("/v1/validateemail")
+     public Response validateEmail(@RequestParam String email) {
         final Response response = new Response();
         response.setValid(false);
         response.setCreated(false);
@@ -31,8 +31,8 @@ public class NotifierController {
         }
     }
 
-    @GetMapping ("/v1/validatepassword/{email}")
-    public boolean validatePassword(@RequestBody User user, @PathVariable String email) {
+    @GetMapping ("/v1/validatepassword")
+    public boolean validatePassword(@RequestBody User user, @RequestParam String email) {
         boolean result = false;
         List<User> users = userRepository.findByEmail(email);
         String hashedString = SecurityUtils.hashPassword(user.getPassword());
@@ -44,8 +44,8 @@ public class NotifierController {
         } else { return result; } // email not registered/incorrect password
     }
 
-    @PostMapping ("/v1/createaccount/{email}")
-    public boolean createAccount (@RequestBody User newUser, @PathVariable String email) {
+    @PostMapping ("/v1/createaccount")
+    public boolean createAccount (@RequestBody User newUser, @RequestParam String email) {
         boolean result = false;
         Response validate = validateEmail(email);
         if (!validate.isCreated()) { // account not created
@@ -71,8 +71,8 @@ public class NotifierController {
         return userRepository.findAll();
     }
 
-    @PutMapping ("/v1/removeaccount/{email}") // debug
-    public boolean removeAccount (@RequestBody User user, @PathVariable String email) {
+    @PutMapping ("/v1/removeaccount") // debug
+    public boolean removeAccount (@RequestBody User user, @RequestParam String email) {
         boolean result = false;
         Response validate = validateEmail(email);
         if (!validate.isCreated()) { // account not found

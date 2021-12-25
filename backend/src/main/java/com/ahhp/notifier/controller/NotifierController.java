@@ -10,6 +10,7 @@ import com.ahhp.notifier.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -75,7 +76,7 @@ public class NotifierController {
 
     @GetMapping("/v1/users") // Debug
     // Get all users at once.
-    public List<User> getAll() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
@@ -97,12 +98,15 @@ public class NotifierController {
         }
     }
 
-    @GetMapping ("/v1/getinterestlist") // get a list of all interests
-    public List<Interest> getInterestList () {
-        return interestRepository.findAll();
+    @GetMapping ("/v1/getallinterestlist") // get a list of all interests
+    public InterestResponse getAllInterest () {
+        InterestResponse interestResponse = new InterestResponse();
+        interestResponse.setResponse_type("all");
+        interestResponse.setInterest_list(interestRepository.findAll());
+        return interestResponse;
     }
 
-    @PostMapping ("/v1/addinterest")
+    @PostMapping ("/v1/addinterest") // debug
     public String addInterest (@RequestBody Interest interest) {
         try {
             interestRepository.save(interest);
@@ -112,41 +116,70 @@ public class NotifierController {
         return "Success";
     }
 
-    @GetMapping ("v1/getinterestlist")
-    public List<Interest> getInterestList (@RequestParam String email) {
+//    @GetMapping ("v1/getinterestlist")
+//    public InterestResponse getUserInterestList (@RequestParam String email) {
+//        // Validate the email
+//        // Find the user in the database
+//        InterestResponse interestResponse = new InterestResponse();
+//        interestResponse.setResponse_type("individual"); // set the response type
+//        User user = userRepository.findByEmail(email).get(0);
+//        List<Interest> interests = userInterestRepository.findByUser(user);
+//        interestResponse.setInterest_list(interests);
+//        return interestResponse;
+//        // Get the userInterests in the intersection table using the user
+//        // Return the list of all interests
+//    }
+
+    @GetMapping ("v1/get")
+    public User get (@RequestParam String email) {
         // Validate the email
         // Find the user in the database
+        InterestResponse interestResponse = new InterestResponse();
+        interestResponse.setResponse_type("individual"); // set the response type
+        List<Interest> interests = interestResponse.getInterest_list();
         User user = userRepository.findByEmail(email).get(0);
-        List<Interest> interests = userInterestRepository.findByUser(user);
-        return interests;
-        // Get the userInterests in the intersection table using the user
-        // Return the list of all interests
-    }
-
-    @GetMapping ("/v1/getall/")
-    public List<UserInterest> getAllOfIt () {
-        List<UserInterest> userInterests = userInterestRepository.findAll();
-        return userInterests;
-    }
-
-    @PostMapping ("v1/manipulateinterest") // currently add new interest to user
-    public String manipulateInterest (@RequestBody Interest interest, @RequestParam String email) {
-        // WRITE A METHOD TO VALIDATE IF THE INTEREST BEING ADDED ACTUALLY EXISTS
-        try {
-            List<User> users = userRepository.findByEmail(email);
-            if (users.size() == 0) {
-                return "No user";
+        try { // try getting out the interest to put into the List
+            List<UserInterest> userInterests = userInterestRepository.findByUser(user);
+            for (int i = 0; i < userInterests.size(); i++) { // add the interests
+                System.out.println(userInterests.get(i).getInterest().getInterestName());
+                interests.add(userInterests.get(i).getInterest());
             }
-            User user = users.get(0);
-            // find the interest
-            List<Interest> interests = interestRepository.findByInterestName(interest.getInterestName());
-            if (interests.size()==0) {
-                return "No interest to speak of";
-            }
-            interest = interests.get(0);
-            UserInterest userInterest = new UserInterest();
-            userInterest.setUser(user);
-            userInterest.setInterest(interest);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+//        for (int i = 0; i < userInterests.size(); i++) {
+//            interestResponse.getInterest_list().add(userInterests.get(i).getInterest());
+//        }
+        return user;
+            // Get the userInterests in the intersection table using the user
+            // Return the list of all interests
+        }
+
+        @GetMapping ("/v1/getall/") // debug
+        // get all userInterests
+        public List<UserInterest> getAllOfIt () {
+            List<UserInterest> userInterests = userInterestRepository.findAll();
+            return userInterests;
+        }
+
+        @PostMapping ("v1/manipulateinterest") // currently add new interest to user
+        public String manipulateInterest (@RequestBody Interest interest, @RequestParam String email) {
+            // WRITE A METHOD TO VALIDATE IF THE INTEREST BEING ADDED ACTUALLY EXISTS
+            try {
+                List<User> users = userRepository.findByEmail(email);
+                if (users.size() == 0) {
+                    return "No user";
+                }
+                User user = users.get(0);
+                // find the interest
+                List<Interest> interests = interestRepository.findByInterestName(interest.getInterestName());
+                if (interests.size()==0) {
+                    return "No interest to speak of";
+                }
+                interest = interests.get(0);
+                UserInterest userInterest = new UserInterest();
+                userInterest.setUser(user);
+                userInterest.setInterest(interest);
             userInterestRepository.save(userInterest);
             return "saved successfully";
         } catch (Exception e) {

@@ -9,8 +9,7 @@ import java.util.List;
 
 public interface UserInterestRepository extends JpaRepository<UserInterest, Long> {
 
-    List<Interest> findByUser (User user); // find all using user
-    //UserInterest findByEmail (User user); // what
+    List<UserInterest> findByUser (User user); // find all using user
     List<UserInterest> findByInterest (Interest interest);
 
 }

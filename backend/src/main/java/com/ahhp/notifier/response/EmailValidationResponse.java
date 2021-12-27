@@ -1,6 +1,6 @@
-package com.ahhp.notifier.controller;
+package com.ahhp.notifier.response;
 
-public class Response {
+public class EmailValidationResponse {
 
     private boolean valid;
     private boolean created;

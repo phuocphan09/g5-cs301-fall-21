@@ -6,11 +6,12 @@ import com.ahhp.notifier.entity.UserInterest;
 import com.ahhp.notifier.repository.InterestRepository;
 import com.ahhp.notifier.repository.UserInterestRepository;
 import com.ahhp.notifier.repository.UserRepository;
+import com.ahhp.notifier.response.EmailCheckResponse;
+import com.ahhp.notifier.response.InterestResponse;
 import com.ahhp.notifier.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -24,8 +25,8 @@ public class NotifierController {
     private UserInterestRepository userInterestRepository;
 
     @GetMapping ("/v1/validateemail")
-    public Response validateEmail(@RequestParam String email) {
-        final Response response = new Response();
+    public EmailCheckResponse validateEmail(@RequestParam String email) {
+        final EmailCheckResponse response = new EmailCheckResponse();
         response.setValid(false);
         response.setCreated(false);
         if (email.contains("fulbright.edu.vn")) { // valid email
@@ -56,7 +57,7 @@ public class NotifierController {
     @PostMapping ("/v1/createaccount")
     public boolean createAccount (@RequestBody User newUser, @RequestParam String email) {
         boolean result = false;
-        Response validate = validateEmail(email);
+        EmailCheckResponse validate = validateEmail(email);
         if (!validate.isCreated()) { // account not created
             if ((validate.isValid() && (newUser.getPassword().length()>0))) { // valid email address AND nonempty pw
                 String hashedString = SecurityUtils.hashPassword(newUser.getPassword());
@@ -83,7 +84,7 @@ public class NotifierController {
     @PutMapping ("/v1/removeaccount") // debug
     public boolean removeAccount (@RequestBody User user, @RequestParam String email) {
         boolean result = false;
-        Response validate = validateEmail(email);
+        EmailCheckResponse validate = validateEmail(email);
         if (!validate.isCreated()) { // account not found
             return result;
         } else { // account found
@@ -98,7 +99,7 @@ public class NotifierController {
         }
     }
 
-    @GetMapping ("/v1/getallinterestlist") // just one, check for email
+    @GetMapping ("/v1/getallinterestlist") // debug
     public InterestResponse getAllInterest () {
         InterestResponse interestResponse = new InterestResponse();
         interestResponse.setResponse_type("all");

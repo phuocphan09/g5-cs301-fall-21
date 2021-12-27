@@ -1,4 +1,4 @@
-package com.ahhp.notifier.controller;
+package com.ahhp.notifier.response;
 
 import com.ahhp.notifier.entity.Interest;
 import com.ahhp.notifier.entity.UserInterest;
@@ -9,8 +9,8 @@ public class IntermediateResponse {
 
     private List<UserInterest> userInterestList;
 
-    public List<Interest> format () {
-        return [];
-    }
+//    public List<Interest> format () {
+//        return [];
+//    }
 
 }

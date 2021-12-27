@@ -1,4 +1,4 @@
-package com.ahhp.notifier.controller;
+package com.ahhp.notifier.response;
 
 import com.ahhp.notifier.entity.Interest;
 
@@ -8,7 +8,7 @@ import java.util.List;
 public class InterestResponse {
 
     private String response_type;
-    private List<Interest> interest_list;
+    private List<Interest> active_interest_list;
 
     public String getResponse_type() {
         return response_type;
@@ -19,10 +19,10 @@ public class InterestResponse {
     }
 
     public List<Interest> getInterest_list() {
-        return interest_list;
+        return active_interest_list;
     }
 
     public void setInterest_list(List<Interest> interest_list) {
-        this.interest_list = interest_list;
+        this.active_interest_list = interest_list;
     }
 }

@@ -1,21 +1,24 @@
 package com.ahhp.notifier.controller;
 
 import com.ahhp.notifier.entity.Interest;
+import com.ahhp.notifier.entity.Manipulation;
 import com.ahhp.notifier.entity.User;
 import com.ahhp.notifier.entity.UserInterest;
 import com.ahhp.notifier.repository.InterestRepository;
 import com.ahhp.notifier.repository.UserInterestRepository;
 import com.ahhp.notifier.repository.UserRepository;
-import com.ahhp.notifier.response.InterestResponse;
+import com.ahhp.notifier.response.InterestListResponse;
 import com.ahhp.notifier.response.AccountValidationResponse;
 import com.ahhp.notifier.response.EmailValidationResponse;
+import com.ahhp.notifier.response.InterestManipulationResponse;
 import com.ahhp.notifier.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class NotifierController {
 
@@ -81,6 +84,77 @@ public class NotifierController {
         }
     }
 
+    @GetMapping ("v1/getinterestlist")
+    public List<UserInterest> getUserInterestList (@RequestParam String email) {
+        User user = userRepository.findByEmail(email).get(0); // find the user in the database
+        List<UserInterest> userInterests = userInterestRepository.findByUser(user);
+        return userInterests;
+    }
+
+    @PutMapping("v1/manipulateinterest")
+    public InterestManipulationResponse manipulateInterest (@RequestBody Manipulation manipulation) {
+        InterestManipulationResponse response = new InterestManipulationResponse(); // create response object
+        response.setType(manipulation.getType());
+        response.setResult("failed");
+        try {
+            List<User> userList = userRepository.findByEmail(manipulation.getInfoPackage().getEmail());// find the user
+            if (userList.size()==0) { // no user found
+                return response;
+            } else { // yes user found
+                User user = userList.get(0); // unwrap user
+                Long interestID = Long.valueOf(manipulation.getInfoPackage().getInterestID()); // get interestID
+                Optional<Interest> findInterest = interestRepository.findById(interestID);
+                if (findInterest.isPresent()) { // check if interest id is true
+                    Interest interest = findInterest.get(); // unwrap interest
+                    List<UserInterest> userInterests = userInterestRepository.findByUserAndInterest(user, interest);
+                    if ((manipulation.getType().equals("add")) && (userInterests.size() == 0)) { // add interest
+                        UserInterest userInterest = new UserInterest(); // save the entry
+                        userInterest.setUser(user);
+                        userInterest.setInterest(interest);
+                        userInterestRepository.save(userInterest);
+                        response.setResult("success");
+                    } else if ((manipulation.getType().equals("remove")) && (userInterests.size() > 0)) { // remove interest
+                        UserInterest userInterest = userInterests.get(0); // proceed to delete it
+                        userInterestRepository.delete(userInterest);
+                        response.setResult("success");
+                    } else {
+                        return response;
+                    }
+                } else {
+                }
+                return response;
+            }
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return response;
+    }
+
+    @GetMapping ("/v1/getall") // debug
+    // get all userInterests
+    public List<UserInterest> getAllOfIt () {
+        List<UserInterest> userInterests = userInterestRepository.findAll();
+        return userInterests;
+    }
+
+    @GetMapping ("/v1/getallinterestlist") // debug
+    public InterestListResponse getAllInterest () {
+        InterestListResponse interestResponse = new InterestListResponse();
+        interestResponse.setResponse_type("all");
+        interestResponse.setInterest_list(interestRepository.findAll());
+        return interestResponse;
+    }
+
+    @PostMapping ("/v1/addinterest") // debug
+    public String addInterest (@RequestBody Interest interest) {
+        try {
+            interestRepository.save(interest);
+        } catch (Exception e) {
+            return e.toString();
+        }
+        return "Success";
+    }
+
     @GetMapping("/v1/users") // Debug
     // Get all users at once.
     public List<User> getAll() {
@@ -103,91 +177,5 @@ public class NotifierController {
                 return result;
             }
         }
-    }
-
-    @GetMapping ("/v1/getallinterestlist") // debug
-    public InterestResponse getAllInterest () {
-        InterestResponse interestResponse = new InterestResponse();
-        interestResponse.setResponse_type("all");
-        interestResponse.setInterest_list(interestRepository.findAll());
-        return interestResponse;
-    }
-
-    @PostMapping ("/v1/addinterest") // debug
-    public String addInterest (@RequestBody Interest interest) {
-        try {
-            interestRepository.save(interest);
-        } catch (Exception e) {
-            return e.toString();
-        }
-        return "Success";
-    }
-
-    @GetMapping ("v1/getinterestlist")
-    public List<UserInterest> getUserInterestList (@RequestParam String email) {
-        // Validate the email
-        // Find the user in the database
-        User user = userRepository.findByEmail(email).get(0); // find the user in the database
-        List<UserInterest> userInterests = userInterestRepository.findByUser(user);
-        return userInterests;
-        // Get the userInterests in the intersection table using the user
-        // Return the list of all interests
-    }
-
-//    @GetMapping ("v1/getinterestlist")
-//    public InterestResponse getUserInterest (@RequestParam String email) {
-//        // Validate the email
-//        InterestResponse interestResponse = new InterestResponse();
-//        interestResponse.setResponse_type("individual"); // set the response type
-//        List<Interest> interests = interestResponse.getInterest_list(); // get an empty list of Interest first
-//        User user = userRepository.findByEmail(email).get(0); // find the user in the database
-//        try { // try getting out the interest to put into the List
-//            List<UserInterest> userInterests = userInterestRepository.findByUser(user); // get all matching userInterest
-//            for (int i = 0; i < userInterests.size(); i++) { // add the interests to the result list
-//                System.out.println(userInterests.get(i).getInterest().getInterestName());
-//                interests.add(userInterests.get(i).getInterest());
-//            }
-//        } catch (Exception e) {
-//            System.out.println(e.toString());
-//        }
-////        for (int i = 0; i < userInterests.size(); i++) {
-////            interestResponse.getInterest_list().add(userInterests.get(i).getInterest());
-////        }
-//        return interestResponse;
-//            // Get the userInterests in the intersection table using the user
-//            // Return the list of all interests
-//        }
-
-        @GetMapping ("/v1/getall/") // debug
-        // get all userInterests
-        public List<UserInterest> getAllOfIt () {
-            List<UserInterest> userInterests = userInterestRepository.findAll();
-            return userInterests;
-        }
-
-        @PostMapping ("v1/manipulateinterest") // currently add new interest to user
-        public String manipulateInterest (@RequestBody Interest interest, @RequestParam String email) {
-            // WRITE A METHOD TO VALIDATE IF THE INTEREST BEING ADDED ACTUALLY EXISTS
-            try {
-                List<User> users = userRepository.findByEmail(email);
-                if (users.size() == 0) {
-                    return "No user";
-                }
-                User user = users.get(0);
-                // find the interest
-                List<Interest> interests = interestRepository.findByInterestName(interest.getInterestName());
-                if (interests.size()==0) {
-                    return "No interest to speak of";
-                }
-                interest = interests.get(0);
-                UserInterest userInterest = new UserInterest();
-                userInterest.setUser(user);
-                userInterest.setInterest(interest);
-            userInterestRepository.save(userInterest);
-            return "saved successfully";
-        } catch (Exception e) {
-            System.out.print(e.toString());
-        }
-        return "saved Success";
     }
 }

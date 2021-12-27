@@ -5,7 +5,7 @@ import com.ahhp.notifier.entity.Interest;
 import java.util.Collections;
 import java.util.List;
 
-public class InterestResponse {
+public class InterestListResponse {
 
     private String response_type;
     private List<Interest> active_interest_list;

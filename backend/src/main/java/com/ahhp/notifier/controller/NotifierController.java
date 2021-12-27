@@ -2,6 +2,8 @@ package com.ahhp.notifier.controller;
 
 import com.ahhp.notifier.entity.User;
 import com.ahhp.notifier.repository.UserRepository;
+import com.ahhp.notifier.response.AccountValidationResponse;
+import com.ahhp.notifier.response.EmailValidationResponse;
 import com.ahhp.notifier.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +18,8 @@ public class NotifierController {
     private UserRepository userRepository;
 
     @GetMapping ("/v1/validateemail")
-     public Response validateEmail(@RequestParam String email) {
-        final Response response = new Response();
+     public EmailValidationResponse validateEmail(@RequestParam String email) {
+        final EmailValidationResponse response = new EmailValidationResponse();
         response.setValid(false);
         response.setCreated(false);
         if (email.contains("fulbright.edu.vn")) { // valid email
@@ -33,36 +35,40 @@ public class NotifierController {
     }
 
     @GetMapping ("/v1/validatepassword")
-    public boolean validatePassword(@RequestBody User user, @RequestParam String email) {
-        boolean result = false;
+    public AccountValidationResponse validatePassword(@RequestBody User user, @RequestParam String email) {
+        AccountValidationResponse response = new AccountValidationResponse(); // create response object
+        response.setResult(false);
+        response.setUser(email);
         List<User> users = userRepository.findByEmail(email);
         String hashedString = SecurityUtils.hashPassword(user.getPassword());
         if (users.isEmpty()) { // email not registered
-            return result;
+            return response;
         } else if (users.get(0).getPassword().equals(hashedString)) { // correct password
-            result = true;
-            return result;
-        } else { return result; } // email not registered/incorrect password
+            response.setResult(true);
+            return response;
+        } else { return response; } // email not registered/incorrect password
     }
 
     @PostMapping ("/v1/createaccount")
-    public boolean createAccount (@RequestBody User newUser, @RequestParam String email) {
-        boolean result = false;
-        Response validate = validateEmail(email);
+    public AccountValidationResponse createAccount (@RequestBody User newUser, @RequestParam String email) {
+        AccountValidationResponse response = new AccountValidationResponse(); // create response object
+        response.setResult(false);
+        response.setUser(email);
+        EmailValidationResponse validate = validateEmail(email); // validate email
         if (!validate.isCreated()) { // account not created
             if ((validate.isValid() && (newUser.getPassword().length()>0))) { // valid email address AND nonempty pw
                 String hashedString = SecurityUtils.hashPassword(newUser.getPassword());
                 newUser.setEmail(email); // set the email from url
                 newUser.setPassword(hashedString); // hash the password
                 userRepository.save(newUser);
-                result = true;
-                return result;
+                response.setResult(true);
+                return response;
             } else { // invalid email OR empty password
-                return result;
+                return response;
             }
 
         } else { // account already created
-            return result;
+            return response;
         }
     }
 
@@ -75,12 +81,12 @@ public class NotifierController {
     @PutMapping ("/v1/removeaccount") // debug
     public boolean removeAccount (@RequestBody User user, @RequestParam String email) {
         boolean result = false;
-        Response validate = validateEmail(email);
+        EmailValidationResponse validate = validateEmail(email);
         if (!validate.isCreated()) { // account not found
             return result;
         } else { // account found
             List<User> users = userRepository.findByEmail(email);
-            if (validatePassword(user, email)) { // requires correct password
+            if (validatePassword(user, email).isResult()) { // requires correct password
                 userRepository.delete(users.get(0));
                 result = true;
                 return result;

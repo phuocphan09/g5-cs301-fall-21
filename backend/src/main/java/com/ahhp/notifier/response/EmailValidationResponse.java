@@ -1,10 +1,5 @@
 package com.ahhp.notifier.response;
-
-<<<<<<< HEAD:backend/src/main/java/com/ahhp/notifier/response/EmailCheckResponse.java
-public class EmailCheckResponse {
-=======
 public class EmailValidationResponse {
->>>>>>> apifix:backend/src/main/java/com/ahhp/notifier/response/EmailValidationResponse.java
 
     private boolean valid;
     private boolean created;

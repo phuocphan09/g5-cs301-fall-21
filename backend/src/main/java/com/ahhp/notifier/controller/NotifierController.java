@@ -6,13 +6,9 @@ import com.ahhp.notifier.entity.UserInterest;
 import com.ahhp.notifier.repository.InterestRepository;
 import com.ahhp.notifier.repository.UserInterestRepository;
 import com.ahhp.notifier.repository.UserRepository;
-<<<<<<< HEAD
-import com.ahhp.notifier.response.EmailCheckResponse;
 import com.ahhp.notifier.response.InterestResponse;
-=======
 import com.ahhp.notifier.response.AccountValidationResponse;
 import com.ahhp.notifier.response.EmailValidationResponse;
->>>>>>> apifix
 import com.ahhp.notifier.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,13 +27,8 @@ public class NotifierController {
     private UserInterestRepository userInterestRepository;
 
     @GetMapping ("/v1/validateemail")
-<<<<<<< HEAD
-    public EmailCheckResponse validateEmail(@RequestParam String email) {
-        final EmailCheckResponse response = new EmailCheckResponse();
-=======
-     public EmailValidationResponse validateEmail(@RequestParam String email) {
+    public EmailValidationResponse validateEmail(@RequestParam String email) {
         final EmailValidationResponse response = new EmailValidationResponse();
->>>>>>> apifix
         response.setValid(false);
         response.setCreated(false);
         if (email.contains("fulbright.edu.vn")) { // valid email
@@ -53,31 +44,15 @@ public class NotifierController {
     }
 
     @GetMapping ("/v1/validatepassword")
-<<<<<<< HEAD
-    public boolean validatePassword(@RequestBody User user, @RequestParam String email) {
-        boolean result = false;
-=======
     public AccountValidationResponse validatePassword(@RequestBody User user, @RequestParam String email) {
         AccountValidationResponse response = new AccountValidationResponse(); // create response object
         response.setResult(false);
         response.setUser(email);
->>>>>>> apifix
         List<User> users = userRepository.findByEmail(email);
         String hashedString = SecurityUtils.hashPassword(user.getPassword());
         if (users.isEmpty()) { // email not registered
             return response;
         } else if (users.get(0).getPassword().equals(hashedString)) { // correct password
-<<<<<<< HEAD
-            result = true;
-            return result;
-        } else { return result; } // email not registered/incorrect password
-    }
-
-    @PostMapping ("/v1/createaccount")
-    public boolean createAccount (@RequestBody User newUser, @RequestParam String email) {
-        boolean result = false;
-        EmailCheckResponse validate = validateEmail(email);
-=======
             response.setResult(true);
             return response;
         } else { return response; } // email not registered/incorrect password
@@ -89,7 +64,6 @@ public class NotifierController {
         response.setResult(false);
         response.setUser(email);
         EmailValidationResponse validate = validateEmail(email); // validate email
->>>>>>> apifix
         if (!validate.isCreated()) { // account not created
             if ((validate.isValid() && (newUser.getPassword().length()>0))) { // valid email address AND nonempty pw
                 String hashedString = SecurityUtils.hashPassword(newUser.getPassword());
@@ -109,22 +83,14 @@ public class NotifierController {
 
     @GetMapping("/v1/users") // Debug
     // Get all users at once.
-<<<<<<< HEAD
-    public List<User> getAllUsers() {
-=======
     public List<User> getAll() {
->>>>>>> apifix
         return userRepository.findAll();
     }
 
     @PutMapping ("/v1/removeaccount") // debug
     public boolean removeAccount (@RequestBody User user, @RequestParam String email) {
         boolean result = false;
-<<<<<<< HEAD
-        EmailCheckResponse validate = validateEmail(email);
-=======
         EmailValidationResponse validate = validateEmail(email);
->>>>>>> apifix
         if (!validate.isCreated()) { // account not found
             return result;
         } else { // account found

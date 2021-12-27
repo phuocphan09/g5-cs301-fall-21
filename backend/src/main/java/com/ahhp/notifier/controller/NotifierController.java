@@ -98,7 +98,7 @@ public class NotifierController {
         }
     }
 
-    @GetMapping ("/v1/getallinterestlist") // get a list of all interests
+    @GetMapping ("/v1/getallinterestlist") // just one, check for email
     public InterestResponse getAllInterest () {
         InterestResponse interestResponse = new InterestResponse();
         interestResponse.setResponse_type("all");
@@ -116,44 +116,40 @@ public class NotifierController {
         return "Success";
     }
 
-//    @GetMapping ("v1/getinterestlist")
-//    public InterestResponse getUserInterestList (@RequestParam String email) {
-//        // Validate the email
-//        // Find the user in the database
-//        InterestResponse interestResponse = new InterestResponse();
-//        interestResponse.setResponse_type("individual"); // set the response type
-//        User user = userRepository.findByEmail(email).get(0);
-//        List<Interest> interests = userInterestRepository.findByUser(user);
-//        interestResponse.setInterest_list(interests);
-//        return interestResponse;
-//        // Get the userInterests in the intersection table using the user
-//        // Return the list of all interests
-//    }
-
-    @GetMapping ("v1/get")
-    public User get (@RequestParam String email) {
+    @GetMapping ("v1/getinterestlist")
+    public List<UserInterest> getUserInterestList (@RequestParam String email) {
         // Validate the email
         // Find the user in the database
-        InterestResponse interestResponse = new InterestResponse();
-        interestResponse.setResponse_type("individual"); // set the response type
-        List<Interest> interests = interestResponse.getInterest_list();
-        User user = userRepository.findByEmail(email).get(0);
-        try { // try getting out the interest to put into the List
-            List<UserInterest> userInterests = userInterestRepository.findByUser(user);
-            for (int i = 0; i < userInterests.size(); i++) { // add the interests
-                System.out.println(userInterests.get(i).getInterest().getInterestName());
-                interests.add(userInterests.get(i).getInterest());
-            }
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-//        for (int i = 0; i < userInterests.size(); i++) {
-//            interestResponse.getInterest_list().add(userInterests.get(i).getInterest());
+        User user = userRepository.findByEmail(email).get(0); // find the user in the database
+        List<UserInterest> userInterests = userInterestRepository.findByUser(user);
+        return userInterests;
+        // Get the userInterests in the intersection table using the user
+        // Return the list of all interests
+    }
+
+//    @GetMapping ("v1/getinterestlist")
+//    public InterestResponse getUserInterest (@RequestParam String email) {
+//        // Validate the email
+//        InterestResponse interestResponse = new InterestResponse();
+//        interestResponse.setResponse_type("individual"); // set the response type
+//        List<Interest> interests = interestResponse.getInterest_list(); // get an empty list of Interest first
+//        User user = userRepository.findByEmail(email).get(0); // find the user in the database
+//        try { // try getting out the interest to put into the List
+//            List<UserInterest> userInterests = userInterestRepository.findByUser(user); // get all matching userInterest
+//            for (int i = 0; i < userInterests.size(); i++) { // add the interests to the result list
+//                System.out.println(userInterests.get(i).getInterest().getInterestName());
+//                interests.add(userInterests.get(i).getInterest());
+//            }
+//        } catch (Exception e) {
+//            System.out.println(e.toString());
 //        }
-        return user;
-            // Get the userInterests in the intersection table using the user
-            // Return the list of all interests
-        }
+////        for (int i = 0; i < userInterests.size(); i++) {
+////            interestResponse.getInterest_list().add(userInterests.get(i).getInterest());
+////        }
+//        return interestResponse;
+//            // Get the userInterests in the intersection table using the user
+//            // Return the list of all interests
+//        }
 
         @GetMapping ("/v1/getall/") // debug
         // get all userInterests

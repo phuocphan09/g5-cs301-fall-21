@@ -11,6 +11,7 @@ public class UserInterest {
 
     @ManyToOne
     private User user;
+
     @ManyToOne
     private Interest interest;
 

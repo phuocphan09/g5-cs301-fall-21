@@ -8,7 +8,7 @@ import java.util.List;
 public class InterestResponse {
 
     private String response_type;
-    private List<Interest> interest_list = Collections.emptyList();
+    private List<Interest> interest_list;
 
     public String getResponse_type() {
         return response_type;

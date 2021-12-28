@@ -34,7 +34,7 @@ public class NotifierController {
         }
     }
 
-    @GetMapping ("/v1/validatepassword")
+    @PostMapping ("/v1/validatepassword")
     public AccountValidationResponse validatePassword(@RequestBody User user, @RequestParam String email) {
         AccountValidationResponse response = new AccountValidationResponse(); // create response object
         response.setResult(false);

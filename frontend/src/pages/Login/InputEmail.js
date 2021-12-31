@@ -73,7 +73,6 @@ const InputEmail = (props) => {
                 <EmailBox inputColor={validState} type='text' required placeholder='Your Fulbright Email' className='form-control' onChange={handleEmailChange} value={email} />
                 <br></br>
                 <button disabled={buttonState}> Continue </button>
-
             </Container2>
         </Container>
     )

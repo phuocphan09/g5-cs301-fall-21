@@ -10,6 +10,7 @@ import EmptyInterest from './pages/InterestConfig/EmptyInterest';
 import React, { useState, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Feed from './pages/Feed';
+import AddInterest from './pages/InterestConfig/AddInterest';
 
 
 function App() {
@@ -38,7 +39,7 @@ function App() {
     <div className='App'>
       <Container>
         <Wrapper>
-          <Routes>
+          {/* <Routes>
             <Route path="/" element={<ProtectedRoute />}>
               <Route path="/EmptyInterest" element={<EmptyInterest />}/>
               <Route path="/Feed" element={<Feed />} />
@@ -48,7 +49,8 @@ function App() {
             <Route path="/CreateAccount" element={<CreateAccount email={inputEmail} passwordInput={changeInputPassword} />} />
             <Route path="/SuccessAuth" element={<SuccessAuth />} />
             <Route path="/SuccessCreate" element={<SuccessCreate />} />
-          </Routes>
+          </Routes> */}
+          <AddInterest></AddInterest>
         </Wrapper>
       </Container>
     </div>
@@ -56,7 +58,7 @@ function App() {
 }
 
 const Container = styled.div` 
-  background: #FFFEF4;
+display:flex;
 
 `
 

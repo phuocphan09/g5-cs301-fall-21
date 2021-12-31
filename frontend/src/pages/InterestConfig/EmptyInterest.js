@@ -74,10 +74,10 @@ const TextWrapper = styled.div`
 
 const Button = styled.button`
     margin: 1rem;
-    width: 71.46 %;
-    height: 7.05 %;
-    top: 25.92 %;
-    left: 14.4 %;
+    width: 71.46%;
+    height: 7.05%;
+    top: 25.92%;
+    left: 14.4%;
     background-color: #FFFFFF;
     border-radius: 5px;
     align-items: center;
@@ -109,10 +109,10 @@ const ColoredLine = ({ color }) => (
 );
 
 const DashedBox = styled.div`
-    width: 81.33 %;
+    width: 81.33%;
     height: 9.15%;
-    top: 25.92 %;
-    left: 14.4 %;
+    top: 25.92%;
+    left: 14.4%;
     background-color: #FFFFFF;
     box-sizing: border-box;
     border-radius: 5px;

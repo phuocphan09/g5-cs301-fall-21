@@ -61,7 +61,7 @@ public class NotifierController {
      * @return AccountValidationResponse.result is true if password is consistent with the database
      * @return AccountValidationResponse.user the email passed in
      */
-    @GetMapping ("/v1/validatepassword")
+    @PostMapping ("/v1/validatepassword")
     public AccountValidationResponse validatePassword(@RequestBody User user, @RequestParam String email) {
         AccountValidationResponse response = new AccountValidationResponse(); // create response object
         response.setResult(false);

@@ -5,7 +5,7 @@ import java.util.List;
 public class InfoPackage {
 
     private String email;
-    private Integer interestID;
+    private String interestName;
 
     public String getEmail() {
         return email;
@@ -15,11 +15,11 @@ public class InfoPackage {
         this.email = email;
     }
 
-    public Integer getInterestID() {
-        return interestID;
+    public String getInterestName() {
+        return interestName;
     }
 
-    public void setInterestID(Integer interestID) {
-        this.interestID = interestID;
+    public void setInterestName(String interestName) {
+        this.interestName = interestName;
     }
 }

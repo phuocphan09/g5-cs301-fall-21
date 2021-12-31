@@ -168,26 +168,29 @@ public class NotifierController {
             return response;
         } else { // yes user found
             User user = userList.get(0); // unwrap user
-            Long interestID = Long.valueOf(manipulation.getInfoPackage().getInterestID()); // get interestID
-            Optional<Interest> findInterest = interestRepository.findById(interestID);
-            if (findInterest.isPresent()) { // check if interest id is true
-                Interest interest = findInterest.get(); // unwrap interest
-                List<UserInterest> userInterests = userInterestRepository.findByUserAndInterest(user, interest);
-                if ((manipulation.getType().equals("add")) && (userInterests.size() == 0)) { // add interest
-                    UserInterest userInterest = new UserInterest(); // save the entry
-                    userInterest.setUser(user);
-                    userInterest.setInterest(interest);
-                    userInterestRepository.save(userInterest);
-                    response.setResult("success");
-                } else if ((manipulation.getType().equals("remove")) && (userInterests.size() > 0)) { // remove interest
-                    UserInterest userInterest = userInterests.get(0); // proceed to delete it
-                    userInterestRepository.delete(userInterest);
-                    response.setResult("success");
-                } else {
-                    return response;
-                }
+            String interestName = manipulation.getInfoPackage().getInterestName(); // get interestName
+            List<Interest> interests = interestRepository.findByInterestName(interestName); // find interest
+            Interest interest = interests.get(0); // unwrap interest
+            // if add
+            if (manipulation.getType().equals("add")) {
+                // add interest
+                UserInterest userInterest = new UserInterest(); // add new userInterest entry
+                userInterest.setUser(user); // set user
+                userInterest.setInterest(interest); // set interest for userInterest
+                userInterestRepository.save(userInterest); // save the userInterest entry
+                response.setResult("success");
+                return response;
+            } else if (manipulation.getType().equals("remove")) {
+                // remove interest
+                UserInterest userInterest = new UserInterest();
+                userInterest.setInterest(interest);
+                userInterest.setUser(user);
+                userInterestRepository.delete(userInterest);// delete the corresponding userInterest entry
+                response.setResult("success");
+                return response;
+            } else { // incorrect
+                return response;
             }
-            return response;
         }
     }
 

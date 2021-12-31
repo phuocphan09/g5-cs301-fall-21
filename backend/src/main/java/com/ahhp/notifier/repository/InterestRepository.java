@@ -8,5 +8,7 @@ import java.util.List;
 public interface InterestRepository extends JpaRepository<Interest, Long> {
 
     List<Interest> findByInterestName (String interestName);
+    List<Interest> findByInterestNameIn (List<String> interestNameList);
+    List<Interest> findByInterestNameNotIn (List<String> interestNameList);
 
 }

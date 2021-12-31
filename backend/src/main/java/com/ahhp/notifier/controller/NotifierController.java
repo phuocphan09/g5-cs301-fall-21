@@ -15,6 +15,7 @@ import com.ahhp.notifier.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,12 +30,19 @@ public class NotifierController {
     @Autowired
     private UserInterestRepository userInterestRepository;
 
+    /**
+     * Validate the email to make sure it is a Fulbright email
+     * @param email to be checked
+     * @return EmailValidationResponse.valid is true if contains the required string
+     * @return EmailValidationResponse.created is true if email matches an account in the database
+     */
     @GetMapping ("/v1/validateemail")
     public EmailValidationResponse validateEmail(@RequestParam String email) {
         final EmailValidationResponse response = new EmailValidationResponse();
         response.setValid(false);
         response.setCreated(false);
-        if (email.contains("fulbright.edu.vn")) { // valid email
+        String requiredString = "fulbright.edu.vn";
+        if (email.contains(requiredString)) { // valid email
             response.setValid(true);
         }
         List<User> result = userRepository.findByEmail(email);
@@ -46,6 +54,13 @@ public class NotifierController {
         }
     }
 
+    /**
+     * Validate the password of a user, complete with hashing and everything.
+     * @param user a User body, containing the user password
+     * @param email of the user
+     * @return AccountValidationResponse.result is true if password is consistent with the database
+     * @return AccountValidationResponse.user the email passed in
+     */
     @GetMapping ("/v1/validatepassword")
     public AccountValidationResponse validatePassword(@RequestBody User user, @RequestParam String email) {
         AccountValidationResponse response = new AccountValidationResponse(); // create response object
@@ -61,18 +76,25 @@ public class NotifierController {
         } else { return response; } // email not registered/incorrect password
     }
 
+    /**
+     *
+     * @param user a User body, containing the user password
+     * @param email of the user account to be created
+     * @return AccountValidationResponse.result is "ok" if created successfully, "fail" otherwise
+     * @return AccountValidationResponse.user the email passed in
+     */
     @PostMapping ("/v1/createaccount")
-    public AccountValidationResponse createAccount (@RequestBody User newUser, @RequestParam String email) {
+    public AccountValidationResponse createAccount (@RequestBody User user, @RequestParam String email) {
         AccountValidationResponse response = new AccountValidationResponse(); // create response object
         response.setResult(false);
         response.setUser(email);
         EmailValidationResponse validate = validateEmail(email); // validate email
         if (!validate.isCreated()) { // account not created
-            if ((validate.isValid() && (newUser.getPassword().length()>0))) { // valid email address AND nonempty pw
-                String hashedString = SecurityUtils.hashPassword(newUser.getPassword());
-                newUser.setEmail(email); // set the email from url
-                newUser.setPassword(hashedString); // hash the password
-                userRepository.save(newUser);
+            if ((validate.isValid() && (user.getPassword().length()>0))) { // valid email address AND nonempty pw
+                String hashedString = SecurityUtils.hashPassword(user.getPassword());
+                user.setEmail(email); // set the email from url
+                user.setPassword(hashedString); // hash the password
+                userRepository.save(user);
                 response.setResult(true);
                 return response;
             } else { // invalid email OR empty password
@@ -84,68 +106,107 @@ public class NotifierController {
         }
     }
 
-    @GetMapping ("v1/getinterestlist")
-    public List<UserInterest> getUserInterestList (@RequestParam String email) {
-        User user = userRepository.findByEmail(email).get(0); // find the user in the database
-        List<UserInterest> userInterests = userInterestRepository.findByUser(user);
-        return userInterests;
+    /**
+     * Get a list of active interests of a user.
+     * @param email of the user, passed through the url param
+     * @return InterestListResponse a list of active interests, and the response type
+     */
+    @GetMapping ("/v1/getactiveinterestlist")
+    public InterestListResponse getUserInterestList (@RequestParam String email) {
+        InterestListResponse response = new InterestListResponse(); // create response object
+        response.setResponseType("individual"); // set response type
+        List<User> users = userRepository.findByEmail(email);
+        if (users.size() == 0) { // check if a user exists
+            return response;
+        }
+        User user = users.get(0); // find the user in the database
+        List<UserInterest> userInterests = userInterestRepository.findByUser(user); // get all userInterests
+        // get all interest name and put it into a list of string
+        List<String> interestNames = new ArrayList<String>();
+        for (int i = 0; i < userInterests.size(); i++) {
+            interestNames.add(userInterests.get(i).getInterest().getInterestName());
+        }
+        // get all interest objects from the intererstRepository
+        List<Interest> interests = interestRepository.findByInterestNameIn(interestNames);
+        response.setActiveInterestList(interests);
+        return response;
     }
 
-    @PutMapping("v1/manipulateinterest")
+    /**
+     * Get a list of inactive interests of a user. In other words, addable interests.
+     * @param email of the user
+     * @return InterestListResponse a list of inactive interests, and the response type
+     */
+    @GetMapping("/v1/getaddableinterestlist")
+    public InterestListResponse getAddableInterestList (@RequestParam String email) {
+        InterestListResponse response = new InterestListResponse(); // create response object
+        response.setResponseType("individual"); // set response type
+        List<User> users = userRepository.findByEmail(email);
+        if (users.size() == 0) { // check if a user exists
+            return response;
+        }
+        User user = users.get(0); // find the user in the database
+        List<UserInterest> userInterests = userInterestRepository.findByUser(user); // get all userInterests
+        // get all interest name and put it into a list of string
+        List<String> interestNames = new ArrayList<String>();
+        for (int i = 0; i < userInterests.size(); i++) {
+            interestNames.add(userInterests.get(i).getInterest().getInterestName());
+        }
+        // get all interest objects NOT IN interestName from the interestRepository
+        List<Interest> interests = interestRepository.findByInterestNameNotIn(interestNames);
+        response.setAddableInteresList(interests);
+        return response;
+    }
+
+    @PutMapping("/v1/manipulateinterest")
     public InterestManipulationResponse manipulateInterest (@RequestBody Manipulation manipulation) {
         InterestManipulationResponse response = new InterestManipulationResponse(); // create response object
         response.setType(manipulation.getType());
         response.setResult("failed");
-        try {
-            List<User> userList = userRepository.findByEmail(manipulation.getInfoPackage().getEmail());// find the user
-            if (userList.size()==0) { // no user found
-                return response;
-            } else { // yes user found
-                User user = userList.get(0); // unwrap user
-                Long interestID = Long.valueOf(manipulation.getInfoPackage().getInterestID()); // get interestID
-                Optional<Interest> findInterest = interestRepository.findById(interestID);
-                if (findInterest.isPresent()) { // check if interest id is true
-                    Interest interest = findInterest.get(); // unwrap interest
-                    List<UserInterest> userInterests = userInterestRepository.findByUserAndInterest(user, interest);
-                    if ((manipulation.getType().equals("add")) && (userInterests.size() == 0)) { // add interest
-                        UserInterest userInterest = new UserInterest(); // save the entry
-                        userInterest.setUser(user);
-                        userInterest.setInterest(interest);
-                        userInterestRepository.save(userInterest);
-                        response.setResult("success");
-                    } else if ((manipulation.getType().equals("remove")) && (userInterests.size() > 0)) { // remove interest
-                        UserInterest userInterest = userInterests.get(0); // proceed to delete it
-                        userInterestRepository.delete(userInterest);
-                        response.setResult("success");
-                    } else {
-                        return response;
-                    }
+        List<User> userList = userRepository.findByEmail(manipulation.getInfoPackage().getEmail());// find the user
+        if (userList.size()==0) { // no user found
+            return response;
+        } else { // yes user found
+            User user = userList.get(0); // unwrap user
+            Long interestID = Long.valueOf(manipulation.getInfoPackage().getInterestID()); // get interestID
+            Optional<Interest> findInterest = interestRepository.findById(interestID);
+            if (findInterest.isPresent()) { // check if interest id is true
+                Interest interest = findInterest.get(); // unwrap interest
+                List<UserInterest> userInterests = userInterestRepository.findByUserAndInterest(user, interest);
+                if ((manipulation.getType().equals("add")) && (userInterests.size() == 0)) { // add interest
+                    UserInterest userInterest = new UserInterest(); // save the entry
+                    userInterest.setUser(user);
+                    userInterest.setInterest(interest);
+                    userInterestRepository.save(userInterest);
+                    response.setResult("success");
+                } else if ((manipulation.getType().equals("remove")) && (userInterests.size() > 0)) { // remove interest
+                    UserInterest userInterest = userInterests.get(0); // proceed to delete it
+                    userInterestRepository.delete(userInterest);
+                    response.setResult("success");
                 } else {
+                    return response;
                 }
-                return response;
             }
-        } catch (Exception e) {
-            System.out.println(e.toString());
+            return response;
         }
-        return response;
     }
 
-    @GetMapping ("/v1/getall") // debug
+    @GetMapping ("/v1/getalluserinterests") // debug
     // get all userInterests
     public List<UserInterest> getAllOfIt () {
         List<UserInterest> userInterests = userInterestRepository.findAll();
         return userInterests;
     }
 
-    @GetMapping ("/v1/getallinterestlist") // debug
+    @GetMapping ("/v1/getallinterests") // debug
     public InterestListResponse getAllInterest () {
         InterestListResponse interestResponse = new InterestListResponse();
-        interestResponse.setResponse_type("all");
-        interestResponse.setInterest_list(interestRepository.findAll());
+        interestResponse.setResponseType("all");
+        interestResponse.setActiveInterestList(interestRepository.findAll());
         return interestResponse;
     }
 
-    @PostMapping ("/v1/addinterest") // debug
+    @PostMapping ("/v1/addinterests") // debug
     public String addInterest (@RequestBody Interest interest) {
         try {
             interestRepository.save(interest);
@@ -155,13 +216,13 @@ public class NotifierController {
         return "Success";
     }
 
-    @GetMapping("/v1/users") // Debug
+    @GetMapping("/v1/getallusers") // Debug
     // Get all users at once.
     public List<User> getAll() {
         return userRepository.findAll();
     }
 
-    @PutMapping ("/v1/removeaccount") // debug
+    @PutMapping ("/v1/removeuser") // debug
     public boolean removeAccount (@RequestBody User user, @RequestParam String email) {
         boolean result = false;
         EmailValidationResponse validate = validateEmail(email);

@@ -7,22 +7,31 @@ import java.util.List;
 
 public class InterestListResponse {
 
-    private String response_type;
-    private List<Interest> active_interest_list;
+    private String responseType;
+    private List<Interest> activeInterestList;
+    private List<Interest> addableInteresList;
 
-    public String getResponse_type() {
-        return response_type;
+    public String getResponseType() {
+        return responseType;
     }
 
-    public void setResponse_type(String response_type) {
-        this.response_type = response_type;
+    public void setResponseType(String responseType) {
+        this.responseType = responseType;
     }
 
-    public List<Interest> getInterest_list() {
-        return active_interest_list;
+    public List<Interest> getActiveInterestList() {
+        return activeInterestList;
     }
 
-    public void setInterest_list(List<Interest> interest_list) {
-        this.active_interest_list = interest_list;
+    public void setActiveInterestList(List<Interest> activeInterestList) {
+        this.activeInterestList = activeInterestList;
+    }
+
+    public List<Interest> getAddableInteresList() {
+        return addableInteresList;
+    }
+
+    public void setAddableInteresList(List<Interest> addableInteresList) {
+        this.addableInteresList = addableInteresList;
     }
 }

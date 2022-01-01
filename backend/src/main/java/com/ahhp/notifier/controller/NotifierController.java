@@ -236,7 +236,17 @@ public class NotifierController {
         }
     }
 
+    public List<User> getUserFromUserInterest(List<UserInterest> userInterests) {
+        String[] emails = new String[userInterests.size()]; // array to store user emails
+        for (int i = 0; i < userInterests.size(); i++) { // collect user emails
+            emails[i] = userInterests.get(i).getUser().getEmail();
+        }
+        List<User> users = userRepository.findByEmailIn(emails);
+        return users;
+    }
+
     private List<User> findUserByInterest(String interestName) {
+        // get the interest entity
         Interest interest = interestRepository.findByInterestName(interestName).get(0);
         // get the list of userInterests from the userInterestRepository
         List<UserInterest> userInterests = userInterestRepository.findByInterest(interest);

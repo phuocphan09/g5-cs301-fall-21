@@ -222,22 +222,17 @@ public class NotifierController {
         }
     }
 
-    @PostMapping("/v1/getuserfrominterest")
-    public List<User> getRelatedUsers(@RequestBody Interest interest) {
-        return findUserByInterest(interest);
-    }
-
-    private String[] representationToList(String rep) {
-        rep = rep.replace("[", "");
-        rep = rep.replace("]", "");
-        String[] vals = rep.split (",");
-        return vals;
-    }
-
-    @PostMapping("/v1/finduserinterestfrominterest")
-    public List<UserInterest> findUserInterestFromInterest(@RequestParam String interestName) {
+    private List<User> findUserByInterest(String interestName) {
         Interest interest = interestRepository.findByInterestName(interestName).get(0);
-        return userInterestRepository.findByInterest(interest);
+        // get the list of userInterests from the userInterestRepository
+        List<UserInterest> userInterests = userInterestRepository.findByInterest(interest);
+        List<String> emails = new ArrayList<String>();
+        for (UserInterest userInterest:userInterests) {
+            emails.add(userInterest.getUser().getEmail());
+        }
+        // convert that list of strings into a list of users
+        List<User> users = userRepository.findByEmailIn(emails);
+        return users;
     }
 
     private List<Interest> findInterestByUser(User user, boolean isActive) {
@@ -260,17 +255,11 @@ public class NotifierController {
         }
     }
 
-    private List<User> findUserByInterest(Interest interest) {
-        // get the list of userInterests from the userInterestRepository
-        List<UserInterest> userInterests = userInterestRepository.findByInterest(interest);
-        // create a list of emails from the list
-        List<String> emails = new ArrayList<String>();
-        for (UserInterest userInterest:userInterests) {
-            emails.add(userInterest.getUser().getEmail());
-        }
-        // convert that list of strings into a list of users
-        List<User> users = userRepository.findByEmailIn(emails);
-        return users;
+    private String[] representationToList(String rep) {
+        rep = rep.replace("[", "");
+        rep = rep.replace("]", "");
+        String[] vals = rep.split (",");
+        return vals;
     }
 
     @GetMapping("/v1/getallpost")

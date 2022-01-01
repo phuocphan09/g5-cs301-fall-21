@@ -23,7 +23,7 @@ const addNewInterest = (emailUser, newInterestName) =>{
 const removeInterest = (emailUser, removeInterestName) =>{
     const bodyText = {
         type: "remove",
-        infopackage: {
+        infoPackage: {
             email: emailUser,
             interestName: removeInterestName
         }

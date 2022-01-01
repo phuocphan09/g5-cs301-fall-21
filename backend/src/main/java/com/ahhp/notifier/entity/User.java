@@ -3,7 +3,6 @@ package com.ahhp.notifier.entity;
 import javax.persistence.*;
 
 @Entity
-//@Table(name = "USER")
 public class User {
 
     @Id

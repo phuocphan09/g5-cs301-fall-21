@@ -1,5 +1,4 @@
 package com.ahhp.notifier.response;
-
 public class EmailValidationResponse {
 
     private boolean valid;

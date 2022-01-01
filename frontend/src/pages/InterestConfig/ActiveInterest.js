@@ -9,28 +9,31 @@ const ActiveInterest = (props) => {
 
     const pickStateR = { color: '#15B34E', width: '27vw' }
     const pickStateNR = { color: '#FF0000', width: '25vw' }
-    
+    // console.log('hello');
+
     let initialInterestState = []
     const userEmail = localStorage.getItem("user");
+    // console.log(userEmail);
+
 
     GetActive.getActiveInterest(userEmail)
         .then(response => {
-            response.addableInterestList.map((itemAPI, indexAPI) => {
-                initialInterestState.concat({ interestName: itemAPI.interestName, interestState: pickStateNR })
+            console.log(response.activeInterestList)
+            response.data.activeInterestList.map((itemAPI, indexAPI) => {
+                initialInterestState = initialInterestState.concat({ interestName: itemAPI.interestName, interestState: pickStateNR })
             })
         })
 
-    const [interest, setInterest] = useState([
-        { interestName: 'Social Science', interestState: pickStateNR },
-        { interestName: 'Marketing', interestState: pickStateNR },
-        { interestName: 'Natural Science', interestState: pickStateNR },
-        { interestName: 'Psychology', interestState: pickStateNR },
-        { interestName: 'Bussiness', interestState: pickStateNR }
-    ])
+    const [interest, setInterest] = useState(initialInterestState)
+        // { interestName: 'Social Science', interestState: pickStateNR },
+        // { interestName: 'Marketing', interestState: pickStateNR },
+        // { interestName: 'Natural Science', interestState: pickStateNR },
+        // { interestName: 'Psychology', interestState: pickStateNR },
+        // { interestName: 'Bussiness', interestState: pickStateNR }
 
     // setInterest(initialInterestState)
 
-    const [dropIndex, setDropIndex] = useState(interest.length + 2)
+    const [dropIndex, setDropIndex] = useState(-1)
 
     useEffect(() => {
         if (dropIndex < interest.length) {
@@ -191,6 +194,7 @@ const ColoredLine = styled.div`
     width: 88.8vw;
     margin-left: 5.87%;
     border: 1px solid #000000;
+    background: #000000;
 `
 
 const InterestContainer = styled.div`

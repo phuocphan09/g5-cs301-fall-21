@@ -11,6 +11,7 @@ import { Route, Routes } from 'react-router-dom';
 import Feed from './pages/Feed';
 import AddInterest from './pages/InterestConfig/AddInterest';
 import ActiveInterest from './pages/InterestConfig/ActiveInterest';
+import Test from './pages/InterestConfig/Test';
 
 
 function App() {
@@ -41,8 +42,9 @@ function App() {
         <Wrapper>
           {/* <Routes>
             <Route path="/" element={<ProtectedRoute />}>
-              <Route path="/EmptyInterest" element={<EmptyInterest />}/>
               <Route path="/Feed" element={<Feed />} />
+              <Route path="/AddInterest" element={<AddInterest />} />
+              <Route path="/ActiveInterest" element={<ActiveInterest />} />
             </Route>
             <Route path="/InputEmail" element={<InputEmail props={changeInputEmail} />} />
             <Route path="/InputPassword" element={<InputPassword email={inputEmail} passwordInput={changeInputPassword} />} />
@@ -50,8 +52,9 @@ function App() {
             <Route path="/SuccessAuth" element={<SuccessAuth />} />
             <Route path="/SuccessCreate" element={<SuccessCreate />} />
           </Routes> */}
-          <AddInterest></AddInterest>
-          {/* <ActiveInterest></ActiveInterest> */}
+          {/* <ActiveInterest/> */}
+          {/* <Test/> */}
+          <AddInterest/>
         </Wrapper>
       </Container>
     </div>

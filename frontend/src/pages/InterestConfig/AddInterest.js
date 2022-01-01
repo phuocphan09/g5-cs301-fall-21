@@ -1,7 +1,5 @@
 import { React, useState, useEffect } from 'react';
-import { ScrollView } from 'react-native';
 import styled from 'styled-components';
-import sstyled from 'styled-components/native';
 import AddIcon_raw from '../../assets/add_icon.svg';
 import AddedIcon_raw from '../../assets/added_icon.svg';
 import GetAddable from '../../get.addable'
@@ -11,36 +9,45 @@ const AddInterest = (props) => {
     const pickStateNA = { color: '#006DFF', width: '18.13vw' }
     const pickStateA = { color: '#15B34E', width: '20vw' }
 
+    const [interest, setInterest] = useState([]);
+
     let initialInterestState = []
-    const userEmail = localStorage.getItem("user");
-
-    GetAddable.getAddable(userEmail)
-        .then(response => {
-            response.addableInterestList.map((itemAPI, indexAPI) => {
-                initialInterestState.concat({ interestName: itemAPI.interestName, interestState: pickStateNA })
-            })
-        })
-
-    const [interest, setInterest] = useState([
-        { interestName: 'Social Science', interestState: pickStateNA },
-        { interestName: 'Marketing', interestState: pickStateNA },
-        { interestName: 'Natural Science', interestState: pickStateNA },
-        { interestName: 'Psychology', interestState: pickStateNA },
-        { interestName: 'Bussiness', interestState: pickStateNA }
-    ])
-
-    // setInterest(initialInterestState)
-
-    const [dropIndex, setDropIndex] = useState(interest.length + 2)
 
     useEffect(() => {
-        if (dropIndex < interest.length) {
+        const userEmail = localStorage.getItem("user")
+        GetAddable.getAddable(userEmail)
+            .then(response => {
+                response.data.addableInteresList.map((itemAPI, indexAPI) => {
+                    // console.log(itemAPI.interestName)
+                    // initialInterestState = initialInterestState.concat({ interestName: itemAPI.interestName, interestState: pickStateNA })
+                    initialInterestState.push({ interestName: itemAPI.interestName, interestState: pickStateNA })
+                })
+                setInterest(initialInterestState);
+            })
+    }, [])
+
+
+    // initialInterestState = initialInterestState.concat({ interestName: 'Bussiness', interestState: pickStateNA })
+    // initialInterestState = initialInterestState.concat({ interestName: 'Psychology', interestState: pickStateNA })
+    // initialInterestState = initialInterestState.concat({ interestName: 'Natural Science', interestState: pickStateNA })
+    // initialInterestState = initialInterestState.concat({ interestName: 'Marketing', interestState: pickStateNA })
+    // initialInterestState = initialInterestState.concat({ interestName: 'Social Science', interestState: pickStateNA })
+
+    // console.log(initialInterestState)
+
+
+    // console.log(interest)
+
+    const [dropIndex, setDropIndex] = useState(-1)
+
+    useEffect(() => {
+        if (dropIndex >= 0) {
             setTimeout(() => {
                 console.log(dropIndex)
                 let cloneInterest = interest
                 cloneInterest.splice(dropIndex, 1)
                 setInterest(cloneInterest)
-                setDropIndex(interest.length + 2)
+                setDropIndex(-1)
             }, 500)
         }
 
@@ -51,12 +58,16 @@ const AddInterest = (props) => {
         let newInterestItem = interest[props]
         newInterestItem.interestState = pickStateA
 
-        GetAddable.addNewInterest({ emailUser: props.email, newInterest: newInterestItem.interestName })
+        console.log(newInterestItem.interestName)
+
+        GetAddable.addNewInterest( localStorage.getItem("user"), newInterestItem.interestName )
             .then(response => console.log(response.result))
 
         let cloneInterest = interest
         cloneInterest[props] = newInterestItem
 
+        cloneInterest.splice(dropIndex, 1)
+        setInterest(cloneInterest)
         setDropIndex(props)
     }
 
@@ -191,7 +202,7 @@ const InterestContainer = styled.div`
         display: flex;
         flex-direction:row;
         align-items: center;
-        color: ${props => props.buttonColor };
+        color: ${props => props.buttonColor};
     }
 `
 const AddIcon = styled.img`

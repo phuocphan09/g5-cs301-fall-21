@@ -4,12 +4,12 @@ import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 
 const SuccessCreate = () => {
-    // const navigate = useNavigate()
-    // useEffect (() => {
-    //     setTimeout (() => {
-    //         navigate('/ActiveInterest')
-    //     }, 1000)
-    // })
+    const navigate = useNavigate()
+    useEffect (() => {
+        setTimeout (() => {
+            navigate('/ActiveInterest')
+        }, 1000)
+    })
 
 
     return (

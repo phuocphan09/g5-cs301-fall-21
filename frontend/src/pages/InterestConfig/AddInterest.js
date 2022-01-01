@@ -17,11 +17,13 @@ const AddInterest = (props) => {
         const userEmail = localStorage.getItem("user")
         GetAddable.getAddable(userEmail)
             .then(response => {
+                console.log(response.data)
                 response.data.addableInteresList.map((itemAPI, indexAPI) => {
                     // console.log(itemAPI.interestName)
                     // initialInterestState = initialInterestState.concat({ interestName: itemAPI.interestName, interestState: pickStateNA })
                     initialInterestState.push({ interestName: itemAPI.interestName, interestState: pickStateNA })
                 })
+                console.log(initialInterestState)
                 setInterest(initialInterestState);
             })
     }, [])

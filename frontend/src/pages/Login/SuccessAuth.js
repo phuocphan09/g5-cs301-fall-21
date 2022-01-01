@@ -5,12 +5,12 @@ import styled from 'styled-components'
 
 
 const SuccessAuth = () => {
-    // const navigate = useNavigate()
-    // useEffect (() => {
-    //     setTimeout (() => {
-    //         navigate('/ActiveInterest')
-    //     }, 1000)
-    // })
+    const navigate = useNavigate()
+    useEffect (() => {
+        setTimeout (() => {
+            navigate('/ActiveInterest')
+        }, 1000)
+    })
 
     return (
         <Container>

@@ -4,6 +4,7 @@ import remove_icon from '../../assets/remove_icon.svg'
 import add_icon from '../../assets/add_icon.svg'
 import added_icon from '../../assets/added_icon.svg'
 import GetActive from '../../get.addable'
+import { useNavigate } from 'react-router-dom'
 
 const ActiveInterest = (props) => {
 
@@ -13,6 +14,12 @@ const ActiveInterest = (props) => {
     const [interest, setInterest] = useState([])
     let initialInterestState = []
     // console.log(userEmail);
+
+    const navigate = useNavigate()
+    function handleAdd() {
+        navigate('/AddInterest')
+    }
+
 
     useEffect(() => {
         const userEmail = localStorage.getItem("user");
@@ -58,7 +65,7 @@ const ActiveInterest = (props) => {
 
         console.log(newInterestItem.interestName)
 
-        GetActive.removeInterest( localStorage.getItem("user"), newInterestItem.interestName )
+        GetActive.removeInterest(localStorage.getItem("user"), newInterestItem.interestName)
             .then(response => console.log(response.result))
 
         let cloneInterest = interest
@@ -98,7 +105,7 @@ const ActiveInterest = (props) => {
                 <Text fontSize={'2.25vh'} fontWeight={'400'}>A post matching any of your interests will be automatically notified via your student email</Text>
             </Container1>
 
-            <AddInterest>
+            <AddInterest onClick={handleAdd}>
                 <text>
                     <RemoveIcon src={add_icon} />
                     Add new interests

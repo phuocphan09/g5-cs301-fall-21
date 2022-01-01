@@ -37,6 +37,7 @@ const InputEmail = (props) => {
 
         // localStorage.setItem("user", JSON.stringify(email.data));
         localStorage.setItem("user", email);
+        // localStorage.getItemget("user");
         console.log(localStorage.getItem("xxx"));
         // localStorage.removeItem("user");
 

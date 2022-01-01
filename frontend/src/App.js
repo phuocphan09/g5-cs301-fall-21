@@ -6,11 +6,11 @@ import ProtectedRoute from './pages/ProtectedRoute';
 import CreateAccount from './pages/Login/CreateAccount';
 import SuccessAuth from './pages/Login/SuccessAuth';
 import SuccessCreate from './pages/Login/SuccessCreate';
-import EmptyInterest from './pages/InterestConfig/EmptyInterest';
 import React, { useState, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Feed from './pages/Feed';
 import AddInterest from './pages/InterestConfig/AddInterest';
+import ActiveInterest from './pages/InterestConfig/ActiveInterest';
 
 
 function App() {
@@ -51,6 +51,7 @@ function App() {
             <Route path="/SuccessCreate" element={<SuccessCreate />} />
           </Routes> */}
           <AddInterest></AddInterest>
+          {/* <ActiveInterest></ActiveInterest> */}
         </Wrapper>
       </Container>
     </div>

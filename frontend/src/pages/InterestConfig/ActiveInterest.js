@@ -1,32 +1,31 @@
-import { React, useState, useEffect } from 'react';
-import { ScrollView } from 'react-native';
-import styled from 'styled-components';
-import sstyled from 'styled-components/native';
-import AddIcon_raw from '../../assets/add_icon.svg';
-import AddedIcon_raw from '../../assets/added_icon.svg';
-import GetAddable from '../../get.addable'
+import { React, useState, useEffect } from 'react'
+import styled from 'styled-components'
+import remove_icon from '../../assets/remove_icon.svg'
+import add_icon from '../../assets/add_icon.svg'
+import added_icon from '../../assets/added_icon.svg'
+import GetActive from '../../get.addable'
 
-const AddInterest = (props) => {
+const ActiveInterest = (props) => {
 
-    const pickStateNA = { color: '#006DFF', width: '18.13vw' }
-    const pickStateA = { color: '#15B34E', width: '20vw' }
-
+    const pickStateR = { color: '#15B34E', width: '27vw' }
+    const pickStateNR = { color: '#FF0000', width: '25vw' }
+    
     let initialInterestState = []
     const userEmail = localStorage.getItem("user");
 
-    GetAddable.getAddable(userEmail)
+    GetActive.getActiveInterest(userEmail)
         .then(response => {
             response.addableInterestList.map((itemAPI, indexAPI) => {
-                initialInterestState.concat({ interestName: itemAPI.interestName, interestState: pickStateNA })
+                initialInterestState.concat({ interestName: itemAPI.interestName, interestState: pickStateNR })
             })
         })
 
     const [interest, setInterest] = useState([
-        { interestName: 'Social Science', interestState: pickStateNA },
-        { interestName: 'Marketing', interestState: pickStateNA },
-        { interestName: 'Natural Science', interestState: pickStateNA },
-        { interestName: 'Psychology', interestState: pickStateNA },
-        { interestName: 'Bussiness', interestState: pickStateNA }
+        { interestName: 'Social Science', interestState: pickStateNR },
+        { interestName: 'Marketing', interestState: pickStateNR },
+        { interestName: 'Natural Science', interestState: pickStateNR },
+        { interestName: 'Psychology', interestState: pickStateNR },
+        { interestName: 'Bussiness', interestState: pickStateNR }
     ])
 
     // setInterest(initialInterestState)
@@ -46,12 +45,12 @@ const AddInterest = (props) => {
 
     }, [dropIndex])
 
-    function handleAdd(props) {
+    function handleRemove(props) {
 
         let newInterestItem = interest[props]
-        newInterestItem.interestState = pickStateA
+        newInterestItem.interestState = pickStateR
 
-        GetAddable.addNewInterest({ emailUser: props.email, newInterest: newInterestItem.interestName })
+        GetActive.removeInterest({ emailUser: props.email, newInterest: newInterestItem.interestName })
             .then(response => console.log(response.result))
 
         let cloneInterest = interest
@@ -61,20 +60,23 @@ const AddInterest = (props) => {
     }
 
     const showButton = (props) => {
-        if (props.color === '#15B34E') {
+        console.log(props.color)
+        if (props.color === "#15B34E") {
             return <button>
                 <view >
-                    <AddIcon src={AddedIcon_raw}></AddIcon>
-                    Added
+                    <RemoveIcon src={added_icon}></RemoveIcon>
+                    Removed
                 </view>
             </button>
         } else {
-            return <button onClick={() => handleAdd(props.number)}>
-                <view>
-                    <AddIcon src={AddIcon_raw}></AddIcon>
-                    Add
-                </view>
-            </button>
+            return (
+                <button onClick={() => handleRemove(props.number)}>
+                    <view>
+                        <RemoveIcon src={remove_icon}></RemoveIcon>
+                        Remove
+                    </view>
+                </button>
+            )
         }
     }
 
@@ -86,18 +88,33 @@ const AddInterest = (props) => {
                 <Text fontSize={'2.25vh'} fontWeight={'400'}>A post matching any of your interests will be automatically notified via your student email</Text>
             </Container1>
 
+            <AddInterest>
+                <text>
+                    <RemoveIcon src={add_icon} />
+                    Add new interests
+                </text>
+            </AddInterest>
+
+            <ColoredLine />
+
+            <Container1>
+                <Text fontSize={'3.6vh'} fontWeight={'700'}>Your active interests</Text>
+                <br></br>
+                <Text fontSize={'2.25vh'} fontWeight={'400'}>Removing an active interest when you no longer want to receive notifications of matched posts</Text>
+            </Container1>
+
             <Container2>
-                {interest.map((item, index) => (
+                {interest.length !== 0 ? interest.map((item, index) => (
                     <InterestContainer buttonColor={item.interestState.color} buttonWidth={item.interestState.width}>
                         <text> {item.interestName} </text>
                         {showButton({ color: item.interestState.color, number: index })}
                     </InterestContainer>
-                ))}
+                )) : <DashedBox><h4> Uh oh... you haven’t added any interests <br /> Select the above blue button to add one! </h4></DashedBox>}
             </Container2>
 
-            <SubmitContainer>
-                <text>Done</text>
-            </SubmitContainer>
+            <BackContainer>
+                <text> Back to homepage </text>
+            </BackContainer>
         </Container>
     )
 }
@@ -140,6 +157,42 @@ const Container2 = styled.div`
     gap:3.3vh;
     transition: all 0.3s ease-out;
 `
+
+const AddInterest = styled.button`
+    margin-bottom:3.3vh;
+    margin-right:16vw;
+    margin-left:16vw;
+    min-height:7.05vh;
+    background: #ffffff;
+    border-radius: 5px;
+    transition: all 0.3s ease-in;
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #006dff;
+    align-items:center;
+    justify-content: center;
+
+    text{
+        margin-right: 5vw;
+        margin-left: 5vw;
+        font-family: 'Source Sans Pro';
+        font-style: normal;
+        font-weight: bold;
+        font-size: 2.7vh;
+        line-height: 21px;
+        display: flex;
+        align-text: center;
+        color: #006DFF;
+    }
+`
+
+const ColoredLine = styled.div`
+    position: relative;
+    width: 88.8vw;
+    margin-left: 5.87%;
+    border: 1px solid #000000;
+`
+
 const InterestContainer = styled.div`
     position: relative;
     top:0%;
@@ -151,7 +204,7 @@ const InterestContainer = styled.div`
     box-sizing: border-box;
     border-radius: 10px;
 
-    text{
+    text {
         position: absolute;
         margin-left: 5.6vw;
         margin-top: 2.4vh;
@@ -166,7 +219,7 @@ const InterestContainer = styled.div`
         width:60vw;
     }
 
-    button{
+    button {
         align-items:center;
         justify-content:center;
         position: absolute;
@@ -175,14 +228,14 @@ const InterestContainer = styled.div`
         top:19.23%;
         height: 61.54%;
         background: #FFFFFF;
-        border: 1px solid #006DFF;
+        border: 1px solid #FF0000;
         box-sizing: border-box;
         border-radius: 15px;
         border-color: ${props => props.buttonColor};
         width:  ${props => props.buttonWidth};
     }
 
-    view{
+    view {
         font-family: 'Source Sans Pro';
         font-style: normal;
         font-weight: bold;
@@ -191,17 +244,46 @@ const InterestContainer = styled.div`
         display: flex;
         flex-direction:row;
         align-items: center;
-        color: ${props => props.buttonColor };
+        color: ${props => props.buttonColor};
     }
 `
-const AddIcon = styled.img`
+
+const RemoveIcon = styled.img`
     width: 3vh;
     height: 3vh;
     margin-right: 5px;
     justify-content:center;
 `
 
-const SubmitContainer = styled.button`
+// const AddIcon = styled.img`
+//     margin-left: 6vw;
+// `
+
+const DashedBox = styled.div`
+    ${'' /* position: absolute; */}
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    border-radius: 5px;
+    align-items: center;
+    border: dashed 1px #6B6B6B;
+    margin-left: 9.3vw;
+    margin-right: 9.3vw;
+    justify-content:center;
+
+    h4 {
+        font-family: 'Source Sans Pro';
+        width: 100%;
+        height: 100%;
+        color: #6B6B6B;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 2.25vh;
+        text-align: center;
+        ${'' /* margin: 1rem; */}
+    }
+`;
+
+const BackContainer = styled.button`
     margin-top:3.3vh;
     margin-bottom:3.3vh;
     margin-right:16vw;
@@ -212,9 +294,8 @@ const SubmitContainer = styled.button`
     transition: all 0.3s ease-out;
     display:flex;
     align-items:center;
-    justify-content: center;
     border: 1px solid #006dff;
-
+    justify-content: center;
 
     text{
         font-family: 'Source Sans Pro';
@@ -223,8 +304,9 @@ const SubmitContainer = styled.button`
         font-size: 2.7vh;
         line-height: 21px;
         display: flex;
-        align-items: center;
+        align-text: center;
         color: #FFFFFF;
     }
 `
-export default AddInterest
+
+export default ActiveInterest

@@ -11,7 +11,7 @@ const getActiveInterest = (email) => {
 const addNewInterest = (emailUser, newInterestName) =>{
     const bodyText = {
         type: "add",
-        infopackage: {
+        infoPackage: {
             email: emailUser,
             interestName: newInterestName,
         }

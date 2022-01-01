@@ -144,7 +144,7 @@ public class NotifierController {
         User user = users.get(0); // find the user in the database
         // get all interest objects NOT IN interestName from the interestRepository
         List<Interest> interests = findInterestByUser(user, false);
-        response.setAddableInteresList(interests);
+        response.setActiveInterestList(interests);
         return response;
     }
 
@@ -155,15 +155,27 @@ public class NotifierController {
         response.setResult("failed");
         List<User> userList = userRepository.findByEmail(manipulation.getInfoPackage().getEmail());// find the user
         if (userList.size()==0) { // no user found
+            System.out.print("User not found");
             return response;
         } else { // yes user found
             User user = userList.get(0); // unwrap user
             String interestName = manipulation.getInfoPackage().getInterestName(); // get interestName
             List<Interest> interests = interestRepository.findByInterestName(interestName); // find interest
+            if (interests.size()==0) {
+                System.out.println("Interest not found");
+                return response;
+            } // valid interest entry found
             Interest interest = interests.get(0); // unwrap interest
             // if add
             if (manipulation.getType().equals("add")) {
+                System.out.println("Adding user interest");
                 // add interest
+                // check if userInterest entry is already present
+                if (userInterestRepository.findByUserAndInterest(user, interest).size() > 0) {
+                    System.out.println("Interest already added");
+                    return response;
+                }
+                
                 UserInterest userInterest = new UserInterest(); // add new userInterest entry
                 userInterest.setUser(user); // set user
                 userInterest.setInterest(interest); // set interest for userInterest
@@ -171,6 +183,7 @@ public class NotifierController {
                 response.setResult("success");
                 return response;
             } else if (manipulation.getType().equals("remove")) {
+                System.out.println("Removing user interest");
                 // remove interest
                 UserInterest userInterest = new UserInterest();
                 userInterest.setInterest(interest);
@@ -178,7 +191,8 @@ public class NotifierController {
                 userInterestRepository.delete(userInterest);// delete the corresponding userInterest entry
                 response.setResult("success");
                 return response;
-            } else { // incorrect
+            } else { // incorrect type parameter
+                System.out.println("Unknown Type parameter");
                 return response;
             }
         }

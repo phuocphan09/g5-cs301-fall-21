@@ -9,7 +9,7 @@ public class InterestListResponse {
 
     private String responseType;
     private List<Interest> activeInterestList;
-    private List<Interest> addableInteresList;
+    private List<Interest> addableInterestList;
 
     public String getResponseType() {
         return responseType;
@@ -28,10 +28,10 @@ public class InterestListResponse {
     }
 
     public List<Interest> getAddableInteresList() {
-        return addableInteresList;
+        return addableInterestList;
     }
 
     public void setAddableInteresList(List<Interest> addableInteresList) {
-        this.addableInteresList = addableInteresList;
+        this.addableInterestList = addableInteresList;
     }
 }

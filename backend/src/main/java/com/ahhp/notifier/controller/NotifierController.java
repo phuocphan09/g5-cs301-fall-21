@@ -15,6 +15,7 @@ import com.ahhp.notifier.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -134,17 +135,17 @@ public class NotifierController {
      * @return InterestListResponse a list of inactive interests, and the response type
      */
     @GetMapping("/v1/getaddableinterestlist")
-    public InterestListResponse getAddableInterestList (@RequestParam String email) {
+    public InterestListResponse getAddableInterestList (@RequestParam String email) throws InvalidParameterException {
         InterestListResponse response = new InterestListResponse(); // create response object
         response.setResponseType("individual"); // set response type
         List<User> users = userRepository.findByEmail(email);
         if (users.size() == 0) { // check if a user exists
-            return response;
+            throw new InvalidParameterException("Emai:" + email); // does not exist
         }
         User user = users.get(0); // find the user in the database
         // get all interest objects NOT IN interestName from the interestRepository
         List<Interest> interests = findInterestByUser(user, false);
-        response.setActiveInterestList(interests);
+        response.setAddableInteresList(interests); // set the addable interest list
         return response;
     }
 

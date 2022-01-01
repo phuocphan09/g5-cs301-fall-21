@@ -1,10 +1,10 @@
 package com.ahhp.notifier.controller;
 
-import com.ahhp.notifier.entity.Interest;
-import com.ahhp.notifier.entity.Manipulation;
-import com.ahhp.notifier.entity.User;
-import com.ahhp.notifier.entity.UserInterest;
+import com.ahhp.notifier.entity.*;
+import com.ahhp.notifier.input.Manipulation;
+import com.ahhp.notifier.input.PostInput;
 import com.ahhp.notifier.repository.InterestRepository;
+import com.ahhp.notifier.repository.PostRepository;
 import com.ahhp.notifier.repository.UserInterestRepository;
 import com.ahhp.notifier.repository.UserRepository;
 import com.ahhp.notifier.response.InterestListResponse;
@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,8 @@ public class NotifierController {
     private InterestRepository interestRepository;
     @Autowired
     private UserInterestRepository userInterestRepository;
+    @Autowired
+    private PostRepository postRepository;
 
     /**
      * Validate the email to make sure it is a Fulbright email
@@ -120,14 +123,7 @@ public class NotifierController {
             return response;
         }
         User user = users.get(0); // find the user in the database
-        List<UserInterest> userInterests = userInterestRepository.findByUser(user); // get all userInterests
-        // get all interest name and put it into a list of string
-        List<String> interestNames = new ArrayList<String>();
-        for (int i = 0; i < userInterests.size(); i++) {
-            interestNames.add(userInterests.get(i).getInterest().getInterestName());
-        }
-        // get all interest objects from the intererstRepository
-        List<Interest> interests = interestRepository.findByInterestNameIn(interestNames);
+        List<Interest> interests = findInterestByUser(user, true); // get the interest list
         response.setActiveInterestList(interests);
         return response;
     }
@@ -146,15 +142,9 @@ public class NotifierController {
             return response;
         }
         User user = users.get(0); // find the user in the database
-        List<UserInterest> userInterests = userInterestRepository.findByUser(user); // get all userInterests
-        // get all interest name and put it into a list of string
-        List<String> interestNames = new ArrayList<String>();
-        for (int i = 0; i < userInterests.size(); i++) {
-            interestNames.add(userInterests.get(i).getInterest().getInterestName());
-        }
         // get all interest objects NOT IN interestName from the interestRepository
-        List<Interest> interests = interestRepository.findByInterestNameNotIn(interestNames);
-        response.setAddableInteresList(interests);
+        List<Interest> interests = findInterestByUser(user, false);
+        response.setActiveInterestList(interests);
         return response;
     }
 
@@ -165,15 +155,27 @@ public class NotifierController {
         response.setResult("failed");
         List<User> userList = userRepository.findByEmail(manipulation.getInfoPackage().getEmail());// find the user
         if (userList.size()==0) { // no user found
+            System.out.print("User not found");
             return response;
         } else { // yes user found
             User user = userList.get(0); // unwrap user
             String interestName = manipulation.getInfoPackage().getInterestName(); // get interestName
             List<Interest> interests = interestRepository.findByInterestName(interestName); // find interest
+            if (interests.size()==0) {
+                System.out.println("Interest not found");
+                return response;
+            } // valid interest entry found
             Interest interest = interests.get(0); // unwrap interest
             // if add
             if (manipulation.getType().equals("add")) {
+                System.out.println("Adding user interest");
                 // add interest
+                // check if userInterest entry is already present
+                if (userInterestRepository.findByUserAndInterest(user, interest).size() > 0) {
+                    System.out.println("Interest already added");
+                    return response;
+                }
+                
                 UserInterest userInterest = new UserInterest(); // add new userInterest entry
                 userInterest.setUser(user); // set user
                 userInterest.setInterest(interest); // set interest for userInterest
@@ -181,6 +183,7 @@ public class NotifierController {
                 response.setResult("success");
                 return response;
             } else if (manipulation.getType().equals("remove")) {
+                System.out.println("Removing user interest");
                 // remove interest
                 UserInterest userInterest = new UserInterest();
                 userInterest.setInterest(interest);
@@ -188,20 +191,105 @@ public class NotifierController {
                 userInterestRepository.delete(userInterest);// delete the corresponding userInterest entry
                 response.setResult("success");
                 return response;
-            } else { // incorrect
+            } else { // incorrect type parameter
+                System.out.println("Unknown Type parameter");
                 return response;
             }
         }
     }
 
-    @GetMapping ("/v1/getalluserinterests") // debug
+    @PostMapping("/v1/submitpost")
+    public AccountValidationResponse submitPost(@RequestBody PostInput postInput) {
+        AccountValidationResponse response = new AccountValidationResponse();
+        response.setResult(false);
+        // find by poster
+        // find by title
+        // check if the post has already been submitted by the user
+        List<Post> posts = postRepository.findByPosterAndTitle(postInput.getPoster(), postInput.getTitle());
+        if (posts.size() > 0) { // post already submitted by the user
+            return response;
+        } else { // post not submitted yet
+            Post post = new Post(); // create Post entity
+            post.setPoster(postInput.getPoster()); // set poster
+            post.setTitle(postInput.getTitle()); // set title
+            post.setDescription(postInput.getDescription()); // set description
+            post.setInterestList(Arrays.toString(postInput.getInterestList())); // turn interestlist to a string
+            postRepository.save(post);
+            response.setResult(true);
+            return response;
+        }
+    }
+
+    @GetMapping("/v1/getpost")
+    public PostInput getPost(@RequestParam String postId) {
+        Optional<Post> posts = postRepository.findById(Long.valueOf(postId));
+        PostInput postInput = new PostInput();
+        if (posts.isPresent()) { // post is found
+            Post post = posts.get();
+            postInput.setPoster(post.getPoster());
+            postInput.setDescription(post.getDescription());
+            postInput.setTitle(post.getTitle());
+            postInput.setInterestList(representationToList(post.getInterestList()));
+            return postInput;
+        } else { // post is not found, return null
+            return null;
+        }
+    }
+
+    private List<User> findUserByInterest(String interestName) {
+        Interest interest = interestRepository.findByInterestName(interestName).get(0);
+        // get the list of userInterests from the userInterestRepository
+        List<UserInterest> userInterests = userInterestRepository.findByInterest(interest);
+        List<String> emails = new ArrayList<String>();
+        for (UserInterest userInterest:userInterests) {
+            emails.add(userInterest.getUser().getEmail());
+        }
+        // convert that list of strings into a list of users
+        List<User> users = userRepository.findByEmailIn(emails);
+        return users;
+    }
+
+    private List<Interest> findInterestByUser(User user, boolean isActive) {
+        List<UserInterest> userInterests = userInterestRepository.findByUser(user); // get all userInterests
+        // get all interest name and put it into a list of string
+        List<String> interestNames = new ArrayList<String>();
+        for (int i = 0; i < userInterests.size(); i++) {
+            interestNames.add(userInterests.get(i).getInterest().getInterestName());
+        }
+        // get all interest objects from the intererstRepository
+        if (isActive) { // get active
+            List<Interest> interests = interestRepository.findByInterestNameIn(interestNames);
+            return interests;
+        } else { // get addable
+            if (interestNames.size()==0) { // no active interests yet
+                return interestRepository.findAll();
+            }
+            List<Interest> interests = interestRepository.findByInterestNameNotIn(interestNames);
+            return interests;
+        }
+    }
+
+    private String[] representationToList(String rep) {
+        rep = rep.replace("[", "");
+        rep = rep.replace("]", "");
+        String[] vals = rep.split (",");
+        return vals;
+    }
+
+    @GetMapping("/v1/getallpost")
+    public List<Post> getAllPost() {
+        List<Post> posts = postRepository.findAll();
+        return posts;
+    }
+
+    @GetMapping ("/v1/getalluserinterest") // debug
     // get all userInterests
     public List<UserInterest> getAllOfIt () {
         List<UserInterest> userInterests = userInterestRepository.findAll();
         return userInterests;
     }
 
-    @GetMapping ("/v1/getallinterests") // debug
+    @GetMapping ("/v1/getallinterest") // debug
     public InterestListResponse getAllInterest () {
         InterestListResponse interestResponse = new InterestListResponse();
         interestResponse.setResponseType("all");
@@ -209,7 +297,7 @@ public class NotifierController {
         return interestResponse;
     }
 
-    @PostMapping ("/v1/addinterests") // debug
+    @PostMapping ("/v1/addinterest") // debug
     public String addInterest (@RequestBody Interest interest) {
         try {
             interestRepository.save(interest);
@@ -219,7 +307,7 @@ public class NotifierController {
         return "Success";
     }
 
-    @GetMapping("/v1/getallusers") // Debug
+    @GetMapping("/v1/getalluser") // Debug
     // Get all users at once.
     public List<User> getAll() {
         return userRepository.findAll();

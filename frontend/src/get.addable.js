@@ -11,7 +11,7 @@ const getActiveInterest = (email) => {
 const addNewInterest = (emailUser, newInterestName) =>{
     const bodyText = {
         type: "add",
-        infopackage: {
+        infoPackage: {
             email: emailUser,
             interestName: newInterestName,
         }
@@ -23,7 +23,7 @@ const addNewInterest = (emailUser, newInterestName) =>{
 const removeInterest = (emailUser, removeInterestName) =>{
     const bodyText = {
         type: "remove",
-        infopackage: {
+        infoPackage: {
             email: emailUser,
             interestName: removeInterestName
         }

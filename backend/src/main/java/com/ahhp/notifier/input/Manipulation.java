@@ -1,4 +1,4 @@
-package com.ahhp.notifier.entity;
+package com.ahhp.notifier.input;
 
 public class Manipulation {
 

@@ -9,40 +9,43 @@ const ActiveInterest = (props) => {
 
     const pickStateR = { color: '#15B34E', width: '27vw' }
     const pickStateNR = { color: '#FF0000', width: '25vw' }
-    // console.log('hello');
 
+    const [interest, setInterest] = useState([])
     let initialInterestState = []
-    const userEmail = localStorage.getItem("user");
     // console.log(userEmail);
 
-
-    GetActive.getActiveInterest(userEmail)
-        .then(response => {
-            console.log(response.activeInterestList)
-            response.data.activeInterestList.map((itemAPI, indexAPI) => {
-                initialInterestState = initialInterestState.concat({ interestName: itemAPI.interestName, interestState: pickStateNR })
+    useEffect(() => {
+        const userEmail = localStorage.getItem("user");
+        GetActive.getActiveInterest(userEmail)
+            .then(response => {
+                console.log(response.activeInterestList)
+                response.data.activeInterestList.map((itemAPI, indexAPI) => {
+                    initialInterestState.push({ interestName: itemAPI.interestName, interestState: pickStateNR })
+                })
+                setInterest(initialInterestState)
             })
-        })
+    }, [])
 
-    const [interest, setInterest] = useState(initialInterestState)
-        // { interestName: 'Social Science', interestState: pickStateNR },
-        // { interestName: 'Marketing', interestState: pickStateNR },
-        // { interestName: 'Natural Science', interestState: pickStateNR },
-        // { interestName: 'Psychology', interestState: pickStateNR },
-        // { interestName: 'Bussiness', interestState: pickStateNR }
+
+
+    // { interestName: 'Social Science', interestState: pickStateNR },
+    // { interestName: 'Marketing', interestState: pickStateNR },
+    // { interestName: 'Natural Science', interestState: pickStateNR },
+    // { interestName: 'Psychology', interestState: pickStateNR },
+    // { interestName: 'Bussiness', interestState: pickStateNR }
 
     // setInterest(initialInterestState)
 
     const [dropIndex, setDropIndex] = useState(-1)
 
     useEffect(() => {
-        if (dropIndex < interest.length) {
+        if (dropIndex >= 0) {
             setTimeout(() => {
                 console.log(dropIndex)
                 let cloneInterest = interest
                 cloneInterest.splice(dropIndex, 1)
                 setInterest(cloneInterest)
-                setDropIndex(interest.length + 2)
+                setDropIndex(-1)
             }, 500)
         }
 
@@ -53,17 +56,21 @@ const ActiveInterest = (props) => {
         let newInterestItem = interest[props]
         newInterestItem.interestState = pickStateR
 
-        GetActive.removeInterest({ emailUser: props.email, newInterest: newInterestItem.interestName })
+        console.log(newInterestItem.interestName)
+
+        GetActive.removeInterest( localStorage.getItem("user"), newInterestItem.interestName )
             .then(response => console.log(response.result))
 
         let cloneInterest = interest
         cloneInterest[props] = newInterestItem
 
+        cloneInterest.splice(dropIndex, 1)
+        setInterest(cloneInterest)
         setDropIndex(props)
     }
 
     const showButton = (props) => {
-        console.log(props.color)
+        // console.log(props.color)
         if (props.color === "#15B34E") {
             return <button>
                 <view >

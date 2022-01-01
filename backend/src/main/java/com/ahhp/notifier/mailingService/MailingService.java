@@ -2,6 +2,7 @@ package com.ahhp.notifier.mailingService;
 
 import com.ahhp.notifier.entity.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailMessage;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMailMessage;
@@ -9,6 +10,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -27,6 +29,7 @@ public class MailingService {
         mail.setTo(recipient); // setTo
         mail.setSubject(post.getTitle()); // setSubject
         mail.setText(post.getDescription()); // setText
+
         mailSender.send(mail); //send email
 
     }

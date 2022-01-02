@@ -176,7 +176,7 @@ public class NotifierController {
                     System.out.println("Interest already added");
                     return response;
                 }
-                
+
                 UserInterest userInterest = new UserInterest(); // add new userInterest entry
                 userInterest.setUser(user); // set user
                 userInterest.setInterest(interest); // set interest for userInterest
@@ -186,10 +186,11 @@ public class NotifierController {
             } else if (manipulation.getType().equals("remove")) {
                 System.out.println("Removing user interest");
                 // remove interest
-                UserInterest userInterest = new UserInterest();
-                userInterest.setInterest(interest);
-                userInterest.setUser(user);
-                userInterestRepository.delete(userInterest);// delete the corresponding userInterest entry
+                List<UserInterest> userInterests = userInterestRepository.findByUserAndInterest(user,interest); // find in the database
+                UserInterest userInterest = userInterests.get(0); // get the entry
+                System.out.println("Entry is: " + userInterest.getUser().getEmail()
+                        + " with " + userInterest.getInterest().getInterestName()); // logging
+                userInterestRepository.deleteById(userInterest.getId()); // delete by id, not by entity
                 response.setResult("success");
                 return response;
             } else { // incorrect type parameter
@@ -237,17 +238,7 @@ public class NotifierController {
         }
     }
 
-    public List<User> getUserFromUserInterest(List<UserInterest> userInterests) {
-        String[] emails = new String[userInterests.size()]; // array to store user emails
-        for (int i = 0; i < userInterests.size(); i++) { // collect user emails
-            emails[i] = userInterests.get(i).getUser().getEmail();
-        }
-        List<User> users = userRepository.findByEmailIn(emails);
-        return users;
-    }
-
     private List<User> findUserByInterest(String interestName) {
-        // get the interest entity
         Interest interest = interestRepository.findByInterestName(interestName).get(0);
         // get the list of userInterests from the userInterestRepository
         List<UserInterest> userInterests = userInterestRepository.findByInterest(interest);

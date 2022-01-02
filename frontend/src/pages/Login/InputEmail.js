@@ -37,6 +37,7 @@ const InputEmail = (props) => {
 
         // localStorage.setItem("user", JSON.stringify(email.data));
         localStorage.setItem("user", email);
+        // localStorage.getItemget("user");
         console.log(localStorage.getItem("xxx"));
         // localStorage.removeItem("user");
 
@@ -73,7 +74,6 @@ const InputEmail = (props) => {
                 <EmailBox inputColor={validState} type='text' required placeholder='Your Fulbright Email' className='form-control' onChange={handleEmailChange} value={email} />
                 <br></br>
                 <button disabled={buttonState}> Continue </button>
-
             </Container2>
         </Container>
     )

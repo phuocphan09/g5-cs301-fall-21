@@ -186,11 +186,10 @@ public class NotifierController {
             } else if (manipulation.getType().equals("remove")) {
                 System.out.println("Removing user interest");
                 // remove interest
-                List<UserInterest> userInterests = userInterestRepository.findByUserAndInterest(user,interest); // find in the database
-                UserInterest userInterest = userInterests.get(0); // get the entry
-                System.out.println("Entry is: " + userInterest.getUser().getEmail()
-                        + " with " + userInterest.getInterest().getInterestName()); // logging
-                userInterestRepository.deleteById(userInterest.getId()); // delete by id, not by entity
+                UserInterest userInterest = new UserInterest();
+                userInterest.setInterest(interest);
+                userInterest.setUser(user);
+                userInterestRepository.delete(userInterest);// delete the corresponding userInterest entry
                 response.setResult("success");
                 return response;
             } else { // incorrect type parameter

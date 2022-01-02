@@ -25,7 +25,7 @@ const ActiveInterest = (props) => {
         const userEmail = localStorage.getItem("user");
         GetActive.getActiveInterest(userEmail)
             .then(response => {
-                console.log(response.activeInterestList)
+                console.log(response)
                 response.data.activeInterestList.map((itemAPI, indexAPI) => {
                     initialInterestState.push({ interestName: itemAPI.interestName, interestState: pickStateNR })
                 })
@@ -48,12 +48,12 @@ const ActiveInterest = (props) => {
     useEffect(() => {
         if (dropIndex >= 0) {
             setTimeout(() => {
-                console.log(dropIndex)
+                // console.log(dropIndex)
                 let cloneInterest = interest
                 cloneInterest.splice(dropIndex, 1)
                 setInterest(cloneInterest)
                 setDropIndex(-1)
-            }, 500)
+            }, 1000)
         }
 
     }, [dropIndex])
@@ -63,15 +63,14 @@ const ActiveInterest = (props) => {
         let newInterestItem = interest[props]
         newInterestItem.interestState = pickStateR
 
-        console.log(newInterestItem.interestName)
+        // console.log(newInterestItem.interestName)
 
         GetActive.removeInterest(localStorage.getItem("user"), newInterestItem.interestName)
-            .then(response => console.log(response.result))
+            .then(response => console.log(response.data.result))
 
         let cloneInterest = interest
         cloneInterest[props] = newInterestItem
 
-        cloneInterest.splice(dropIndex, 1)
         setInterest(cloneInterest)
         setDropIndex(props)
     }

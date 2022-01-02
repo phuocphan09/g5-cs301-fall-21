@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import AddIcon_raw from '../../assets/add_icon.svg';
 import AddedIcon_raw from '../../assets/added_icon.svg';
 import GetAddable from '../../get.addable'
+import { useNavigate } from 'react-router-dom';
+
 
 const AddInterest = (props) => {
 
@@ -12,6 +14,11 @@ const AddInterest = (props) => {
     const [interest, setInterest] = useState([]);
 
     let initialInterestState = []
+
+    const navigate = useNavigate();
+    function handleDone() {
+        navigate('/ActiveInterest')
+    }
 
     useEffect(() => {
         const userEmail = localStorage.getItem("user")
@@ -62,13 +69,12 @@ const AddInterest = (props) => {
 
         console.log(newInterestItem.interestName)
 
-        GetAddable.addNewInterest( localStorage.getItem("user"), newInterestItem.interestName )
+        GetAddable.addNewInterest(localStorage.getItem("user"), newInterestItem.interestName)
             .then(response => console.log(response.result))
 
         let cloneInterest = interest
         cloneInterest[props] = newInterestItem
 
-        cloneInterest.splice(dropIndex, 1)
         setInterest(cloneInterest)
         setDropIndex(props)
     }
@@ -108,7 +114,7 @@ const AddInterest = (props) => {
                 ))}
             </Container2>
 
-            <SubmitContainer>
+            <SubmitContainer onClick={handleDone}>
                 <text>Done</text>
             </SubmitContainer>
         </Container>

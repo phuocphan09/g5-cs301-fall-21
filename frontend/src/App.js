@@ -40,7 +40,7 @@ function App() {
     <div className='App'>
       <Container>
         <Wrapper>
-          {/* <Routes>
+          <Routes>
             <Route path="/" element={<ProtectedRoute />}>
               <Route path="/Feed" element={<Feed />} />
               <Route path="/AddInterest" element={<AddInterest />} />
@@ -51,10 +51,10 @@ function App() {
             <Route path="/CreateAccount" element={<CreateAccount email={inputEmail} passwordInput={changeInputPassword} />} />
             <Route path="/SuccessAuth" element={<SuccessAuth />} />
             <Route path="/SuccessCreate" element={<SuccessCreate />} />
-          </Routes> */}
+          </Routes>
           {/* <ActiveInterest/> */}
           {/* <Test/> */}
-          <AddInterest/>
+          {/* <AddInterest/> */}
         </Wrapper>
       </Container>
     </div>

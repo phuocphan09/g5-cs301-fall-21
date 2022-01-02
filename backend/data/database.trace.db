@@ -292,3 +292,6 @@ insert into INTEREST VALUES ('000000','black') [21002-200]
 2021-12-22 21:29:41 jdbc[13]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INTEREST[*]"; expected "INSERT"; SQL statement:
 INTEREST [42001-200]
+2022-01-02 22:42:34 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELETE *[*] FROM POST"; expected "identifier"; SQL statement:
+DELETE * FROM POST [42001-200]

@@ -1,13 +1,23 @@
-import React from 'react'
-import {ReactComponent as SuccessIcon} from '../../assets/success_icon.svg'
+import { React, useEffect } from 'react'
+import { ReactComponent as SuccessIcon } from '../../assets/success_icon.svg'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
 
-const SuccessAuth = () => {
+const SuccessCreate = () => {
+    const navigate = useNavigate()
+    useEffect (() => {
+        setTimeout (() => {
+            navigate('/ActiveInterest')
+        }, 1000)
+    })
+
+
     return (
         <Container>
-            <SuccessIcon className='SuccessIcon'/>
+            <SuccessIcon className='SuccessIcon' />
             <h1> Account successfully created </h1>
             <h2> Please wait, redirecting to your feed... </h2>
+            {/* <Navigate to="/ActiveInterest" /> */}
         </Container>
     )
 }
@@ -42,4 +52,4 @@ const Container = styled.div`
     }
 `;
 
-export default SuccessAuth
+export default SuccessCreate

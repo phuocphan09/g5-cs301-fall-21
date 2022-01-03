@@ -163,7 +163,10 @@ public class NotifierController {
      */
     @GetMapping("/v1/getaddableinterestlist")
     public InterestListResponse getAddableInterestList (@RequestParam String email) throws InvalidParameterException {
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
         InterestListResponse response = new InterestListResponse(); // create response object
         response.setResponseType("individual"); // set response type
         List<User> users = userRepository.findByEmail(email);
@@ -177,7 +180,10 @@ public class NotifierController {
         // get all interest objects NOT IN interestName from the interestRepository
         List<Interest> interests = findInterestByUser(user, false);
         response.setAddableInteresList(interests); // set the addable interest list
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
         return response;
     }
 
@@ -231,6 +237,7 @@ public class NotifierController {
             } else if (manipulation.getType().equals("remove")) {
 
                 System.out.println("Removing user interest");
+<<<<<<< HEAD
                 List<UserInterest> userInterests = userInterestRepository.
                         findByUserAndInterest(user,interest); // find in the database
                 UserInterest userInterest = userInterests.get(0); // get the entry
@@ -240,6 +247,14 @@ public class NotifierController {
 
                 userInterestRepository.deleteById(userInterest.getId()); // delete by id, not by entity
 
+=======
+                // remove interest
+                List<UserInterest> userInterests = userInterestRepository.findByUserAndInterest(user,interest); // find in the database
+                UserInterest userInterest = userInterests.get(0); // get the entry
+                System.out.println("Entry is: " + userInterest.getUser().getEmail()
+                        + " with " + userInterest.getInterest().getInterestName()); // logging
+                userInterestRepository.deleteById(userInterest.getId()); // delete by id, not by entity
+>>>>>>> main
                 response.setResult("success");
                 return response;
 

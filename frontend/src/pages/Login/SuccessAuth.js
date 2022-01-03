@@ -8,8 +8,8 @@ const SuccessAuth = () => {
     const navigate = useNavigate()
     useEffect (() => {
         setTimeout (() => {
-            navigate('/ActiveInterest')
-        }, 1000)
+            navigate('/HomePage')
+        }, 500)
     })
 
     return (

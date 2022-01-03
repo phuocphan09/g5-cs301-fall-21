@@ -8,7 +8,7 @@ const SuccessCreate = () => {
     useEffect (() => {
         setTimeout (() => {
             navigate('/ActiveInterest')
-        }, 1000)
+        }, 500)
     })
 
 
@@ -16,7 +16,7 @@ const SuccessCreate = () => {
         <Container>
             <SuccessIcon className='SuccessIcon' />
             <h1> Account successfully created </h1>
-            <h2> Please wait, redirecting to your feed... </h2>
+            <h2> Please wait, redirecting to your personal space... </h2>
             {/* <Navigate to="/ActiveInterest" /> */}
         </Container>
     )

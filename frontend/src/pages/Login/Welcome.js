@@ -2,15 +2,16 @@ import React from 'react'
 import styled from 'styled-components';
 
 const Welcome = () => {
+
     return (
-        <Container>
+        <WelcomeContainer>
             <h1>Welcome to the Notifier</h1>
             <h2>Type in your Fulbright email to begin</h2>
-        </Container>
+        </WelcomeContainer>
     )
 }
 
-const Container = styled.div`
+const WelcomeContainer = styled.div`
     position: absolute;
     width: 75%;
     height: 8.54%;

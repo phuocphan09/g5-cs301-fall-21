@@ -60,10 +60,10 @@ function App() {
           {/* <ActiveInterest/> */}
           {/* <Test/> */}
           {/* <AddInterest/> */}
-          {/* <ViewPost/> */}
+          <ViewPost/>
           {/* <SuccessLogout/> */}
           {/* <HomePage/> */}
-          <PersonalPage/>
+          {/* <PersonalPage/> */}
         </Wrapper>
       </Container>
     </div>

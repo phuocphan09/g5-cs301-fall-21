@@ -1,5 +1,4 @@
 import React from 'react'
-import { View } from 'react-native-web'
 import styled from 'styled-components'
 import Post from '../../post.service'
 
@@ -53,17 +52,17 @@ const Container = styled.div`
     width:100vw;
     display: flex;
     flex-direction: column;
-    justify-content: left;
-    inline-size: min-content;
+    align-items: center;
 `
 
 const TextWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    inline-size: 100vw;
+    inline-size: 90vw;
+    width:90vw;
     overflow-wrap: break-word;
-    ${'' /* width: min-content; */}
-    ${'' /* height: min-content; */}
+    margin-right: 1vw;
+    margin-left: 1vw;
 
     h1 {
         font-family: 'Source Sans Pro';
@@ -74,6 +73,8 @@ const TextWrapper = styled.div`
         text-align: left;
         margin-left: 1rem;
         margin-right: 1rem;
+        overflow-wrap: break-word;
+
     }
 
     h2 {
@@ -85,15 +86,15 @@ const TextWrapper = styled.div`
         text-align: left;
         margin-left: 1rem;
         margin-right: 1rem;
+        overflow-wrap: break-word;
 
     }
     
     line {
         position: relative;
-        width: 70vw;
+        width: 80vw;
         margin-top: 2vh;
-        margin-left: 5vw;
-        margin-right: 5vw;
+        margin-left: 2vw;
         border: 0.5px solid #000000;
         background: #000000;
         
@@ -101,18 +102,17 @@ const TextWrapper = styled.div`
 `
 
 const PostBox = styled.div`
-    ${'' /* max-width: 100vw; */}
-    ${'' /* max-height: 100vh; */}
     background-color: #FFFFFF;
     box-sizing: border-box;
     border-radius: 5px;
     border: solid 1px #006DFF;
     margin-top: 5vh;
     margin-bottom: 5vh;
-    margin-left: 9.3vw;
-    margin-right: 9.3vw;
-    justify-content: center;
-    inline-size: 100vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    inline-size: 90vw;
+    width: 90vw;
+    overflow-wrap: break-word;
 
 `;
 
@@ -127,6 +127,7 @@ const DashedBox = styled.div`
     margin-left: 10vw;
     margin-right: 10vw;
     justify-content:center;
+    overflow-wrap: break-word;
 
     h4 {
         font-family: 'Source Sans Pro';
@@ -137,6 +138,7 @@ const DashedBox = styled.div`
         font-weight: normal;
         font-size: 2.25vh;
         text-align: center;
+        overflow-wrap: break-word;
     }
 `;
 
@@ -153,9 +155,10 @@ const DashedBox = styled.div`
 const BackContainer = styled.button`
     margin-top:3.3vh;
     margin-bottom:3.3vh;
-    margin-right:16vw;
-    margin-left:16vw;
+    margin-right:5vw;
+    margin-left:5vw;
     min-height:7.05vh;
+    width:70vw;
     background: #006DFF;
     border-radius: 5px;
     transition: all 0.3s ease-out;

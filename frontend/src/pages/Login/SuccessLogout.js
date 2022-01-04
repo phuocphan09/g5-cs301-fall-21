@@ -3,11 +3,11 @@ import { ReactComponent as SuccessIcon } from '../../assets/success_icon.svg'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 
-const SuccessCreate = () => {
+const SuccessLogout = () => {
     const navigate = useNavigate()
     useEffect (() => {
         setTimeout (() => {
-            navigate('/ActiveInterest')
+            navigate('/InputEmail')
         }, 1000)
     })
 
@@ -15,8 +15,8 @@ const SuccessCreate = () => {
     return (
         <Container>
             <SuccessIcon className='SuccessIcon' />
-            <h1> Account successfully created </h1>
-            <h2> Please wait, redirecting to your personal space... </h2>
+            <h1> Log out successfully </h1>
+            <h2> Please wait, redirecting to login page... </h2>
             {/* <Navigate to="/ActiveInterest" /> */}
         </Container>
     )
@@ -52,4 +52,4 @@ const Container = styled.div`
     }
 `;
 
-export default SuccessCreate
+export default SuccessLogout

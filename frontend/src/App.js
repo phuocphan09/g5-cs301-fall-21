@@ -12,6 +12,11 @@ import Feed from './pages/Feed';
 import AddInterest from './pages/InterestConfig/AddInterest';
 import ActiveInterest from './pages/InterestConfig/ActiveInterest';
 import Test from './pages/InterestConfig/Test';
+import ViewPost from './pages/Post/ViewPost';
+import SuccessLogout from './pages/Login/SuccessLogout';
+import HomePage from './pages/Post/HomePage';
+import PersonalPage from './pages/Post/PersonalPage';
+
 
 
 function App() {
@@ -40,7 +45,7 @@ function App() {
     <div className='App'>
       <Container>
         <Wrapper>
-          <Routes>
+          {/* <Routes>
             <Route path="/" element={<ProtectedRoute />}>
               <Route path="/Feed" element={<Feed />} />
               <Route path="/AddInterest" element={<AddInterest />} />
@@ -51,10 +56,14 @@ function App() {
             <Route path="/CreateAccount" element={<CreateAccount email={inputEmail} passwordInput={changeInputPassword} />} />
             <Route path="/SuccessAuth" element={<SuccessAuth />} />
             <Route path="/SuccessCreate" element={<SuccessCreate />} />
-          </Routes>
+          </Routes> */}
           {/* <ActiveInterest/> */}
           {/* <Test/> */}
           {/* <AddInterest/> */}
+          {/* <ViewPost/> */}
+          {/* <SuccessLogout/> */}
+          {/* <HomePage/> */}
+          <PersonalPage/>
         </Wrapper>
       </Container>
     </div>

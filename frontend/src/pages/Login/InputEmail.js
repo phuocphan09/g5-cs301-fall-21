@@ -60,7 +60,10 @@ const InputEmail = (props) => {
     }
     return (
         <Container>
-            <Welcome/>
+            <WelcomeContainer>
+                <h1>Welcome to the Notifier</h1>
+                <h2>Type in your Fulbright email to begin</h2>
+            </WelcomeContainer>
             <Container1 inputColor={validState} >
                 <view >
                     <text style={{ fontWeight: 700, fontSize: 18 }}>Fulbright Email</text>
@@ -110,6 +113,7 @@ view{
     line-height: 21px;
     font-family: 'Source Sans Pro';
     color: ${props => props.inputColor };
+    text-align: left;
 }
 text{
     text-align: left;
@@ -195,6 +199,34 @@ const Container2 = styled.form`
         pointer-events: none;
         transition: all 0.2s ease-in;
     }
+`;
+
+const WelcomeContainer = styled.div`
+    position: absolute;
+    width: 75%;
+    height: 8.54%;
+    left: 10.4%;
+    top: 11.1%;
+    align-items: center;
+
+    h1{
+        font-family: 'Source Sans Pro';
+        text-align: center;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 10px;
+    }
+
+    h2{
+        font-family: 'Source Sans Pro';
+        text-align: center;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 23,87px;
+    }
+
 `;
 
 export default InputEmail

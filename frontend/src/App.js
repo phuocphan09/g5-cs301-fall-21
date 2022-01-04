@@ -12,6 +12,11 @@ import Feed from './pages/Feed';
 import AddInterest from './pages/InterestConfig/AddInterest';
 import ActiveInterest from './pages/InterestConfig/ActiveInterest';
 import Test from './pages/InterestConfig/Test';
+import ViewPost from './pages/Post/ViewPost';
+import SuccessLogout from './pages/Login/SuccessLogout';
+import HomePage from './pages/Post/HomePage';
+import PersonalPage from './pages/Post/PersonalPage';
+
 
 
 function App() {
@@ -54,7 +59,11 @@ function App() {
           </Routes> */}
           {/* <ActiveInterest/> */}
           {/* <Test/> */}
-          <AddInterest/>
+          {/* <AddInterest/> */}
+          <ViewPost/>
+          {/* <SuccessLogout/> */}
+          {/* <HomePage/> */}
+          {/* <PersonalPage/> */}
         </Wrapper>
       </Container>
     </div>

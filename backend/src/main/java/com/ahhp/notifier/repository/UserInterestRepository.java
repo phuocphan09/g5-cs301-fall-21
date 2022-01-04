@@ -11,6 +11,7 @@ public interface UserInterestRepository extends JpaRepository<UserInterest, Long
 
     List<UserInterest> findByUser (User user); // find all using user
     List<UserInterest> findByInterest (Interest interest);
+    List<UserInterest> findByInterestIn (String[] interests);
     List<UserInterest> findByUserAndInterest(User user, Interest interest);
 
 }

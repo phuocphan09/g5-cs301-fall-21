@@ -237,7 +237,7 @@ public class NotifierController {
             } else if (manipulation.getType().equals("remove")) {
 
                 System.out.println("Removing user interest");
-<<<<<<< HEAD
+
                 List<UserInterest> userInterests = userInterestRepository.
                         findByUserAndInterest(user,interest); // find in the database
                 UserInterest userInterest = userInterests.get(0); // get the entry
@@ -246,15 +246,7 @@ public class NotifierController {
                         + " with " + userInterest.getInterest().getInterestName()); // logging
 
                 userInterestRepository.deleteById(userInterest.getId()); // delete by id, not by entity
-
-=======
-                // remove interest
-                List<UserInterest> userInterests = userInterestRepository.findByUserAndInterest(user,interest); // find in the database
-                UserInterest userInterest = userInterests.get(0); // get the entry
-                System.out.println("Entry is: " + userInterest.getUser().getEmail()
-                        + " with " + userInterest.getInterest().getInterestName()); // logging
-                userInterestRepository.deleteById(userInterest.getId()); // delete by id, not by entity
->>>>>>> main
+                
                 response.setResult("success");
                 return response;
 

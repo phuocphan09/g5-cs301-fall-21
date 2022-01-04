@@ -240,7 +240,7 @@ public class NotifierController {
                         + " with " + userInterest.getInterest().getInterestName()); // logging
 
                 userInterestRepository.deleteById(userInterest.getId()); // delete by id, not by entity
-                
+
                 response.setResult("success");
                 return response;
 

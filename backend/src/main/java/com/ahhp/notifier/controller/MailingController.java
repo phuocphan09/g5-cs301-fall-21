@@ -13,6 +13,7 @@ import com.ahhp.notifier.repository.UserRepository;
 import com.ahhp.notifier.response.AccountValidationResponse;
 import com.ahhp.notifier.response.PostSubmissionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.InvalidParameterException;
@@ -33,7 +34,8 @@ public class MailingController {
     MailingService mailingService;
 
     @PostMapping("/v1/submitpost")
-    public PostSubmissionResponse submitPost(@RequestBody PostInput postInput) {
+    public PostSubmissionResponse submitPost(@RequestBody PostInput postInput,
+                                             @RequestParam(defaultValue = "false") boolean send) {
 
         PostSubmissionResponse response = new PostSubmissionResponse();
         response.setAdded(false);
@@ -56,13 +58,18 @@ public class MailingController {
 
             response.setAdded(true);
 
-            // send the damn emails
-            int userNum = sendEmail(postInput.getInterestList(), post);
-            if (userNum > 0) {
-                response.setEmailSent(true);
+            if (send) {
+                System.out.println("Yes send email"); // debug
+//                // send the damn emails
+//                int userNum = sendEmail(postInput.getInterestList(), post);
+//                if (userNum > 0) {
+//                    response.setEmailSent(true);
+//                    response.setDetails("Email sent to " + userNum + " recipients."); // log
+//                }
+            } else {
+                System.out.println("Not sending anything");
             }
 
-            response.setDetails("Email sent to " + userNum + " recipients.");
             return response;
         }
     }

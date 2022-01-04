@@ -33,7 +33,7 @@ public class MailingController {
     MailingService mailingService;
 
     @PostMapping("/v1/submitpost")
-    public PostSubmissionResponse submitPost(@RequestBody PostInput postInput) {
+    public PostSubmissionResponse submitPost(@RequestBody PostInput postInput, @RequestParam boolean send) {
 
         PostSubmissionResponse response = new PostSubmissionResponse();
         response.setAdded(false);
@@ -56,13 +56,16 @@ public class MailingController {
 
             response.setAdded(true);
 
-            // send the damn emails
-            int userNum = sendEmail(postInput.getInterestList(), post);
-            if (userNum > 0) {
-                response.setEmailSent(true);
+            if (send) { // send parameter
+                System.out.println("Yes send email"); // debug
+                // send the damn emails
+//                int userNum = sendEmail(postInput.getInterestList(), post);
+//                if (userNum > 0) {
+//                    response.setEmailSent(true);
+//                    response.setDetails("Email sent to " + userNum + " recipients."); // log
+//                }
             }
 
-            response.setDetails("Email sent to " + userNum + " recipients.");
             return response;
         }
     }

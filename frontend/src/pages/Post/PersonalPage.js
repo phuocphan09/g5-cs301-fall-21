@@ -85,18 +85,22 @@ const Container = styled.div`
 `
 
 const Avatar = styled.img`
+    position: relative;
     width: 13.33vw;
     height: 13.33vw;
-    margin-right: 2rem;
-    margin-left: 2rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    align-items: left;
+    justify-content: left;
 `
 
 const RemoveIcon = styled.img`
     width: 3vh;
     height: 3vh;
-    margin-left: 5px;
-    margin-top: 5px;
-    justify-content:center;
+    ${'' /* margin-left: 5px;
+    margin-top: 5px; */}
+    justify-content:left;
+    align-items: left;
     display: flex;
     flex-direction: row
 `
@@ -110,10 +114,10 @@ const RemoveIcon = styled.img`
 // `
 
 const ArrowButton = styled.button`
-    width:100vw;
+    width:90vw;
     display:flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     background: #ffffff;
     border: 0px solid #ffffff;
@@ -131,9 +135,9 @@ const TextWrapper = styled.div`
 const Container2 = styled.div`
     display: flex;
     flex-direction: column;
-    inline-size: 100vw;
+    ${'' /* inline-size: 100vw; */}
     overflow-wrap: break-word;
-    width: 100vw;
+    width: 90vw;
 
     h1 {
         width:100vw;
@@ -144,7 +148,6 @@ const Container2 = styled.div`
         font-size: 3vh;
         text-align: left;
         margin-left: 1rem;
-        margin-right: 1rem;
         margin-bottom: 0rem;
     }
 
@@ -157,7 +160,6 @@ const Container2 = styled.div`
         font-size: 2vh;
         text-align: left;
         margin-left: 1rem;
-        margin-right: 1rem;
 
     }
     

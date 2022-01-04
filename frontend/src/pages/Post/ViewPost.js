@@ -28,13 +28,25 @@ const ViewPost = () => {
                         <line />
 
                         <h2>
-                            Description <br /> fdsafhsjdkasdasdasdasdalhfjdskalhfewuifhdsjaklfhdsakfjlhdsajklfhdsajkflhdsajkl
-                        </h2>
+                            Description <br /> </h2>
 
                         <line />
 
                         <h2> Posted by: an@student.fulbright.edu.vn </h2>
                     </TextWrapper>
+
+                    <InterestWrapper>
+                        <InterestLabel>
+                            <h2> Engineering </h2>
+                        </InterestLabel>
+                        <InterestLabel>
+                            <h2> Engineering </h2>
+                        </InterestLabel>
+                        <InterestLabel>
+                            <h2> Engineering </h2>
+                        </InterestLabel>
+                    </InterestWrapper>
+
                 </PostBox>
 
                 <BackContainer>
@@ -53,6 +65,47 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+`
+
+const InterestWrapper = styled.div`
+    position:relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: left;
+    inline-size: 90vw;
+    width: 90vw;
+    margin-right:1vw;
+    margin-left: 2vw;
+    margin-bottom: 5vw;
+    overflow-wrap: inherit;
+`
+
+const InterestLabel = styled.div`
+    position: relative;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    border-radius: 2px;
+    border: solid 1px #6B6B6B;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.2rem;
+    overflow-wrap: inherit;
+
+
+    h2 {
+        font-family: 'Source Sans Pro';
+        color: #000000;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 2vh;
+        text-align: left;
+        margin-left: 0.2rem;
+        margin-right: 0.2rem;
+        margin-top: 0.2rem;
+        margin-bottom: 0.2rem;
+        overflow-wrap: break-word;
+    }
 `
 
 const TextWrapper = styled.div`
@@ -74,7 +127,6 @@ const TextWrapper = styled.div`
         margin-left: 1rem;
         margin-right: 1rem;
         overflow-wrap: break-word;
-
     }
 
     h2 {
@@ -87,7 +139,6 @@ const TextWrapper = styled.div`
         margin-left: 1rem;
         margin-right: 1rem;
         overflow-wrap: break-word;
-
     }
     
     line {
@@ -97,7 +148,6 @@ const TextWrapper = styled.div`
         margin-left: 2vw;
         border: 0.5px solid #000000;
         background: #000000;
-        
     }
 `
 

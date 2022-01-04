@@ -11,8 +11,10 @@ const CreateAccount = (props) => {
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [buttonState, setbuttonState] = useState(true);
-    const [validState, setValidState] = useState("#006DFF");
-
+    const [validState, setValidState] = useState({
+        color: "#006DFF",
+        subtitle: "Use this to authorize your next logins"
+    });
     const initialValue = false
     const [passwordValidState,setPasswordValidState]= useState(initialValue)
     const handlePasswordChange = (e) => {
@@ -32,6 +34,12 @@ const CreateAccount = (props) => {
         e.preventDefault();
         props.passwordInput(password)
 
+        if (password.length < 2) {
+            setValidState({color: "#FF5630", subtitle: "Your password contains AT LEAST 2 characters"})
+            return;
+        }
+
+
         AuthService.CreateEmail(props.email, password)
         .then(response =>{
             const resultOutput = response.data.result;
@@ -39,25 +47,30 @@ const CreateAccount = (props) => {
             if (resultOutput === true){
                 navigate("/SuccessCreate")
             } else {
-                setValidState('#FF5630')
+                setValidState({color: "#FF5630", subtitle: "Something wrong happened while creating your account"})
             }
         })
 
     }
 
     return (
+
         <Container>
-            <Container1 inputColor={validState} >
+            <WelcomeContainer>
+                <h1>Welcome to the Notifier</h1>
+                <h2>Create a password for your new account</h2>
+            </WelcomeContainer>
+            <Container1 inputColor={validState.color} >
                 <view >
-                    <text style={{ fontWeight: 700, fontSize: 18 }}>Fulbright Password</text>
+                    <text style={{ fontWeight: 700, fontSize: 18 }}>Create a password</text>
                     <br></br>
-                    <text style={{ fontWeight: 400, fontSize: 16 }}>Please input your password to authorize</text>
+                    <text style={{ fontWeight: 400, fontSize: 16 }}>{validState.subtitle}</text>
 
                 </view>
             </Container1>
             <Container2 className='form-group form' autoComplete='off' onSubmit={handleFormSubmit}>
 
-                <PasswordBox inputColor={validState} type='password' required placeholder='Your Fulbright Password' className='form-control' onChange={handlePasswordChange} value={password} />
+                <PasswordBox inputColor={validState.color} type='password' required placeholder='Your Fulbright Password' className='form-control' onChange={handlePasswordChange} value={password} />
                 <br></br>
                 <button disabled={buttonState}> Authorize </button>
 
@@ -98,6 +111,7 @@ view{
     line-height: 21px;
     font-family: 'Source Sans Pro';
     color: ${props => props.inputColor};
+    text-align: left;
 }
 text{
     text-align: left;
@@ -181,6 +195,34 @@ const Container2 = styled.form`
         cursor: pointer;
         transition: all 0.2s ease-in;
     }
+`;
+
+const WelcomeContainer = styled.div`
+    position: absolute;
+    width: 75%;
+    height: 8.54%;
+    left: 10.4%;
+    top: 11.1%;
+    align-items: center;
+
+    h1{
+        font-family: 'Source Sans Pro';
+        text-align: center;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 10px;
+    }
+
+    h2{
+        font-family: 'Source Sans Pro';
+        text-align: center;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 23,87px;
+    }
+
 `;
 
 

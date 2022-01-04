@@ -163,10 +163,7 @@ public class NotifierController {
      */
     @GetMapping("/v1/getaddableinterestlist")
     public InterestListResponse getAddableInterestList (@RequestParam String email) throws InvalidParameterException {
-<<<<<<< HEAD
 
-=======
->>>>>>> main
         InterestListResponse response = new InterestListResponse(); // create response object
         response.setResponseType("individual"); // set response type
         List<User> users = userRepository.findByEmail(email);
@@ -180,10 +177,7 @@ public class NotifierController {
         // get all interest objects NOT IN interestName from the interestRepository
         List<Interest> interests = findInterestByUser(user, false);
         response.setAddableInteresList(interests); // set the addable interest list
-<<<<<<< HEAD
 
-=======
->>>>>>> main
         return response;
     }
 

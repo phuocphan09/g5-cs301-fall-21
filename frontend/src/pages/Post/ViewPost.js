@@ -1,13 +1,31 @@
 import React from 'react'
 import styled from 'styled-components'
 import Post from '../../post.service'
+import { useState, useEffect } from 'react'
+import axios from 'axios';
 
 const ViewPost = () => {
-    const response = 'success'
-    // Post.GetPost(localStorage.getItem("id")
-    //     .then(response => console.log(response.data.result)))
+    const [title, setTitle] = useState('')
+    const [description, setDescription] = useState('')
+    const [poster, setPoster] = useState('')
+    let initialInterestList = []
 
-    if (response === 'not found') {
+    useEffect(() => {
+        axios.get('http://localhost:8080/v1/getpost?postId=578')
+            .then(response => {
+                setTitle(response.data.title)
+                setDescription(response.data.description)
+                setPoster(response.data.poster)
+                response.data.interestList.map((item) => {
+                    initialInterestList.push(item)
+                })
+            })
+    }, [])
+
+    const [interestList, setInterestList] = useState(initialInterestList)
+    console.log(interestList)
+    
+    if (title.length === 0) {
         return (
             <Container>
                 <DashedBox>
@@ -24,27 +42,25 @@ const ViewPost = () => {
             <Container>
                 <PostBox>
                     <TextWrapper>
-                        <h1> Title sdakfdshafkjelwqfiodhsahfjkdasdasdasdasdasdasdasddlshafewoafhdskajlfhjkdlfehiwq </h1>
+                        {console.log(title)}
+                        {console.log('hello')}
+                        <h1> {title} </h1>
                         <line />
-
-                        <h2>
-                            Description <br /> </h2>
-
+                        <h2> {description} </h2>
                         <line />
-
-                        <h2> Posted by: an@student.fulbright.edu.vn </h2>
+                        <h2> Posted by: {poster} </h2>
                     </TextWrapper>
 
                     <InterestWrapper>
-                        <InterestLabel>
-                            <h2> Engineering </h2>
-                        </InterestLabel>
-                        <InterestLabel>
-                            <h2> Engineering </h2>
-                        </InterestLabel>
-                        <InterestLabel>
-                            <h2> Engineering </h2>
-                        </InterestLabel>
+                        {console.log(interestList)}
+                        {interestList.map((item) => {
+                            {console.log('hello')}
+                            {console.log(item)}
+                            <InterestLabel>
+                                {item}
+                            </InterestLabel>
+                        })}
+
                     </InterestWrapper>
 
                 </PostBox>

@@ -9,7 +9,7 @@ const HomePage = () => {
 
     const navigate = useNavigate()
     function handleAdd() {
-        navigate('/AddInterest')
+        navigate('/AddPost')
     }
 
     function handleHome() {
@@ -26,7 +26,7 @@ const HomePage = () => {
             <AddInterest onClick={handleAdd}>
                 <text>
                     <RemoveIcon src={add_icon} />
-                    Add new interests
+                    Add new post
                 </text>
             </AddInterest>
 

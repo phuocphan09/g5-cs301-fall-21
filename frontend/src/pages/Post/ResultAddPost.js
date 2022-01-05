@@ -5,9 +5,18 @@ import AddPost from './AddPost';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 
 const NewPostController = () => {
+
+    const navigate = useNavigate()
+    useEffect (() => {
+        setTimeout (() => {
+            navigate('/HomePage')
+        }, 500)
+    })
+
 
     return (
         <Container>

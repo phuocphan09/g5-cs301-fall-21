@@ -8,7 +8,6 @@ import SuccessAuth from './pages/Login/SuccessAuth';
 import SuccessCreate from './pages/Login/SuccessCreate';
 import React, { useState, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import Feed from './pages/Feed';
 import AddInterest from './pages/InterestConfig/AddInterest';
 import ActiveInterest from './pages/InterestConfig/ActiveInterest';
 import Test from './pages/InterestConfig/Test';
@@ -47,9 +46,8 @@ function App() {
     <div className='App'>
       <Container>
         <Wrapper>
-          <Routes>
-            {/* <Route path="/" element={<ProtectedRoute />}>
-              <Route path="/Feed" element={<Feed />} />
+          {/* <Routes>
+            <Route path="/" element={<ProtectedRoute />}>
               <Route path="/AddInterest" element={<AddInterest />} />
               <Route path="/ActiveInterest" element={<ActiveInterest />} />
             </Route>
@@ -57,16 +55,13 @@ function App() {
             <Route path="/InputPassword" element={<InputPassword email={inputEmail} passwordInput={changeInputPassword} />} />
             <Route path="/CreateAccount" element={<CreateAccount email={inputEmail} passwordInput={changeInputPassword} />} />
             <Route path="/SuccessAuth" element={<SuccessAuth />} />
-            <Route path="/SuccessCreate" element={<SuccessCreate />} /> */}
+            <Route path="/SuccessCreate" element={<SuccessCreate />} />
             <Route path="/AddPost" element={<AddPost/>}></Route>
             <Route path="/ResultAddPost" element={<ResultAddPost/>}></Route>
-          </Routes>
-          {/* <ActiveInterest/> */}
-          {/* <Test/> */}
-          {/* <AddInterest/> */}
-          {/* <SuccessLogout/> */}
+          </Routes> */}
           {/* <HomePage/> */}
           {/* <PersonalPage/> */}
+          <ViewPost/>
         </Wrapper>
       </Container>
     </div>

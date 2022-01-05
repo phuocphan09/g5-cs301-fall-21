@@ -20,6 +20,10 @@ const ActiveInterest = (props) => {
         navigate('/AddInterest')
     }
 
+    function handleHome() {
+        navigate('/HomePage')
+    }
+
 
     useEffect(() => {
         const userEmail = localStorage.getItem("user");
@@ -128,7 +132,7 @@ const ActiveInterest = (props) => {
                 )) : <DashedBox><h4> Uh oh... you haven’t added any interests <br /> Select the above blue button to add one! </h4></DashedBox>}
             </Container2>
 
-            <BackContainer>
+            <BackContainer onClick={handleHome}>
                 <text> Back to homepage </text>
             </BackContainer>
         </Container>

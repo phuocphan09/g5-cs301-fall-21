@@ -1,10 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
-import Post from '../../post.service'
 import { useState, useEffect } from 'react'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
 
 const ViewPost = () => {
+    const navigate = useNavigate()
+
+    function handleHome() {
+        navigate('/HomePage')
+    }
+
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [poster, setPoster] = useState('')
@@ -23,8 +29,8 @@ const ViewPost = () => {
     }, [])
 
     const [interestList, setInterestList] = useState(initialInterestList)
-    console.log(interestList)
-    
+    // console.log(interestList)
+
     if (title.length === 0) {
         return (
             <Container>
@@ -42,30 +48,24 @@ const ViewPost = () => {
             <Container>
                 <PostBox>
                     <TextWrapper>
-                        {console.log(title)}
-                        {console.log('hello')}
                         <h1> {title} </h1>
                         <line />
                         <h2> {description} </h2>
                         <line />
                         <h2> Posted by: {poster} </h2>
                     </TextWrapper>
-
+                    
                     <InterestWrapper>
-                        {console.log(interestList)}
-                        {interestList.map((item) => {
-                            {console.log('hello')}
-                            {console.log(item)}
+                        {interestList.map((item) => (
                             <InterestLabel>
-                                {item}
+                                <h2> {item} </h2>
                             </InterestLabel>
-                        })}
-
+                        ))}
                     </InterestWrapper>
-
+                
                 </PostBox>
 
-                <BackContainer>
+                <BackContainer onClick={handleHome}>
                     <text> Back to homepage </text>
                 </BackContainer>
             </Container>
@@ -84,8 +84,8 @@ const Container = styled.div`
 `
 
 const InterestWrapper = styled.div`
-    position:relative;
     display: flex;
+    flex-wrap:wrap;
     flex-direction: row;
     justify-content: left;
     align-items: left;
@@ -94,11 +94,9 @@ const InterestWrapper = styled.div`
     margin-right:1vw;
     margin-left: 2vw;
     margin-bottom: 5vw;
-    overflow-wrap: inherit;
 `
 
 const InterestLabel = styled.div`
-    position: relative;
     background-color: #FFFFFF;
     box-sizing: border-box;
     border-radius: 2px;
@@ -106,7 +104,8 @@ const InterestLabel = styled.div`
     align-items: center;
     justify-content: center;
     margin-right: 0.2rem;
-    overflow-wrap: inherit;
+    margin-bottom: 0.2rem;
+    overflow-wrap: break-word;
 
 
     h2 {
@@ -193,30 +192,20 @@ const DashedBox = styled.div`
     margin-left: 10vw;
     margin-right: 10vw;
     justify-content:center;
-    overflow-wrap: break-word;
 
     h4 {
-        font-family: 'Source Sans Pro';
+       font-family: 'Source Sans Pro';
         width: 100%;
         height: 100%;
         color: #000000;
         font-style: normal;
         font-weight: normal;
-        font-size: 2.25vh;
+        font-size: 10vw;
         text-align: center;
+        margin-right:10vw;
         overflow-wrap: break-word;
     }
 `;
-
-// const ColoredLine = styled.div`
-//     position: relative;
-//     width: 70vw;
-//     margin-top: 3.3vh;
-//     margin-left: 5vw;
-//     margin-right: 5vw;
-//     border: 1px solid #000000;
-//     background: #000000;
-// `
 
 const BackContainer = styled.button`
     margin-top:3.3vh;

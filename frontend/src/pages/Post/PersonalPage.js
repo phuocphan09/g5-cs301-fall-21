@@ -10,6 +10,10 @@ import arrow from '../../assets/arrow.svg'
 const PersonalPage = () => {
 
     const navigate = useNavigate()
+    const userEmail = localStorage.getItem("user")
+    var name = userEmail.split("@")[0];
+    var firstname = name.split(".")[0];
+    var lastname = name.split(".")[1];
 
     function handleAdd() {
         navigate('/AddInterest')
@@ -29,15 +33,14 @@ const PersonalPage = () => {
 
     return (
         <Container>
-            <Container2>
 
-                <ArrowButton>
+                <AvatarWrapper>
                     <Avatar src={avatar} />
                     <TextWrapper>
-                        <h1> Phuoc Phan </h1>
-                        <h2> phuoc.phan@student.fulbright.edu.vn </h2>
+                        <h1> {firstname} {lastname} </h1>
+                        <h2> {userEmail} </h2>
                     </TextWrapper>
-                </ArrowButton>
+                </AvatarWrapper>
 
                 <line />
 
@@ -60,8 +63,6 @@ const PersonalPage = () => {
 
                 <line />
 
-            </Container2>
-
             <Navigation>
                 <Home onClick={handleHome}> <RemoveIcon src={inactive_home} />
                     <text> Home </text>
@@ -82,40 +83,49 @@ const Container = styled.div`
     width:100vw;
     display:flex;
     flex-direction: column;
+
+    line {
+        position: relative;
+        width: 100vw;
+        margin-top: 2vh;
+        border: 0.5px solid #000000;
+        background: #000000;
+        
+    }
 `
 
 const Avatar = styled.img`
     position: relative;
     width: 13.33vw;
     height: 13.33vw;
-    margin-right: 1rem;
-    margin-left: 1rem;
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+    margin-top: 1rem;
     align-items: left;
     justify-content: left;
 `
 
 const RemoveIcon = styled.img`
+    ${'' /* position: relative; */}
     width: 3vh;
     height: 3vh;
-    ${'' /* margin-left: 5px;
-    margin-top: 5px; */}
-    justify-content:left;
-    align-items: left;
-    display: flex;
-    flex-direction: row
+    margin-right:5px;
+    margin-left: 5px;
+    margin-top: 5px;
+`
+const AvatarWrapper = styled.div`
+    width:100vw;
+    display:flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    justify-content: center;
+    align-items: center;
 `
 
-// const ColoredLine = styled.div`
-//     position: relative;
-//     width: 88.8vw;
-//     margin-left: 5.87%;
-//     border: 1px solid #000000;
-//     background: #000000;
-// `
-
 const ArrowButton = styled.button`
-    width:90vw;
+    width: 100vw;
     display:flex;
+    flex-wrap:wrap;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -124,23 +134,15 @@ const ArrowButton = styled.button`
 `
 
 const TextWrapper = styled.div`
-    width:60vw;
+    width:76.26vw;
     display:flex;
+    flex-wrap:wrap;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    margin-left: 5rem;
-`
-
-const Container2 = styled.div`
-    display: flex;
-    flex-direction: column;
-    ${'' /* inline-size: 100vw; */}
-    overflow-wrap: break-word;
-    width: 90vw;
+    align-items: left;
+    margin-right: 1rem;
 
     h1 {
-        width:100vw;
         font-family: 'Source Sans Pro';
         color: #000000;
         font-style: normal;
@@ -149,10 +151,11 @@ const Container2 = styled.div`
         text-align: left;
         margin-left: 1rem;
         margin-bottom: 0rem;
+        flex-wrap:wrap;
+
     }
 
     h2 {
-        width:100vw;
         font-family: 'Source Sans Pro';
         color: #000000;
         font-style: normal;
@@ -202,12 +205,9 @@ const Home = styled.button`
         font-weight: normal;
         font-size: 13px;
         line-height: 16px;
-        /* identical to box height */
-
         display: flex;
         align-items: center;
         text-align: center;
-
         color: #6B6B6B;
     }
 `
@@ -227,12 +227,9 @@ const Personal = styled.button`
         font-weight: normal;
         font-size: 13px;
         line-height: 16px;
-        /* identical to box height */
-
         display: flex;
         align-items: center;
         text-align: center;
-
         color: #006DFF;
     }
 `

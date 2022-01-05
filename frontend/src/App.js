@@ -1,22 +1,25 @@
 import './App.css';
 import styled from 'styled-components';
+import React, { useState, useEffect } from 'react';
+import { Route, Routes } from 'react-router-dom';
+// ProtectedRoute
+import ProtectedRoute from './pages/ProtectedRoute';
+// InterestConfig
+import AddInterest from './pages/InterestConfig/AddInterest';
+import ActiveInterest from './pages/InterestConfig/ActiveInterest';
+// Login
 import InputEmail from './pages/Login/InputEmail';
 import InputPassword from './pages/Login/InputPassword';
-import ProtectedRoute from './pages/ProtectedRoute';
 import CreateAccount from './pages/Login/CreateAccount';
 import SuccessAuth from './pages/Login/SuccessAuth';
 import SuccessCreate from './pages/Login/SuccessCreate';
-import React, { useState, useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import AddInterest from './pages/InterestConfig/AddInterest';
-import ActiveInterest from './pages/InterestConfig/ActiveInterest';
-import Test from './pages/InterestConfig/Test';
-import ViewPost from './pages/Post/ViewPost';
 import SuccessLogout from './pages/Login/SuccessLogout';
+// Post
+import ViewPost from './pages/Post/ViewPost';
 import HomePage from './pages/Post/HomePage';
 import AddPost from './pages/Post/AddPost'
 import PersonalPage from './pages/Post/PersonalPage';
-import ResultAddPost from'./pages/Post/ResultAddPost';
+import ResultAddPost from './pages/Post/ResultAddPost';
 
 
 
@@ -46,22 +49,26 @@ function App() {
     <div className='App'>
       <Container>
         <Wrapper>
-          {/* <Routes>
+          <Routes>
             <Route path="/" element={<ProtectedRoute />}>
               <Route path="/AddInterest" element={<AddInterest />} />
               <Route path="/ActiveInterest" element={<ActiveInterest />} />
+              <Route path="/AddPost" element={<AddPost />}></Route>
+              <Route path="/ResultAddPost" element={<ResultAddPost />} />
+              <Route path="/HomePage" element={<HomePage />} />
+              <Route path="/PersonalPage" element={<PersonalPage />} />
+              <Route path="/ViewPost" element={<ViewPost />} />
+              <Route path="/SuccessLogout" element={<SuccessLogout />} />
             </Route>
             <Route path="/InputEmail" element={<InputEmail props={changeInputEmail} />} />
             <Route path="/InputPassword" element={<InputPassword email={inputEmail} passwordInput={changeInputPassword} />} />
             <Route path="/CreateAccount" element={<CreateAccount email={inputEmail} passwordInput={changeInputPassword} />} />
             <Route path="/SuccessAuth" element={<SuccessAuth />} />
             <Route path="/SuccessCreate" element={<SuccessCreate />} />
-            <Route path="/AddPost" element={<AddPost/>}></Route>
-            <Route path="/ResultAddPost" element={<ResultAddPost/>}></Route>
-          </Routes> */}
+          </Routes>
           {/* <HomePage/> */}
           {/* <PersonalPage/> */}
-          <ViewPost/>
+          {/* <ViewPost/> */}
         </Wrapper>
       </Container>
     </div>

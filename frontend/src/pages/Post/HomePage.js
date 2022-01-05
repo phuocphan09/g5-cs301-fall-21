@@ -17,7 +17,7 @@ const HomePage = () => {
     }
 
     function handlePersonal() {
-        navigate('/Personal')
+        navigate('/PersonalPage')
     }
 
     return (

@@ -17,6 +17,7 @@ public class Post {
     private String title;
     private String description;
     private String interestList;
+    private Long timeStamp;
 
     public String getPoster() {
         return poster;
@@ -56,5 +57,13 @@ public class Post {
 
     public void setInterestList(String interestList) {
         this.interestList = interestList;
+    }
+
+    public Long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Long timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }

@@ -52,6 +52,7 @@ public class MailingController {
             post.setPoster(postInput.getPoster()); // set poster
             post.setTitle(postInput.getTitle()); // set title
             post.setDescription(postInput.getDescription()); // set description
+            post.setTimeStamp(System.currentTimeMillis()); // set timestamp
 
             post.setInterestList(Arrays.toString(postInput.getInterestList())); // turn interestlist[] to a string
 
@@ -60,15 +61,15 @@ public class MailingController {
             response.setAdded(true);
 
             if (send) {
-                System.out.println("Yes send email"); // debug
-//                // send the damn emails
-//                int userNum = sendEmail(postInput.getInterestList(), post);
-//                if (userNum > 0) {
-//                    response.setEmailSent(true);
-//                    response.setDetails("Email sent to " + userNum + " recipients."); // log
-//                }
+
+                // send the damn emails
+                int userNum = sendEmail(postInput.getInterestList(), post);
+                if (userNum > 0) {
+                    response.setEmailSent(true);
+                    response.setDetails("Email sent to " + userNum + " recipients."); // log
+                }
             } else {
-                System.out.println("Not sending anything");
+                response.setDetails("Emails not sent");
             }
 
             return response;
@@ -88,6 +89,7 @@ public class MailingController {
             postInput.setDescription(post.getDescription());
             postInput.setTitle(post.getTitle());
             postInput.setInterestList(ToList(post.getInterestList())); // convert from string to string[]
+            postInput.setTimeStamp(post.getTimeStamp());
 
             return postInput;
         } else { // post is not found, return null

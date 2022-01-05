@@ -51,10 +51,15 @@ public class MailingService {
 
     private String formatText (Post post, List<String> interests) {
 
-        String formatted = "<p>A new post " + post.getTitle() + ":" + post.getId() + " from " +
+        // add email header
+        String formatted = "<p>A new post, " + post.getTitle() + " [" + post.getId() + "] from " +
                 post.getPoster() + " indicated your interests in : " +
                 interests.toString().substring(1,interests.toString().length()-1) + ".</p><p>" +
                 post.getDescription() + "</p>";
+
+        // add link to post
+        String linkToPost = "localhost:3000/viewpost?postid=" + post.getId();
+        formatted += "<a href='" + linkToPost + "'>" + "Link to post" + "</a>";
 
         return formatted;
     }

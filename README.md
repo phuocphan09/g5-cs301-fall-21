@@ -15,9 +15,9 @@ below.
     $ npm --version
     1.3.21
 
-#### Node installation on OS X
+#### Node installation on Mac OS
 
-You will need to use a Terminal. On OS X, you can find the default terminal in
+You will need to use a Terminal. On Mac OS, you can find the default terminal in
 `/Applications/Utilities/Terminal.app`.
 
 Please install [Homebrew](http://brew.sh/) if it's not already done with the following command.
@@ -40,7 +40,14 @@ If everything when fine, you should run
 Just go on [official Node.js website](http://nodejs.org/) & grab the installer.
 Also, be sure to have `git` available in your PATH, `npm` might need it.
 
-#### Java
+### react-script
+
+If the project frontend failed to start and required [react-scripts](https://www.npmjs.com/package/react-scripts),
+follow the link to learn more or type in the node terminal in your desired IDE to install react-scripts:
+
+    npm i react-scripts
+
+### Java
 
 Head on to [Java Downloads](https://www.oracle.com/java/technologies/downloads/) and follow the instructionso to get JDK up and running on your machine.\
 Be sure that you have set the `JAVA_HOME` variable on your machine.
@@ -115,11 +122,11 @@ After this, execute `.\mvnw spring-boot:run` again from the `backend` folder, if
 
 ---
 
-#### To start the frontend
+### To start the frontend
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+#### Available Scripts
 
 In the project frontend directory, you can run:
 

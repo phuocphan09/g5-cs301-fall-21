@@ -52,6 +52,7 @@ public class MailingController {
             post.setPoster(postInput.getPoster()); // set poster
             post.setTitle(postInput.getTitle()); // set title
             post.setDescription(postInput.getDescription()); // set description
+            post.setTimeStamp(System.currentTimeMillis()); // set timestamp
 
             post.setInterestList(Arrays.toString(postInput.getInterestList())); // turn interestlist[] to a string
 
@@ -88,6 +89,7 @@ public class MailingController {
             postInput.setDescription(post.getDescription());
             postInput.setTitle(post.getTitle());
             postInput.setInterestList(ToList(post.getInterestList())); // convert from string to string[]
+            postInput.setTimeStamp(post.getTimeStamp());
 
             return postInput;
         } else { // post is not found, return null

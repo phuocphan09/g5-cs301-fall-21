@@ -19,9 +19,6 @@ const SearchBar = (propsAPI) => {
     const [dropIndex, setDropIndex] = useState(-1)
     const [interestAdded, setInterestAdded] = useState(propsAPI.picked.pickedList)
 
-
-    
-
     useEffect(()=>{
         propsAPI.toPick.function1(interestToPickS)
     },[interestToPickS])
@@ -106,21 +103,27 @@ const SearchBar = (propsAPI) => {
         let cloneInterestToSuggest = [...interestSuggested];
         let cloneInterestToPick = [...interestToPickS];
 
-        interestToPickS.map((item,index)=>{
+        cloneInterestToPick.map((item,index)=>{
             if (searchString.includes(item.interestName.toLocaleLowerCase())){
+            // if (item.interestName.toLocaleLowerCase().includes(searchString)){
                 cloneInterestToSuggest.push(item)
                 cloneInterestToPick.splice(index,1)
             }
         })
-        let finalSuggest =[]
+
+        let finalSuggest = []
         cloneInterestToSuggest.map((item,index)=>{
             if(!searchString.includes(item.interestName.toLocaleLowerCase())){
+            // if(!item.interestName.toLocaleLowerCase().includes(searchString)){
                 cloneInterestToPick.push(item)
-            } else {finalSuggest.push(item)}
+            } else {
+                finalSuggest.push(item)
+            }
         })
         setInterestToPickS([...cloneInterestToPick])
         setInterestSuggested([...finalSuggest])
     }
+
 
     function handleSubmitTopic(){
         setInterestToPickS([])

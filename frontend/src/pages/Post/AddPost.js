@@ -130,14 +130,35 @@ const AddPost = () => {
 
         let cloneInterestPicked = [...interestPicked];
         let cloneInterestToPick = [...interestToPick]
-        interestToPick.map((item, index) => {
-            if (searchString.includes(item.interestName.toLocaleLowerCase())) {
-                cloneInterestPicked.push(item)
-                cloneInterestToPick.splice(cloneInterestToPick.indexOf(item), 1)
-                console.log(cloneInterestToPick)
+
+        cloneInterestPicked.map((item, index) => {
+            if (!searchString.includes(item.interestName.toLocaleLowerCase())) {
+                cloneInterestPicked.splice(index, 1)
+                cloneInterestToPick.push(item)
             }
         })
 
+        cloneInterestToPick.map((item, index) => {
+            if (searchString.includes(item.interestName.toLocaleLowerCase())) {
+                if (cloneInterestPicked.indexOf(item) === -1) { // if not picked
+                    cloneInterestPicked.push(item)
+                    cloneInterestToPick.splice(cloneInterestToPick.indexOf(item), 1)
+                    console.log('added');
+                    console.log(item)
+                }
+
+            } else {
+                // cloneInterestToPick.push(item)
+                if (cloneInterestPicked.indexOf(item) > -1) { // if picked
+                    console.log('removed')
+                    cloneInterestPicked.splice(cloneInterestPicked.indexOf(item), 1)
+                    cloneInterestToPick.push(item);
+                    console.log('removed')
+                    console.log(item)
+                }
+
+            }
+        })
 
         setInterestPicked([...cloneInterestPicked])
         setInterestToPick([...cloneInterestToPick])
@@ -160,7 +181,7 @@ const AddPost = () => {
             const userEmail = localStorage.getItem("user");
             const bodyText = { poster: userEmail, title: pageTitle, description: topicDescription, interestList: bodyTextInterest }
             console.log(bodyText)
-            axios.post("http://localhost:8080/v1/submitpost", bodyText)
+            axios.post("http://localhost:8080/v1/submitpost?send=true", bodyText)
                 .then(response => console.log(response.data.added))
             navigate("/ResultAddPost")
         }

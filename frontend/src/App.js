@@ -12,6 +12,13 @@ import Feed from './pages/Feed';
 import AddInterest from './pages/InterestConfig/AddInterest';
 import ActiveInterest from './pages/InterestConfig/ActiveInterest';
 import Test from './pages/InterestConfig/Test';
+import ViewPost from './pages/Post/ViewPost';
+import SuccessLogout from './pages/Login/SuccessLogout';
+import HomePage from './pages/Post/HomePage';
+import AddPost from './pages/Post/AddPost'
+import PersonalPage from './pages/Post/PersonalPage';
+import ResultAddPost from'./pages/Post/ResultAddPost';
+
 
 
 function App() {
@@ -40,8 +47,8 @@ function App() {
     <div className='App'>
       <Container>
         <Wrapper>
-          {/* <Routes>
-            <Route path="/" element={<ProtectedRoute />}>
+          <Routes>
+            {/* <Route path="/" element={<ProtectedRoute />}>
               <Route path="/Feed" element={<Feed />} />
               <Route path="/AddInterest" element={<AddInterest />} />
               <Route path="/ActiveInterest" element={<ActiveInterest />} />
@@ -50,11 +57,16 @@ function App() {
             <Route path="/InputPassword" element={<InputPassword email={inputEmail} passwordInput={changeInputPassword} />} />
             <Route path="/CreateAccount" element={<CreateAccount email={inputEmail} passwordInput={changeInputPassword} />} />
             <Route path="/SuccessAuth" element={<SuccessAuth />} />
-            <Route path="/SuccessCreate" element={<SuccessCreate />} />
-          </Routes> */}
+            <Route path="/SuccessCreate" element={<SuccessCreate />} /> */}
+            <Route path="/AddPost" element={<AddPost/>}></Route>
+            <Route path="/ResultAddPost" element={<ResultAddPost/>}></Route>
+          </Routes>
           {/* <ActiveInterest/> */}
           {/* <Test/> */}
-          <AddInterest/>
+          {/* <AddInterest/> */}
+          {/* <SuccessLogout/> */}
+          {/* <HomePage/> */}
+          {/* <PersonalPage/> */}
         </Wrapper>
       </Container>
     </div>

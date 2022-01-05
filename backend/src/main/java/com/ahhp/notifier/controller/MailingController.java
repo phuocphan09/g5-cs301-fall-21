@@ -60,15 +60,15 @@ public class MailingController {
             response.setAdded(true);
 
             if (send) {
-                System.out.println("Yes send email"); // debug
-//                // send the damn emails
-//                int userNum = sendEmail(postInput.getInterestList(), post);
-//                if (userNum > 0) {
-//                    response.setEmailSent(true);
-//                    response.setDetails("Email sent to " + userNum + " recipients."); // log
-//                }
+
+                // send the damn emails
+                int userNum = sendEmail(postInput.getInterestList(), post);
+                if (userNum > 0) {
+                    response.setEmailSent(true);
+                    response.setDetails("Email sent to " + userNum + " recipients."); // log
+                }
             } else {
-                System.out.println("Not sending anything");
+                response.setDetails("Emails not sent");
             }
 
             return response;

@@ -87,8 +87,4 @@ public class MailingController {
 //            return null;
 //        }
 //    }
-
-
-
-
 }

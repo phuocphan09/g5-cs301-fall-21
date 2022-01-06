@@ -65,7 +65,7 @@ public class EmailSender {
                 post.getDescription() + "</p>";
 
         // add link to post
-        String linkToPost = "localhost:3000/viewpost?postid=" + post.getId();
+        String linkToPost = "http://localhost:3000/viewpost?postid=" + post.getId();
         formatted += "<a href='" + linkToPost + "'>" + "Link to post" + "</a>";
 
         return formatted;

@@ -30,59 +30,59 @@ const HomePage = () => {
 
             <ColoredLine />
 
-            <PostBox>
-                <TextWrapper>
-                    <h1> title </h1>
-                    <line />
-                    <h2> description </h2>
-                    <line />
-                    <h2> Posted by: poster </h2>
-                </TextWrapper>
+            {/*<PostBox>*/}
+            {/*    <TextWrapper>*/}
+            {/*        <h1> title </h1>*/}
+            {/*        <line />*/}
+            {/*        <h2> description </h2>*/}
+            {/*        <line />*/}
+            {/*        <h2> Posted by: poster </h2>*/}
+            {/*    </TextWrapper>*/}
 
-                <InterestWrapper>
-                    {/* {interestList.map((item) => ( */}
-                    <InterestLabel>
-                        <h2> item </h2>
-                    </InterestLabel>
-                    {/* ))} */}
-                </InterestWrapper>
-            </PostBox>
+            {/*    <InterestWrapper>*/}
+            {/*        /!* {interestList.map((item) => ( *!/*/}
+            {/*        <InterestLabel>*/}
+            {/*            <h2> item </h2>*/}
+            {/*        </InterestLabel>*/}
+            {/*        /!* ))} *!/*/}
+            {/*    </InterestWrapper>*/}
+            {/*</PostBox>*/}
 
-            <PostBox>
-                <TextWrapper>
-                    <h1> title </h1>
-                    <line />
-                    <h2> description </h2>
-                    <line />
-                    <h2> Posted by: poster </h2>
-                </TextWrapper>
+            {/*<PostBox>*/}
+            {/*    <TextWrapper>*/}
+            {/*        <h1> title </h1>*/}
+            {/*        <line />*/}
+            {/*        <h2> description </h2>*/}
+            {/*        <line />*/}
+            {/*        <h2> Posted by: poster </h2>*/}
+            {/*    </TextWrapper>*/}
 
-                <InterestWrapper>
-                    {/* {interestList.map((item) => ( */}
-                    <InterestLabel>
-                        <h2> item </h2>
-                    </InterestLabel>
-                    {/* ))} */}
-                </InterestWrapper>
-            </PostBox>
+            {/*    <InterestWrapper>*/}
+            {/*        /!* {interestList.map((item) => ( *!/*/}
+            {/*        <InterestLabel>*/}
+            {/*            <h2> item </h2>*/}
+            {/*        </InterestLabel>*/}
+            {/*        /!* ))} *!/*/}
+            {/*    </InterestWrapper>*/}
+            {/*</PostBox>*/}
 
-            <PostBox>
-                <TextWrapper>
-                    <h1> title </h1>
-                    <line />
-                    <h2> description </h2>
-                    <line />
-                    <h2> Posted by: poster </h2>
-                </TextWrapper>
+            {/*<PostBox>*/}
+            {/*    <TextWrapper>*/}
+            {/*        <h1> title </h1>*/}
+            {/*        <line />*/}
+            {/*        <h2> description </h2>*/}
+            {/*        <line />*/}
+            {/*        <h2> Posted by: poster </h2>*/}
+            {/*    </TextWrapper>*/}
 
-                <InterestWrapper>
-                    {/* {interestList.map((item) => ( */}
-                    <InterestLabel>
-                        <h2> item </h2>
-                    </InterestLabel>
-                    {/* ))} */}
-                </InterestWrapper>
-            </PostBox>
+            {/*    <InterestWrapper>*/}
+            {/*        /!* {interestList.map((item) => ( *!/*/}
+            {/*        <InterestLabel>*/}
+            {/*            <h2> item </h2>*/}
+            {/*        </InterestLabel>*/}
+            {/*        /!* ))} *!/*/}
+            {/*    </InterestWrapper>*/}
+            {/*</PostBox>*/}
 
             <Navigation>
                 <Home onClick={handleHome}> <RemoveIcon src={active_home} />

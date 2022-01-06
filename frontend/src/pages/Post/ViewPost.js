@@ -12,18 +12,21 @@ const ViewPost = () => {
         navigate('/HomePage')
     }
 
-
-
+    let initialInterestList = []
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
+    const [interestList, setInterestList] = useState([])
     const [poster, setPoster] = useState('')
-    let initialInterestList = []
+    const [isBusy, setBusy] = useState(true);
+
 
     useEffect(() => {
         console.log(searchParams.get('postId'));
         axios.get('http://localhost:8080/v1/getpost?id=' + searchParams.get('id'))
             .then(response => {
                 console.log(response)
+
+                setBusy(false);
 
                 // no post is found
                 if (response.data.content.length == 0) {
@@ -33,59 +36,54 @@ const ViewPost = () => {
                 setTitle(response.data.content[0].title.toString())
                 setDescription(response.data.content[0].description.toString())
                 setPoster(response.data.content[0].poster.toString())
-                response.data.content[0].interestList.map((item) => {
-                    initialInterestList.push(item)
-                })
+                setInterestList(response.data.content[0].interestList)
+
             })
     }, [])
 
-    const [interestList, setInterestList] = useState(initialInterestList)
-    // console.log(interestList)
+    return (
+        <div> {
+            isBusy ?
+                (<div></div>) :
+                (title.length === 0) ?
+                    (<Container>
+                            <DashedBox>
+                                <h4> Uh oh... <br /> Post not found :( </h4>
+                            </DashedBox>
 
-    if (title.length === 0 || title === undefined) {
-        console.log("not found")
-        return (
-            <Container>
-                <DashedBox>
-                    <h4> Uh oh... <br /> Post not found :( </h4>
-                </DashedBox>
+                            <BackContainer onClick={handleHome}>
+                                <text> Back to homepage </text>
+                            </BackContainer>
+                    </Container>)
 
-                <BackContainer onClick={handleHome}>
-                    <text> Back to homepage </text>
-                </BackContainer>
-            </Container>
-        )
-    } else {
-        return (
-            <Container>
-                <PostBox>
-                    <TextWrapper>
-                        <h1> {title} </h1>
-                        <line />
-                        <h2> {description} </h2>
-                        <line />
-                        <h2> Posted by: {poster} </h2>
-                    </TextWrapper>
+                    :
 
-                    <InterestWrapper>
-                        {interestList.map((item) => (
-                            <InterestLabel>
-                                <h2> {item} </h2>
-                            </InterestLabel>
-                        ))}
-                    </InterestWrapper>
-<<<<<<< HEAD
+                    (<Container>
+                        <PostBox>
+                            <TextWrapper>
+                                <h1> {title} </h1>
+                                <line />
+                                <h2> {description} </h2>
+                                <line />
+                                <h2> Posted by: {poster} </h2>
+                            </TextWrapper>
 
-=======
->>>>>>> main
-                </PostBox>
+                            <InterestWrapper>
+                                {interestList.map((item) => (
+                                    <InterestLabel>
+                                        <h2> {item} </h2>
+                                    </InterestLabel>
+                                ))}
+                            </InterestWrapper>
+                        </PostBox>
 
-                <BackContainer onClick={handleHome}>
-                    <text> Back to homepage </text>
-                </BackContainer>
-            </Container>
-        )
-    }
+                        <BackContainer onClick={handleHome}>
+                            <text> Back to homepage </text>
+                        </BackContainer>
+                    </Container>)
+                }
+        </div>
+    )
 }
 
 const Container = styled.div`

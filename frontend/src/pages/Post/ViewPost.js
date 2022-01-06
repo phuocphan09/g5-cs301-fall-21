@@ -38,7 +38,7 @@ const ViewPost = () => {
                     <h4> Uh oh... <br /> Post not found :( </h4>
                 </DashedBox>
 
-                <BackContainer>
+                <BackContainer onClick={handleHome}>
                     <text> Back to homepage </text>
                 </BackContainer>
             </Container>
@@ -54,7 +54,7 @@ const ViewPost = () => {
                         <line />
                         <h2> Posted by: {poster} </h2>
                     </TextWrapper>
-                    
+
                     <InterestWrapper>
                         {interestList.map((item) => (
                             <InterestLabel>
@@ -62,7 +62,6 @@ const ViewPost = () => {
                             </InterestLabel>
                         ))}
                     </InterestWrapper>
-                
                 </PostBox>
 
                 <BackContainer onClick={handleHome}>

@@ -93,9 +93,9 @@ const Container = styled.div`
 `
 
 const Avatar = styled.img`
-    width: 13.33vw;
-    height: 13.33vw;
-    margin-right: 0.5rem;
+    width: 13vw;
+    height: 13vw;
+    margin-left: 0.5rem;
     align-items: left;
     justify-content: left;
 `

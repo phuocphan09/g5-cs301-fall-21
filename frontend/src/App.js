@@ -66,15 +66,6 @@ function App() {
             <Route path="/SuccessAuth" element={<SuccessAuth />} />
             <Route path="/SuccessCreate" element={<SuccessCreate />} />
           </Routes>
-          {/* <HomePage/> */}
-          {/* <PersonalPage/> */}
-          <Routes>
-          <Route path="/AddInterest" element={<AddInterest />} />
-            <Route path="/ActiveInterest" element={<ActiveInterest />} />
-
-          </Routes>
-          
-          <ViewPost/>
         </Wrapper>
       </Container>
     </div>

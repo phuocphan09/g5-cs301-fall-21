@@ -137,7 +137,7 @@ const ActiveInterest = (props) => {
                 </Block7>
 
                 <Header7>
-                    <SubmitButton>
+                    <SubmitButton onClick={handleHome}>
                         <text>Back to Homepage</text>
                     </SubmitButton>
                 </Header7>

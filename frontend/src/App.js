@@ -61,6 +61,12 @@ function App() {
           </Routes> */}
           {/* <HomePage/> */}
           {/* <PersonalPage/> */}
+          <Routes>
+          <Route path="/AddInterest" element={<AddInterest />} />
+            <Route path="/ActiveInterest" element={<ActiveInterest />} />
+
+          </Routes>
+          
           <ViewPost/>
         </Wrapper>
       </Container>

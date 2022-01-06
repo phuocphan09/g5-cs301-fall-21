@@ -128,13 +128,58 @@ const ActiveInterest = (props) => {
                 )) : <DashedBox><h4> Uh oh... you haven’t added any interests <br /> Select the above blue button to add one! </h4></DashedBox>}
             </Container2>
 
-            <BackContainer>
-                <text> Back to homepage </text>
-            </BackContainer>
+            <Block7>
+
+                </Block7>
+
+                <Header7>
+                    <SubmitButton>
+                        <text>Back to Homepage</text>
+                    </SubmitButton>
+                </Header7>
         </Container>
     )
 }
+const Block7 = styled.div`
+min-height:13.79vh;
+min-width:100vw;
+`
 
+const Header7 = styled.div`
+position:fixed;
+background: #ffffff;
+width:100%;
+height:13.79vh;
+align-items: center;
+bottom:0;
+`
+
+const SubmitButton = styled.button`
+    margin-top:3.3vh;
+    margin-left:14.4vw;
+    bottom:3.3vh;
+    width: 71.7vw;
+    height:7.04vh;
+    background: #006DFF;
+    border-radius: 5px;
+    transition: all 0.3s ease-out;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    border: 1px solid #006dff;
+
+
+    text{
+        font-family: 'Source Sans Pro';
+        font-style: normal;
+        font-weight: bold;
+        font-size: 2.7vh;
+        line-height: 21px;
+        display: flex;
+        align-items: center;
+        color: #FFFFFF;
+    }
+`
 const Container = styled.div`
     top:0;
     left:0;

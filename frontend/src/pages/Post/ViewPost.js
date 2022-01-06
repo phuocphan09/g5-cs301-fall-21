@@ -50,7 +50,7 @@ const ViewPost = () => {
                     <h4> Uh oh... <br /> Post not found :( </h4>
                 </DashedBox>
 
-                <BackContainer>
+                <BackContainer onClick={handleHome}>
                     <text> Back to homepage </text>
                 </BackContainer>
             </Container>
@@ -74,7 +74,10 @@ const ViewPost = () => {
                             </InterestLabel>
                         ))}
                     </InterestWrapper>
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
                 </PostBox>
 
                 <BackContainer onClick={handleHome}>

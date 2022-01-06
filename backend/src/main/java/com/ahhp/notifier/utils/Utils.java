@@ -1,8 +1,10 @@
 package com.ahhp.notifier.utils;
 
 import com.ahhp.notifier.entity.Interest;
+import com.ahhp.notifier.entity.Post;
 import com.ahhp.notifier.entity.User;
 import com.ahhp.notifier.entity.UserInterest;
+import com.ahhp.notifier.input.PostInput;
 import com.ahhp.notifier.repository.InterestRepository;
 import com.ahhp.notifier.repository.UserInterestRepository;
 import com.ahhp.notifier.repository.UserRepository;
@@ -87,5 +89,18 @@ public class Utils {
         rep = rep.replace("]", "");
         String[] vals = rep.split (",");
         return vals;
+    }
+
+    public PostInput toPostInput(Post post) {
+
+        PostInput postInput = new PostInput();
+
+        postInput.setInterestList(toList(post.getInterestList()));
+        postInput.setPoster(post.getPoster());
+        postInput.setDescription(post.getDescription());
+        postInput.setTimeStamp(post.getTimeStamp());
+        postInput.setTitle(post.getTitle());
+
+        return postInput;
     }
 }

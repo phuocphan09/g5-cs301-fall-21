@@ -12,6 +12,7 @@ import com.ahhp.notifier.response.AccountValidationResponse;
 import com.ahhp.notifier.response.EmailValidationResponse;
 import com.ahhp.notifier.response.InterestManipulationResponse;
 import com.ahhp.notifier.utils.SecurityUtils;
+import com.ahhp.notifier.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-public class NotifierController {
+public class UserController {
 
     @Autowired
     private UserRepository userRepository;
@@ -33,6 +34,8 @@ public class NotifierController {
     private UserInterestRepository userInterestRepository;
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private Utils utils;
 
     /**
      * Validate the email to make sure it is a Fulbright email
@@ -149,7 +152,7 @@ public class NotifierController {
 
         User user = users.get(0); // find the user in the database
 
-        List<Interest> interests = findInterestByUser(user, true); // get the interest list
+        List<Interest> interests = utils.findInterestByUser(user, true); // get the interest list
 
         response.setActiveInterestList(interests);
 
@@ -175,7 +178,7 @@ public class NotifierController {
         User user = users.get(0); // find the user in the database
 
         // get all interest objects NOT IN interestName from the interestRepository
-        List<Interest> interests = findInterestByUser(user, false);
+        List<Interest> interests = utils.findInterestByUser(user, false);
         response.setAddableInteresList(interests); // set the addable interest list
 
         return response;
@@ -249,35 +252,6 @@ public class NotifierController {
                 System.out.println("Unknown Type parameter");
                 return response;
             }
-        }
-    }
-
-    private List<Interest> findInterestByUser(User user, boolean isActive) {
-
-        List<UserInterest> userInterests = userInterestRepository.findByUser(user); // get all userInterests
-
-        // get all interest name and put it into a list of string
-        List<String> interestNames = new ArrayList<String>();
-
-        for (int i = 0; i < userInterests.size(); i++) {
-
-            interestNames.add(userInterests.get(i).getInterest().getInterestName());
-        }
-
-        // get all interest objects from the intererstRepository
-        if (isActive) { // get active
-
-            List<Interest> interests = interestRepository.findByInterestNameIn(interestNames);
-            return interests;
-
-        } else { // get addable
-            if (interestNames.size()==0) { // no active interests yet
-
-                return interestRepository.findAll();
-            }
-
-            List<Interest> interests = interestRepository.findByInterestNameNotIn(interestNames);
-            return interests;
         }
     }
 

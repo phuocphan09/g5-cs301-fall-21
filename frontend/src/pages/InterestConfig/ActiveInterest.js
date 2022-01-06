@@ -20,6 +20,10 @@ const ActiveInterest = (props) => {
         navigate('/AddInterest')
     }
 
+    function handleHome() {
+        navigate('/HomePage')
+    }
+
 
     useEffect(() => {
         const userEmail = localStorage.getItem("user");

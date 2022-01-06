@@ -2,14 +2,17 @@ import React from 'react'
 import styled from 'styled-components'
 import { useState, useEffect } from 'react'
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'
+import {useNavigate, useSearchParams} from 'react-router-dom'
 
 const ViewPost = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     function handleHome() {
         navigate('/HomePage')
     }
+
+
 
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
@@ -17,12 +20,20 @@ const ViewPost = () => {
     let initialInterestList = []
 
     useEffect(() => {
-        axios.get('http://localhost:8080/v1/getpost?postId=578')
+        console.log(searchParams.get('postId'));
+        axios.get('http://localhost:8080/v1/getpost?id=' + searchParams.get('id'))
             .then(response => {
-                setTitle(response.data.title)
-                setDescription(response.data.description)
-                setPoster(response.data.poster)
-                response.data.interestList.map((item) => {
+                console.log(response)
+
+                // no post is found
+                if (response.data.content.length == 0) {
+                    return
+                }
+
+                setTitle(response.data.content[0].title.toString())
+                setDescription(response.data.content[0].description.toString())
+                setPoster(response.data.content[0].poster.toString())
+                response.data.content[0].interestList.map((item) => {
                     initialInterestList.push(item)
                 })
             })
@@ -31,7 +42,8 @@ const ViewPost = () => {
     const [interestList, setInterestList] = useState(initialInterestList)
     // console.log(interestList)
 
-    if (title.length === 0) {
+    if (title.length === 0 || title === undefined) {
+        console.log("not found")
         return (
             <Container>
                 <DashedBox>
@@ -54,7 +66,7 @@ const ViewPost = () => {
                         <line />
                         <h2> Posted by: {poster} </h2>
                     </TextWrapper>
-                    
+
                     <InterestWrapper>
                         {interestList.map((item) => (
                             <InterestLabel>
@@ -62,7 +74,7 @@ const ViewPost = () => {
                             </InterestLabel>
                         ))}
                     </InterestWrapper>
-                
+
                 </PostBox>
 
                 <BackContainer onClick={handleHome}>

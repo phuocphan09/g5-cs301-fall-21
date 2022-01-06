@@ -13,60 +13,60 @@ import axios from 'axios';
 const AddPost = () => {
     const pickStateR = { color: '#15B34E', width: '27vw' }
     const pickStateNR = { color: '#FF0000', width: '25vw' }
-    const [pageValidState, setPageValidState] = useState({colorTitle: '#006DFF', colorDescription:'#6B6B6B',title:'Title', description:'Description - Text and links (required)'})
+    const [pageValidState, setPageValidState] = useState({ colorTitle: '#006DFF', colorDescription: '#6B6B6B', title: 'Title', description: 'Description - Text and links (required)' })
 
-    const [pageTitle,setPageTitle] = useState('')
+    const [pageTitle, setPageTitle] = useState('')
     const [topicDescription, setTopicDescription] = useState('')
     const [interestPicked, setInterestPicked] = useState([])
-    
+
     const [dropIndex, setDropIndex] = useState(-1)
-    const [pageState,setPageState] = useState(true)
-    
+    const [pageState, setPageState] = useState(true)
+
     let intialInterestSet = []
-    useEffect(()=>{
+    useEffect(() => {
         axios.get('http://localhost:8080/v1/getallinterest')
-        .then(response => {
-            console.log(response)
-            response.data.activeInterestList.map((item)=>{
-            intialInterestSet.push({ interestName: item.interestName, interestState: pickStateNR })
-        })
-        })
-    },[])
+            .then(response => {
+                console.log(response)
+                response.data.activeInterestList.map((item) => {
+                    intialInterestSet.push({ interestName: item.interestName, interestState: pickStateNR })
+                })
+            })
+    }, [])
 
     const [interestToPick, setInterestToPick] = useState(intialInterestSet)
 
     //call api inside, modify search in keyword list only this
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         console.log(pageTitle)
-    },[pageTitle])
+    }, [pageTitle])
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log(topicDescription)
-    },[topicDescription])
+    }, [topicDescription])
 
-    
+
     const changeToPick = (e) => {
         setInterestToPick([...e])
     }
 
-    const changePicked = (e)=>{
+    const changePicked = (e) => {
         setInterestPicked([...e])
     }
 
-    const changePage = (e)=>{
+    const changePage = (e) => {
         setPageState(e)
     }
 
-    function handleClickSearch(){
+    function handleClickSearch() {
         setPageState(false)
     }
 
-    function updateTitle(props){
+    function updateTitle(props) {
         setPageTitle(props.target.value)
     }
 
-    function updateDescription(props){
+    function updateDescription(props) {
         setTopicDescription(props.target.value)
     }
 
@@ -98,10 +98,10 @@ const AddPost = () => {
         let cloneInterest = interestPicked
         cloneInterest[props] = newInterestItem
 
-    
+
         setDropIndex(props)
 
-        let newAddbackInterestItem = {...newInterestItem};
+        let newAddbackInterestItem = { ...newInterestItem };
         newAddbackInterestItem.interestState = pickStateNR
         let addbackInterestClone = [...interestToPick]
         addbackInterestClone.push(newAddbackInterestItem)
@@ -121,19 +121,19 @@ const AddPost = () => {
 
     }, [dropIndex])
 
-    
 
-    function searchFunctionSuggestMe(props){
+
+    function searchFunctionSuggestMe(props) {
 
         let searchString = props.title + props.description;
         searchString = searchString.toLocaleLowerCase()
 
         let cloneInterestPicked = [...interestPicked];
         let cloneInterestToPick = [...interestToPick]
-        interestToPick.map((item,index)=>{
-            if (searchString.includes(item.interestName.toLocaleLowerCase())){
+        interestToPick.map((item, index) => {
+            if (searchString.includes(item.interestName.toLocaleLowerCase())) {
                 cloneInterestPicked.push(item)
-                cloneInterestToPick.splice(cloneInterestToPick.indexOf(item),1)
+                cloneInterestToPick.splice(cloneInterestToPick.indexOf(item), 1)
                 console.log(cloneInterestToPick)
             }
         })
@@ -141,85 +141,85 @@ const AddPost = () => {
 
         setInterestPicked([...cloneInterestPicked])
         setInterestToPick([...cloneInterestToPick])
-        
+
     }
 
-    function updateValidState(){
-        if (pageValidState.colorTitle === '#FF0000'){
-            setPageValidState({colorTitle:'#006DFF', colorDescription:'#6B6B6B',title:'Title',description:'Description - texts and links (required)'})
+    function updateValidState() {
+        if (pageValidState.colorTitle === '#FF0000') {
+            setPageValidState({ colorTitle: '#006DFF', colorDescription: '#6B6B6B', title: 'Title', description: 'Description - texts and links (required)' })
         }
     }
 
     const navigate = useNavigate();
 
-    function handleSubmitTopic(){
-         if (pageTitle.length === 0|| topicDescription.length === 0)
-         {setPageValidState({colorTitle:'#FF0000', colorDescription:'#FF0000',title:'A title is required',description:'A description is reqired'})}
-         else {
+    function handleSubmitTopic() {
+        if (pageTitle.length === 0 || topicDescription.length === 0) { setPageValidState({ colorTitle: '#FF0000', colorDescription: '#FF0000', title: 'A title is required', description: 'A description is reqired' }) }
+        else {
             let bodyTextInterest = []
             interestPicked.map(item => bodyTextInterest.push(item.interestName))
             const userEmail = localStorage.getItem("user");
-            const bodyText = {poster: userEmail, title: pageTitle, description: topicDescription, interestList: bodyTextInterest}
+            const bodyText = { poster: userEmail, title: pageTitle, description: topicDescription, interestList: bodyTextInterest }
             console.log(bodyText)
-            axios.post("http://localhost:8080/v1/submitpost",bodyText)
-            .then(response => console.log(response.data.added))
+            axios.post("http://localhost:8080/v1/submitpost", bodyText)
+                .then(response => console.log(response.data.added))
             navigate("/ResultAddPost")
-         }
+        }
     }
 
-    if (pageState){
+    if (pageState) {
         console.log(pageTitle)
-    return (
-        <Container>
-            <Header1>Add a new post</Header1>
+        return (
+            <Container>
+                <Header1>Add a new post</Header1>
 
-            <Header2 placeholder = {pageValidState.title} onChange={(e)=> (updateTitle(e),updateValidState())} inputColor ={pageValidState.colorTitle} value ={pageTitle}></Header2>
+                <Header2 placeholder={pageValidState.title} onChange={(e) => (updateTitle(e), updateValidState())} inputColor={pageValidState.colorTitle} value={pageTitle}></Header2>
 
-            <Header3 inputColor={pageValidState.colorDescription} >
-                <textarea placeholder = {pageValidState.description} onChange={(e)=> (updateDescription(e),updateValidState())} value={topicDescription}></textarea>
-            </Header3>
+                <Header3 inputColor={pageValidState.colorDescription} >
+                    <textarea placeholder={pageValidState.description} onChange={(e) => (updateDescription(e), updateValidState())} value={topicDescription}></textarea>
+                </Header3>
 
-            <Header4>
-                <PairNewTag>
-                <text>Topic</text>
-                <NewTag src ={newTag}/> 
-                </PairNewTag>
-                <TextSupport>
-                Students indicating interests in the selected topics will be notified
-                </TextSupport>
-            </Header4>
+                <Header4>
+                    <PairNewTag>
+                        <text>Topic</text>
+                        <NewTag src={newTag} />
+                    </PairNewTag>
+                    <TextSupport>
+                        Students indicating interests in the selected topics will be notified
+                    </TextSupport>
+                </Header4>
 
-            <Header5>
-            <SuggestMe onClick={() => searchFunctionSuggestMe({title: pageTitle, description: topicDescription})}>Suggest Me!</SuggestMe>
-            <SearchBarContainer onClick={()=>handleClickSearch()}>
-                <SearchIcon src={searchIcon}/>
-                <SearchBar > Search for Topics
-                </SearchBar>
-            </SearchBarContainer >
-            </Header5>
+                <Header5>
+                    <SuggestMe onClick={() => searchFunctionSuggestMe({ title: pageTitle, description: topicDescription })}>Suggest Me!</SuggestMe>
+                    <SearchBarContainer onClick={() => handleClickSearch()}>
+                        <SearchIcon src={searchIcon} />
+                        <SearchBar > Search for Topics
+                        </SearchBar>
+                    </SearchBarContainer >
+                </Header5>
 
-            <Header6>
-                {interestPicked.length !== 0 ? interestPicked.map((item, index) => (
-                    <InterestContainer buttonColor={item.interestState.color} buttonWidth={item.interestState.width}>
-                        <text> {item.interestName} </text>
-                        {showButton({ color: item.interestState.color, number: index })}
-                    </InterestContainer>
-                )) : <DashedBox><h4> Uh oh... you haven’t added any interests <br /> Select the above blue button to add one! </h4></DashedBox>}
-            </Header6>
+                <Header6>
+                    {interestPicked.length !== 0 ? interestPicked.map((item, index) => (
+                        <InterestContainer buttonColor={item.interestState.color} buttonWidth={item.interestState.width}>
+                            <text> {item.interestName} </text>
+                            {showButton({ color: item.interestState.color, number: index })}
+                        </InterestContainer>
+                    )) : <DashedBox><h4> Uh oh... you haven’t added any interests <br /> Select the above blue button to add one! </h4></DashedBox>}
+                </Header6>
 
-            <Block7>
+                <Block7>
 
-            </Block7>
+                </Block7>
 
-            <Header7>
-                <SubmitButton onClick={()=> handleSubmitTopic()}>
-                    <text>Submit</text>
-                </SubmitButton>
-            </Header7>
-        </Container>
-        
-    )  } else {
-        return <SearchBarPage pageStatefunc = {changePage} toPick = {{toPickList : interestToPick, function1 : changeToPick}} picked = {{pickedList : interestPicked, function2 : changePicked}}></SearchBarPage>
+                <Header7>
+                    <SubmitButton onClick={() => handleSubmitTopic()}>
+                        <text>Submit</text>
+                    </SubmitButton>
+                </Header7>
+            </Container>
+
+        )
+    } else {
+        return <SearchBarPage pageStatefunc={changePage} toPick={{ toPickList: interestToPick, function1: changeToPick }} picked={{ pickedList: interestPicked, function2: changePicked }}></SearchBarPage>
     }
 }
 
@@ -397,7 +397,7 @@ display:flex;
 flex-direction:row;
 background-color:#ffffff;
 `
-const SearchIcon =styled.img`
+const SearchIcon = styled.img`
 width:2.27vh;
 height:2.27vh;
 margin-top:1.4vh;

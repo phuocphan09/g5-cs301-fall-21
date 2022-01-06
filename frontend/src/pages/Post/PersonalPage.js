@@ -34,34 +34,34 @@ const PersonalPage = () => {
     return (
         <Container>
 
-                <AvatarWrapper>
-                    <Avatar src={avatar} />
-                    <TextWrapper>
-                        <h1> {firstname} {lastname} </h1>
-                        <h2> {userEmail} </h2>
-                    </TextWrapper>
-                </AvatarWrapper>
+            <AvatarWrapper>
+                <Avatar src={avatar} />
+                <TextWrapper>
+                    <h1> {firstname} {lastname} </h1>
+                    <h2> {userEmail} </h2>
+                </TextWrapper>
+            </AvatarWrapper>
 
-                <line />
+            <line />
 
-                <ArrowButton onClick={handleAdd}>
-                    <TextWrapper>
-                        <h1>Configure your interest </h1>
-                        <h2> Choose which type of posts you want to be notified about </h2>
-                    </TextWrapper>
-                    <RemoveIcon src={arrow} />
-                </ArrowButton>
+            <ArrowButton onClick={handleAdd}>
+                <TextWrapper>
+                    <h1>Configure your interest </h1>
+                    <h2> Choose which type of posts you want to be notified about </h2>
+                </TextWrapper>
+                <RemoveIcon src={arrow} />
+            </ArrowButton>
 
-                <line />
+            <line />
 
-                <ArrowButton onClick={handleLogout}>
-                    <TextWrapper>
-                        <h1> Logout </h1>
-                    </TextWrapper>
-                    <RemoveIcon src={arrow} />
-                </ArrowButton>
+            <ArrowButton onClick={handleLogout}>
+                <TextWrapper>
+                    <h1> Logout </h1>
+                </TextWrapper>
+                <RemoveIcon src={arrow} />
+            </ArrowButton>
 
-                <line />
+            <line />
 
             <Navigation>
                 <Home onClick={handleHome}> <RemoveIcon src={inactive_home} />
@@ -85,36 +85,29 @@ const Container = styled.div`
     flex-direction: column;
 
     line {
-        position: relative;
-        width: 100vw;
+        max-width: 100vw;
         margin-top: 2vh;
         border: 0.5px solid #000000;
         background: #000000;
-        
     }
 `
 
 const Avatar = styled.img`
-    position: relative;
     width: 13.33vw;
     height: 13.33vw;
     margin-right: 0.5rem;
-    margin-left: 0.5rem;
-    margin-top: 1rem;
     align-items: left;
     justify-content: left;
 `
 
 const RemoveIcon = styled.img`
-    ${'' /* position: relative; */}
     width: 3vh;
     height: 3vh;
-    margin-right:5px;
-    margin-left: 5px;
-    margin-top: 5px;
+    justify-content:center;
 `
 const AvatarWrapper = styled.div`
     width:100vw;
+    margin-top:0.5rem;
     display:flex;
     flex-direction: row;
     flex-wrap:wrap;
@@ -134,45 +127,37 @@ const ArrowButton = styled.button`
 `
 
 const TextWrapper = styled.div`
-    width:76.26vw;
+    width:76.27vw;
     display:flex;
     flex-wrap:wrap;
     flex-direction: column;
     justify-content: center;
-    align-items: left;
+    align-items:left;
     margin-right: 1rem;
+    margin-left:1rem;
 
     h1 {
+        width:76.27vw;
         font-family: 'Source Sans Pro';
         color: #000000;
         font-style: normal;
         font-weight: bold;
         font-size: 3vh;
         text-align: left;
-        margin-left: 1rem;
         margin-bottom: 0rem;
         flex-wrap:wrap;
 
     }
 
     h2 {
+        width:76.27vw;
         font-family: 'Source Sans Pro';
         color: #000000;
         font-style: normal;
         font-weight: normal;
         font-size: 2vh;
         text-align: left;
-        margin-left: 1rem;
 
-    }
-    
-    line {
-        position: relative;
-        width: 100vw;
-        margin-top: 2vh;
-        border: 0.5px solid #000000;
-        background: #000000;
-        
     }
 `
 
@@ -182,11 +167,12 @@ const Navigation = styled.div`
     position: absolute;
     justify-content: center;
     align-items: center;
-    wdith: 100vw;
+    width: 100vw;
     height: 7.35vh;
-    left: 0vw;
+    left: 0;
+    right:0;
     top: 92.65vh;
-    box-shadow: 0px 0px 8px 1px;
+    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.15);
     background: #ffffff;
 `
 

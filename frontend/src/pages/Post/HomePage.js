@@ -24,10 +24,8 @@ const HomePage = () => {
         <Container>
 
             <AddInterest onClick={handleAdd}>
-                <text>
-                    <RemoveIcon src={add_icon} />
-                    Add new post
-                </text>
+                <RemoveIcon src={add_icon} />
+                <text> Add new post </text>
             </AddInterest>
 
             <ColoredLine />
@@ -70,8 +68,8 @@ const AddInterest = styled.button`
     justify-content: center;
 
     text{
-        margin-right: 5vw;
-        margin-left: 5vw;
+        margin-right: 2vw;
+        margin-left: 2vw;
         font-family: 'Source Sans Pro';
         font-style: normal;
         font-weight: bold;
@@ -86,7 +84,6 @@ const AddInterest = styled.button`
 const RemoveIcon = styled.img`
     width: 3vh;
     height: 3vh;
-    margin-right: 5px;
     justify-content:center;
 `
 
@@ -103,11 +100,12 @@ const Navigation = styled.div`
     position: absolute;
     justify-content: center;
     align-items: center;
-    wdith: 100vw;
+    width: 100vw;
     height: 7.35vh;
-    left: 0vw;
+    left: 0;
+    right:0;
     top: 92.65vh;
-    box-shadow: 0px 0px 8px 1px;
+    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.15);
     background: #ffffff;
 `
 
@@ -127,12 +125,9 @@ const Home = styled.button`
         font-weight: normal;
         font-size: 13px;
         line-height: 16px;
-        /* identical to box height */
-
         display: flex;
         align-items: center;
         text-align: center;
-
         color: #006DFF;
     }
 `
@@ -153,12 +148,9 @@ const Personal = styled.button`
         font-weight: normal;
         font-size: 13px;
         line-height: 16px;
-        /* identical to box height */
-
         display: flex;
         align-items: center;
         text-align: center;
-
         color: #6B6B6B;
     }
 `

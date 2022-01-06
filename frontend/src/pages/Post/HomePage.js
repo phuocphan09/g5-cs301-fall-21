@@ -1,13 +1,45 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import add_icon from '../../assets/add_icon.svg'
 import active_home from '../../assets/home_blue.svg'
 import inactive_personal from '../../assets/personal_grey.svg'
+import axios from 'axios';
+
 
 const HomePage = () => {
 
     const navigate = useNavigate()
+    const userEmail = localStorage.getItem('user')
+    const timestamp = useState('')
+    const [title, setTitle] = useState('')
+    const [description, setDescription] = useState('')
+    const [poster, setPoster] = useState('')
+    let initialInterestList = []
+    let initialPostList = []
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/v1/getdisplaypost?email=' + userEmail)
+            .then(response => { console.log(response.content.id) })
+    }, [])
+
+    const [postList, setPostList] = useState(initialPostList)
+
+    useEffect(() => {
+        postList.map((postId) => (axios.get('http://localhost:8080/v1/getpost?postId=' + postId)
+            .then(response => {
+                setTitle(response.data.title)
+                setDescription(response.data.description)
+                setPoster(response.data.poster)
+                response.data.interestList.map((item) => {
+                    initialInterestList.push(item)
+                })
+            })))
+    }, [])
+
+    const [interestList, setInterestList] = useState(initialInterestList)
+
     function handleAdd() {
         navigate('/AddPost')
     }
@@ -32,55 +64,55 @@ const HomePage = () => {
 
             <PostBox>
                 <TextWrapper>
-                    <h1> title </h1>
+                    <h1> {title} </h1>
                     <line />
-                    <h2> description </h2>
+                    <h2> {description} </h2>
                     <line />
-                    <h2> Posted by: poster </h2>
+                    <h2> Posted by: {poster} </h2>
                 </TextWrapper>
 
                 <InterestWrapper>
-                    {/* {interestList.map((item) => ( */}
-                    <InterestLabel>
-                        <h2> item </h2>
-                    </InterestLabel>
-                    {/* ))} */}
+                    {interestList.map((item) => (
+                        <InterestLabel>
+                            <h2> {item} </h2>
+                        </InterestLabel>
+                    ))}
                 </InterestWrapper>
             </PostBox>
 
             <PostBox>
                 <TextWrapper>
-                    <h1> title </h1>
+                    <h1> {title} </h1>
                     <line />
-                    <h2> description </h2>
+                    <h2> {description} </h2>
                     <line />
-                    <h2> Posted by: poster </h2>
+                    <h2> Posted by: {poster} </h2>
                 </TextWrapper>
 
                 <InterestWrapper>
-                    {/* {interestList.map((item) => ( */}
-                    <InterestLabel>
-                        <h2> item </h2>
-                    </InterestLabel>
-                    {/* ))} */}
+                    {interestList.map((item) => (
+                        <InterestLabel>
+                            <h2> {item} </h2>
+                        </InterestLabel>
+                    ))}
                 </InterestWrapper>
             </PostBox>
 
             <PostBox>
                 <TextWrapper>
-                    <h1> title </h1>
+                    <h1> {title} </h1>
                     <line />
-                    <h2> description </h2>
+                    <h2> {description} </h2>
                     <line />
-                    <h2> Posted by: poster </h2>
+                    <h2> Posted by: {poster} </h2>
                 </TextWrapper>
 
                 <InterestWrapper>
-                    {/* {interestList.map((item) => ( */}
-                    <InterestLabel>
-                        <h2> item </h2>
-                    </InterestLabel>
-                    {/* ))} */}
+                    {interestList.map((item) => (
+                        <InterestLabel>
+                            <h2> {item} </h2>
+                        </InterestLabel>
+                    ))}
                 </InterestWrapper>
             </PostBox>
 
@@ -144,6 +176,7 @@ const RemoveIcon = styled.img`
 const ColoredLine = styled.div`
     position: relative;
     max-width: 100vw;
+    margin-bottom: 3.3vh;
     border: 1px solid #000000;
     background: #000000;
 `
@@ -236,8 +269,7 @@ const PostBox = styled.div`
     box-sizing: border-box;
     border-radius: 5px;
     border: solid 1px #006DFF;
-    margin-top: 5vh;
-    margin-bottom: 5vh;
+    margin-bottom: 3.3vh;
     margin-left: 5vw;
     margin-right: 5vw;
     inline-size: 90vw;
@@ -249,7 +281,6 @@ const PostBox = styled.div`
 const Navigation = styled.div`
     display: flex;
     flex-direction: row;    
-    position: absolute;
     justify-content: center;
     align-items: center;
     width: 100vw;

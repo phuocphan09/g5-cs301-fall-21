@@ -58,8 +58,6 @@ function App() {
               <Route path="/HomePage" element={<HomePage />} />
               <Route path="/PersonalPage" element={<PersonalPage />} />
               <Route path="/ViewPost" element={<ViewPost />} />
-              {/*<Route path="/ViewPost?:id" element={<ViewPost />} />*/}
-              {/*<Route path="/ViewPost/:id" component={ViewPost} />*/}
               <Route path="/SuccessLogout" element={<SuccessLogout />} />
             </Route>
             <Route path="/InputEmail" element={<InputEmail props={changeInputEmail} />} />

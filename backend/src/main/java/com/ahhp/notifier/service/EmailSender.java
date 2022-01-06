@@ -21,7 +21,7 @@ import java.util.Map;
 public class EmailSender {
 
     @Value("${spring.mail.username}")
-    private String username;
+    private String username; // specified in application.properties
     @Autowired
     private JavaMailSender javaMailSender;
     @Autowired

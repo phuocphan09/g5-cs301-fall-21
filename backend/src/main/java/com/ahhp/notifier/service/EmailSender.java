@@ -1,24 +1,31 @@
-package com.ahhp.notifier.mailingService;
+package com.ahhp.notifier.service;
 
-import com.ahhp.notifier.entity.Interest;
 import com.ahhp.notifier.entity.Post;
 import com.ahhp.notifier.entity.User;
+import com.ahhp.notifier.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class MailingService {
+public class EmailSender {
 
+    @Value("${spring.mail.username}")
+    private String username;
     @Autowired
-    private JavaMailSender mailSender;
+    private JavaMailSender javaMailSender;
+    @Autowired
+    Utils utils;
 
     public void sendSimpleEmail(Post post, String recipient) {
 
@@ -29,23 +36,23 @@ public class MailingService {
         mail.setSubject(post.getTitle()); // setSubject
         mail.setText(post.getDescription()); // setText
 
-        mailSender.send(mail); //send email
+        javaMailSender.send(mail); //send email
 
     }
 
     public void sendMimeMessage(Post post, String recipient, List<String> interests) throws MessagingException {
 
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
-        mimeMessageHelper.setFrom(post.getPoster());
+        mimeMessageHelper.setFrom(username);
         mimeMessageHelper.setTo(recipient);
         mimeMessageHelper.setSubject(post.getTitle());
         String formattedText = formatText(post, interests);
         mimeMessageHelper.setText(formattedText, true);
 
-        mailSender.send(mimeMessage);
+        javaMailSender.send(mimeMessage);
         System.out.println("Mail sent");
     }
 
@@ -64,4 +71,46 @@ public class MailingService {
         return formatted;
     }
 
+    public int sendEmail(String[] interests, Post post) {
+
+        int recipientNum = 0;
+        Map<String, List<String>> dict = new HashMap<String, List<String>>();
+
+        for (String interest:interests) {
+
+            try {
+                List<User> users = utils.findUserByInterest(interest);
+                recipientNum = users.size();
+
+                for (User user : users) {
+                    // user added in dictionary
+                    if (dict.containsKey(user.getEmail())) {
+
+                        dict.get(user.getEmail()).add(interest); // add the interest list for the user
+
+                    } else {
+
+                        dict.put(user.getEmail(), new ArrayList<String>());
+                        dict.get(user.getEmail()).add(interest); // add the interest list for the user
+                    }
+
+                }
+
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+        }
+
+        // send email for each user, including the interests
+        for (String recipient:dict.keySet()) {
+
+            try {
+                sendMimeMessage(post, recipient, dict.get(recipient));
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+        }
+        return recipientNum;
+
+    }
 }

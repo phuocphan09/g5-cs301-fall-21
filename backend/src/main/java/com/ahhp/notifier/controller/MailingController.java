@@ -66,25 +66,4 @@ public class MailingController {
             return response;
         }
     }
-
-//    @GetMapping("/v1/getpost")
-//    public PostInput getPost(@RequestParam String postId) {
-//
-//        Optional<Post> posts = postRepository.findById(Long.valueOf(postId));
-//        PostInput postInput = new PostInput();
-//
-//        if (posts.isPresent()) { // post is found
-//
-//            Post post = posts.get();
-//            postInput.setPoster(post.getPoster());
-//            postInput.setDescription(post.getDescription());
-//            postInput.setTitle(post.getTitle());
-//            postInput.setInterestList(utils.toList(post.getInterestList())); // convert from string to string[]
-//            postInput.setTimeStamp(post.getTimeStamp());
-//
-//            return postInput;
-//        } else { // post is not found, return null
-//            return null;
-//        }
-//    }
 }

@@ -1,10 +1,12 @@
 package com.ahhp.notifier.response;
 
 import com.ahhp.notifier.entity.Post;
+import com.ahhp.notifier.input.PostInput;
 import com.ahhp.notifier.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -14,7 +16,7 @@ public class PostRetrievalResponse {
     PostRepository postRepository;
 
     private String result;
-    private List<Post> content;
+    private Set<PostInput> content = new HashSet<PostInput>();
 
     public String getResult() {
         return result;
@@ -24,11 +26,11 @@ public class PostRetrievalResponse {
         this.result = result;
     }
 
-    public List<Post> getContent() {
+    public Set<PostInput> getContent() {
         return content;
     }
 
-    public void setContent(List<Post> content) {
+    public void setContent(Set<PostInput> content) {
         this.content = content;
     }
 }

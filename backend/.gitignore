@@ -33,4 +33,4 @@ build/
 .vscode/
 .db
 
-/data/database.mv.db
+### /data/database.mv.db ###

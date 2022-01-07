@@ -10,6 +10,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     public List<Post> findByPoster(String poster); // fake poster, not used
     public List<Post> findByTitle(String title);
+    public List<Post> findAllByOrderById(); // find all, order by id
     public List<Post> findByPosterAndTitle(String poster, String title);
 
 }

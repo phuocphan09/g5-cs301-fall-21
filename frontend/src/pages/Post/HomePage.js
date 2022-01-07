@@ -62,61 +62,6 @@ const HomePage = () => {
 
             <ColoredLine />
 
-<<<<<<< HEAD
-            {/*<PostBox>*/}
-            {/*    <TextWrapper>*/}
-            {/*        <h1> title </h1>*/}
-            {/*        <line />*/}
-            {/*        <h2> description </h2>*/}
-            {/*        <line />*/}
-            {/*        <h2> Posted by: poster </h2>*/}
-            {/*    </TextWrapper>*/}
-
-            {/*    <InterestWrapper>*/}
-            {/*        /!* {interestList.map((item) => ( *!/*/}
-            {/*        <InterestLabel>*/}
-            {/*            <h2> item </h2>*/}
-            {/*        </InterestLabel>*/}
-            {/*        /!* ))} *!/*/}
-            {/*    </InterestWrapper>*/}
-            {/*</PostBox>*/}
-
-            {/*<PostBox>*/}
-            {/*    <TextWrapper>*/}
-            {/*        <h1> title </h1>*/}
-            {/*        <line />*/}
-            {/*        <h2> description </h2>*/}
-            {/*        <line />*/}
-            {/*        <h2> Posted by: poster </h2>*/}
-            {/*    </TextWrapper>*/}
-
-            {/*    <InterestWrapper>*/}
-            {/*        /!* {interestList.map((item) => ( *!/*/}
-            {/*        <InterestLabel>*/}
-            {/*            <h2> item </h2>*/}
-            {/*        </InterestLabel>*/}
-            {/*        /!* ))} *!/*/}
-            {/*    </InterestWrapper>*/}
-            {/*</PostBox>*/}
-
-            {/*<PostBox>*/}
-            {/*    <TextWrapper>*/}
-            {/*        <h1> title </h1>*/}
-            {/*        <line />*/}
-            {/*        <h2> description </h2>*/}
-            {/*        <line />*/}
-            {/*        <h2> Posted by: poster </h2>*/}
-            {/*    </TextWrapper>*/}
-
-            {/*    <InterestWrapper>*/}
-            {/*        /!* {interestList.map((item) => ( *!/*/}
-            {/*        <InterestLabel>*/}
-            {/*            <h2> item </h2>*/}
-            {/*        </InterestLabel>*/}
-            {/*        /!* ))} *!/*/}
-            {/*    </InterestWrapper>*/}
-            {/*</PostBox>*/}
-=======
             <PostBox>
                 <TextWrapper>
                     <h1> {title} </h1>
@@ -170,7 +115,6 @@ const HomePage = () => {
                     ))}
                 </InterestWrapper>
             </PostBox>
->>>>>>> e2aac943d85c6808e97557692c84cfa600147e64
 
             <Navigation>
                 <Home onClick={handleHome}> <RemoveIcon src={active_home} />

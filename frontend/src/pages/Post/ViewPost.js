@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useState, useEffect } from 'react'
 import axios from 'axios';
-import {useNavigate, useSearchParams} from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 const ViewPost = () => {
     const navigate = useNavigate();
@@ -29,7 +29,7 @@ const ViewPost = () => {
                 setBusy(false);
 
                 // no post is found
-                if (response.data.content.length == 0) {
+                if (response.data.content.length === 0) {
                     return
                 }
 
@@ -47,13 +47,13 @@ const ViewPost = () => {
                 (<div></div>) :
                 (title.length === 0) ?
                     (<Container>
-                            <DashedBox>
-                                <h4> Uh oh... <br /> Post not found :( </h4>
-                            </DashedBox>
+                        <DashedBox>
+                            <h4> Uh oh... <br /> Post not found :( </h4>
+                        </DashedBox>
 
-                            <BackContainer onClick={handleHome}>
-                                <text> Back to homepage </text>
-                            </BackContainer>
+                        <BackContainer onClick={handleHome}>
+                            <text> Back to homepage </text>
+                        </BackContainer>
                     </Container>)
 
                     :
@@ -81,7 +81,7 @@ const ViewPost = () => {
                             <text> Back to homepage </text>
                         </BackContainer>
                     </Container>)
-                }
+        }
         </div>
     )
 }

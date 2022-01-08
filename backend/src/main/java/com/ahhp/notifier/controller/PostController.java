@@ -27,6 +27,8 @@ public class PostController {
     UserRepository userRepository;
     @Autowired
     Utils utils;
+    String email;
+
 
     @GetMapping("/v1/getpost")
     public PostRetrievalResponse getSinglePost (@RequestParam String id) {

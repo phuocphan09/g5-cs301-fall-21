@@ -21,8 +21,7 @@ const AddInterest = (props) => {
     }
 
     useEffect(() => {
-        const userEmail = localStorage.getItem("user")
-        GetAddable.getAddable(userEmail)
+        GetAddable.getAddable()
             .then(response => {
                 console.log(response.data)
                 response.data.addableInteresList.map((itemAPI, indexAPI) => {
@@ -69,7 +68,7 @@ const AddInterest = (props) => {
 
         console.log(newInterestItem.interestName)
 
-        GetAddable.addNewInterest(localStorage.getItem("user"), newInterestItem.interestName)
+        GetAddable.addNewInterest(newInterestItem.interestName)
             .then(response => console.log(response.result))
 
         let cloneInterest = interest

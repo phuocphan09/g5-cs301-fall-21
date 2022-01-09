@@ -1,26 +1,44 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import inactive_home from '../../assets/home_grey.svg'
 import active_personal from '../../assets/personal_blue.svg'
 import avatar from '../../assets/avatar.svg'
 import arrow from '../../assets/arrow.svg'
+import axios from "axios";
 
 
 const PersonalPage = () => {
 
     const navigate = useNavigate()
-    const userEmail = localStorage.getItem("user")
-    var name = userEmail.split("@")[0];
-    var firstname = name.split(".")[0];
-    var lastname = name.split(".")[1];
+    const [userEmail, setUserEmail] = useState('');
+    const [firstname, setFirstName] = useState('');
+    const [lastname, setLastName] = useState('');
+
+    useEffect(() => {
+        axios.get('/v1/authenticatetoken')
+
+            .then(response => {
+
+                const email = response.data;
+                let name = email.split("@")[0];
+
+                setFirstName(name.split(".")[0]);
+                setLastName(name.split(".")[1]);
+                setUserEmail(email);
+
+            })
+    }, [])
 
     function handleAdd() {
         navigate('/AddInterest')
     }
 
     function handleLogout() {
-        navigate('/SuccessLogout')
+        axios.get('/v1/logout')
+            .then(response => {
+                navigate('/SuccessLogout')
+            })
     }
 
     function handleHome() {
@@ -32,47 +50,48 @@ const PersonalPage = () => {
     }
 
     return (
-        <Container>
+        <div> {(userEmail.length === 0) ? (<div></div>) :
+            (<Container>
+                <AvatarWrapper>
+                    <Avatar src={avatar}/>
+                    <TextWrapper>
+                        <h1> {firstname} {lastname} </h1>
+                        <h2> {userEmail} </h2>
+                    </TextWrapper>
+                </AvatarWrapper>
 
-            <AvatarWrapper>
-                <Avatar src={avatar} />
-                <TextWrapper>
-                    <h1> {firstname} {lastname} </h1>
-                    <h2> {userEmail} </h2>
-                </TextWrapper>
-            </AvatarWrapper>
+                <line/>
 
-            <line />
+                <ArrowButton onClick={handleAdd}>
+                    <TextWrapper>
+                        <h1>Configure your interest </h1>
+                        <h2> Choose which type of posts you want to be notified about </h2>
+                    </TextWrapper>
+                    <RemoveIcon src={arrow}/>
+                </ArrowButton>
 
-            <ArrowButton onClick={handleAdd}>
-                <TextWrapper>
-                    <h1>Configure your interest </h1>
-                    <h2> Choose which type of posts you want to be notified about </h2>
-                </TextWrapper>
-                <RemoveIcon src={arrow} />
-            </ArrowButton>
+                <line/>
 
-            <line />
+                <ArrowButton onClick={handleLogout}>
+                    <TextWrapper>
+                        <h1> Logout </h1>
+                    </TextWrapper>
+                    <RemoveIcon src={arrow}/>
+                </ArrowButton>
 
-            <ArrowButton onClick={handleLogout}>
-                <TextWrapper>
-                    <h1> Logout </h1>
-                </TextWrapper>
-                <RemoveIcon src={arrow} />
-            </ArrowButton>
+                <line/>
 
-            <line />
+                <Navigation>
+                    <Home onClick={handleHome}> <RemoveIcon src={inactive_home}/>
+                        <text> Home</text>
+                    </Home>
+                    <Personal onClick={handlePersonal}> <RemoveIcon src={active_personal}/>
+                        <text> Personal</text>
+                    </Personal>
+                </Navigation>
 
-            <Navigation>
-                <Home onClick={handleHome}> <RemoveIcon src={inactive_home} />
-                    <text> Home </text>
-                </Home>
-                <Personal onClick={handlePersonal}> <RemoveIcon src={active_personal} />
-                    <text> Personal </text>
-                </Personal>
-            </Navigation>
-
-        </Container>
+            </Container>
+            )} </div>
     )
 }
 

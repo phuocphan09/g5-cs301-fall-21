@@ -157,8 +157,7 @@ const AddPost = () => {
         else {
             let bodyTextInterest = []
             interestPicked.map(item => bodyTextInterest.push(item.interestName))
-            const userEmail = localStorage.getItem("user");
-            const bodyText = { poster: userEmail, title: pageTitle, description: topicDescription, interestList: bodyTextInterest }
+            const bodyText = { title: pageTitle, description: topicDescription, interestList: bodyTextInterest }
             console.log(bodyText)
             axios.post("/v1/submitpost", bodyText)
                 .then(response => console.log(response.data.added))

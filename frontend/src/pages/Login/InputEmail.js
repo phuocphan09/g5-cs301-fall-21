@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import {Navigate, useLocation, useNavigate} from 'react-router-dom';
 import Welcome from './Welcome';
 import AuthService from '../../auth.service';
+import axios from "axios";
 
 const InputEmail = (props) => {
 
@@ -28,18 +29,21 @@ const InputEmail = (props) => {
         }
     }
 
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
+    const [state, setState] = useState({isValidated: false, apiCalled: false});
+
+    // useEffect(() => {
+    //     axios.get('/v1/authenticatetoken')
+    //         .then(response => {
+    //                 setState({isValidated: response.status !== 401, apiCalled: true})
+    //             }
+    //         )
+    // }, []);
     
     const handleFormSubmit = (e) =>{
 
         e.preventDefault();
-        props.props(email)
-
-        // localStorage.setItem("user", JSON.stringify(email.data));
-        localStorage.setItem("user", email);
-        // localStorage.getItemget("user");
-        // console.log(localStorage.getItem("xxx"));
-        // localStorage.removeItem("user");
+        props.props(email);
 
         AuthService.ValidateEmail(email)
         .then (response => {
@@ -48,9 +52,9 @@ const InputEmail = (props) => {
             setEmailValidState(resultOutput)
             if (resultOutput.valid === true){
                 if (resultOutput.created === true){
-                    navigate("/InputPassword");
+                    navigate("/login/InputPassword");
                 } else {
-                    navigate("/CreateAccount")
+                    navigate("/login/CreateAccount")
                 }
             } else {
                 setValidState("#FF5630")
@@ -58,28 +62,59 @@ const InputEmail = (props) => {
             
 
     }
+
     return (
-        <Container>
-            <WelcomeContainer>
-                <h1>Welcome to the Notifier</h1>
-                <h2>Type in your Fulbright email to begin</h2>
-            </WelcomeContainer>
-            <Container1 inputColor={validState} >
-                <view >
-                    <text style={{ fontWeight: 700, fontSize: 18 }}>Fulbright Email</text>
+            <Container>
+                <WelcomeContainer>
+                    <h1>Welcome to the Notifier</h1>
+                    <h2>Type in your Fulbright email to begin</h2>
+                </WelcomeContainer>
+                <Container1 inputColor={validState} >
+                    <view >
+                        <text style={{ fontWeight: 700, fontSize: 18 }}>Fulbright Email</text>
+                        <br></br>
+                        <text style={{ fontWeight: 400, fontSize: 16 }}>Must have fulbright.edu.vn domain</text>
+
+                    </view>
+                </Container1>
+                <Container2 className='form-group form' autoComplete='off' onSubmit={handleFormSubmit}>
+
+                    <EmailBox inputColor={validState} type='text' required placeholder='Your Fulbright Email' className='form-control' onChange={handleEmailChange} value={email} />
                     <br></br>
-                    <text style={{ fontWeight: 400, fontSize: 16 }}>Must have fulbright.edu.vn domain</text>
-
-                </view>
-            </Container1>
-            <Container2 className='form-group form' autoComplete='off' onSubmit={handleFormSubmit}>
-
-                <EmailBox inputColor={validState} type='text' required placeholder='Your Fulbright Email' className='form-control' onChange={handleEmailChange} value={email} />
-                <br></br>
-                <button disabled={buttonState}> Continue </button>
-            </Container2>
-        </Container>
+                    <button disabled={buttonState}> Continue </button>
+                </Container2>
+            </Container>
     )
+
+    // return (
+        // <div>
+        //     {state.apiCalled ?
+        //         state.isValidated ?
+        //             <Navigate to="/HomePage" />
+        //             : (<Container>
+        //                 <WelcomeContainer>
+        //                     <h1>Welcome to the Notifier</h1>
+        //                     <h2>Type in your Fulbright email to begin</h2>
+        //                 </WelcomeContainer>
+        //                 <Container1 inputColor={validState} >
+        //                     <view >
+        //                         <text style={{ fontWeight: 700, fontSize: 18 }}>Fulbright Email</text>
+        //                         <br></br>
+        //                         <text style={{ fontWeight: 400, fontSize: 16 }}>Must have fulbright.edu.vn domain</text>
+        //
+        //                     </view>
+        //                 </Container1>
+        //                 <Container2 className='form-group form' autoComplete='off' onSubmit={handleFormSubmit}>
+        //
+        //                     <EmailBox inputColor={validState} type='text' required placeholder='Your Fulbright Email' className='form-control' onChange={handleEmailChange} value={email} />
+        //                     <br></br>
+        //                     <button disabled={buttonState}> Continue </button>
+        //                 </Container2>
+        //             </Container>)
+        //     : <div></div>}
+        // </div>
+
+    // )
 }
 
 const Container = styled.div`

@@ -45,7 +45,7 @@ const CreateAccount = (props) => {
             const resultOutput = response.data.result;
             setPasswordValidState(resultOutput)
             if (resultOutput === true){
-                navigate("/SuccessCreate")
+                navigate("/login/SuccessCreate")
             } else {
                 setValidState({color: "#FF5630", subtitle: "Something wrong happened while creating your account"})
             }

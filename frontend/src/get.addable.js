@@ -1,18 +1,17 @@
 import axios from 'axios'
 
-const getAddable = (email) =>{
-    return axios.get("/v1/getaddableinterestlist?email=" + email)
+const getAddable = () =>{
+    return axios.get("/v1/getaddableinterestlist")
 }
 
-const getActiveInterest = (email) => {
-    return axios.get("/v1/getactiveinterestlist?email=" + email)
+const getActiveInterest = () => {
+    return axios.get("/v1/getactiveinterestlist")
 }
 
-const addNewInterest = (emailUser, newInterestName) =>{
+const addNewInterest = (newInterestName) =>{
     const bodyText = {
         type: "add",
         infoPackage: {
-            email: emailUser,
             interestName: newInterestName,
         }
     }
@@ -20,11 +19,10 @@ const addNewInterest = (emailUser, newInterestName) =>{
     return axios.put("/v1/manipulateinterest",bodyText)
 }
 
-const removeInterest = (emailUser, removeInterestName) =>{
+const removeInterest = (removeInterestName) =>{
     const bodyText = {
         type: "remove",
         infoPackage: {
-            email: emailUser,
             interestName: removeInterestName
         }
     }

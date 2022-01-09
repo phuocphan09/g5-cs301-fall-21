@@ -359,8 +359,10 @@ public class UserController {
     }
 
     @GetMapping("/v1/authenticatetoken")
-    public boolean authenticateToken() {
-        return true;
+    public String authenticateToken() {
+
+        return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
     }
 
 //    @PutMapping ("/v1/removeuser") // debug

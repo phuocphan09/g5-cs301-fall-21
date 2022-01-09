@@ -1,16 +1,18 @@
-import React from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import history from './history'
+import CustomRouter from "./CustomRouter";
 
 ReactDOM.render(
-  <BrowserRouter>
+  <CustomRouter history={history}>
     <React.StrictMode>
       <App />
     </React.StrictMode>
-  </BrowserRouter>,
+  </CustomRouter>,
   document.getElementById('root')
 );
 

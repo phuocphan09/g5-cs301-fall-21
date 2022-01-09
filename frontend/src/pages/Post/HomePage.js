@@ -11,7 +11,6 @@ import axios from 'axios';
 const HomePage = () => {
 
     const navigate = useNavigate()
-    const userEmail = localStorage.getItem('user')
     const timestamp = useState('')
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')

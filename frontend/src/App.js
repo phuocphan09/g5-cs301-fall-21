@@ -1,9 +1,10 @@
 import './App.css';
 import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import {Route, Routes, useNavigate} from 'react-router-dom';
 // ProtectedRoute
 import ProtectedRoute from './pages/ProtectedRoute';
+import LoginRoute from './pages/LoginRoute';
 // InterestConfig
 import AddInterest from './pages/InterestConfig/AddInterest';
 import ActiveInterest from './pages/InterestConfig/ActiveInterest';
@@ -20,10 +21,48 @@ import HomePage from './pages/Post/HomePage';
 import AddPost from './pages/Post/AddPost'
 import PersonalPage from './pages/Post/PersonalPage';
 import ResultAddPost from './pages/Post/ResultAddPost';
+import axios from "axios";
+
+import history from './history'
+
 
 
 
 function App() {
+
+  const navigate = useNavigate();
+  // axios
+  axios.interceptors.response.use(response => {
+    return response;
+    console.log("success")
+    console.log(response.status);
+  }, error => {
+    console.log("error")
+    console.log(error.response.status);
+    if ( error.response.status === 401 ) {
+      history.push({
+        pathname: '/login/InputEmail',
+        state: { redirect: true }
+      });
+    }
+    return error;
+
+    // return Promise.reject(err);
+
+    // axios.interceptors.response.use(response => {
+    //     return response;
+    //     console.log("success")
+    //     console.log(response.status);
+    // }, error => {
+    //     console.log("error")
+    //     console.log(error.response.status);
+    //     if (error.response.status === 401) {
+    //         // navigate("/login/InputEmail");
+    //     }
+    //     return error;
+    // });
+  });
+
   const [width, setWindowWidth] = useState(0)
   useEffect(() => {
     updateDimensions();
@@ -62,11 +101,13 @@ function App() {
               {/*<Route path="/ViewPost/:id" component={ViewPost} />*/}
               <Route path="/SuccessLogout" element={<SuccessLogout />} />
             </Route>
-            <Route path="/InputEmail" element={<InputEmail props={changeInputEmail} />} />
-            <Route path="/InputPassword" element={<InputPassword email={inputEmail} passwordInput={changeInputPassword} />} />
-            <Route path="/CreateAccount" element={<CreateAccount email={inputEmail} passwordInput={changeInputPassword} />} />
-            <Route path="/SuccessAuth" element={<SuccessAuth />} />
-            <Route path="/SuccessCreate" element={<SuccessCreate />} />
+            <Route path="/login" element={<LoginRoute />}>
+              <Route path="/login/SuccessAuth" element={<SuccessAuth />} />
+              <Route path="/login/SuccessCreate" element={<SuccessCreate />} />
+            </Route>
+            <Route path="/login/InputEmail" element={<InputEmail props={changeInputEmail} />} />
+            <Route path="/login/InputPassword" element={<InputPassword email={inputEmail} passwordInput={changeInputPassword} />} />
+            <Route path="/login/CreateAccount" element={<CreateAccount email={inputEmail} passwordInput={changeInputPassword} />} />
           </Routes>
         </Wrapper>
       </Container>

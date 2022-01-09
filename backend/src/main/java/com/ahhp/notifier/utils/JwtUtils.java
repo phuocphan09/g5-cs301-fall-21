@@ -12,6 +12,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestController;
+import java.math.BigInteger;
 
 @Component
 public class JwtUtils {
@@ -38,6 +39,7 @@ public class JwtUtils {
 
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
+        System.out.println(now);
 
         //We will sign our JWT with our ApiKey secret
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);

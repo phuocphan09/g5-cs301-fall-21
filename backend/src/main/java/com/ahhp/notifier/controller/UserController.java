@@ -21,6 +21,12 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseEntity;
+
+import org.springframework.http.HttpStatus;
+
 import javax.servlet.http.Cookie;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -82,25 +88,40 @@ public class UserController {
      * @return AccountValidationResponse.user the email passed in
      */
     @PostMapping ("/v1/validatepassword")
-    public AccountValidationResponse validatePassword(@RequestBody User user, @RequestParam String email) {
+    public ResponseEntity<AccountValidationResponse> validatePassword(@RequestBody User user, @RequestParam String email, HttpServletResponse response) {
 
-        AccountValidationResponse response = new AccountValidationResponse(); // create response object
-        response.setResult(false);
-        response.setUser(email);
+        AccountValidationResponse theResponse = new AccountValidationResponse(); // create response object
+        theResponse.setResult(false);
+        theResponse.setUser(email);
 
         List<User> users = userRepository.findByEmail(email);
 
         String hashedString = SecurityUtils.hashPassword(user.getPassword());
 
         if (users.isEmpty()) { // email not registered
-            return response;
+
+            return new ResponseEntity<AccountValidationResponse> (theResponse, HttpStatus.OK);
 
         } else if (users.get(0).getPassword().equals(hashedString)) { // correct password
 
-            response.setResult(true);
-            return response;
+            // create token
+            String token = jwtUtils.createJWT(email, 2592000);
+            Cookie cookie = new Cookie("Authorization", token);
+            cookie.setPath("/");  // The cookie is visible to all the pages in the directory you specify, and all the pages in that directory's subdirectories
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
 
-        } else { return response; } // email not registered/incorrect password
+            // set result to true
+            theResponse.setResult(true);
+
+            // return
+            return new ResponseEntity<AccountValidationResponse> (theResponse, HttpStatus.OK);
+
+        } else {
+
+            return new ResponseEntity<AccountValidationResponse> (theResponse, HttpStatus.OK);
+
+        } // email not registered/incorrect password
     }
 
     /**
@@ -112,11 +133,11 @@ public class UserController {
      */
     @PostMapping ("/v1/createaccount")
     @ResponseBody
-    public ResponseEntity createAccount (@RequestBody User user, @RequestParam String email) {
+    public ResponseEntity createAccount (@RequestBody User user, @RequestParam String email, HttpServletResponse response) {
 
-//        AccountValidationResponse response = new AccountValidationResponse(); // create response object
-//        response.setResult(false);
-//        response.setUser(email);
+        AccountValidationResponse theReponse = new AccountValidationResponse(); // create response object
+        theReponse.setResult(false);
+        theReponse.setUser(email);
 
         EmailValidationResponse validate = validateEmail(user.getEmail()); // validate email
 
@@ -128,23 +149,30 @@ public class UserController {
                 user.setEmail(user.getEmail()); // set the email from url
                 user.setPassword(hashedString); // hash the password
 
-                userRepository.save(user);
+                userRepository.save(user); // save user to DB
 
-//                response.setResult(true);
-//                return response;
+                // generate token and respond
+                String token = jwtUtils.createJWT(email, 2592000);
+                Cookie cookie = new Cookie("Authorization", token);
+                cookie.setPath("/");  // The cookie is visible to all the pages in the directory you specify, and all the pages in that directory's subdirectories
+                cookie.setHttpOnly(true);
+                response.addCookie(cookie);
 
-                String token = jwtUtils.createJWT(email, 878878778);
+                theReponse.setResult(true);
 
-                ResponseEntity response = writeCookie(token);
-
-                return response;
+                // return
+                return new ResponseEntity<AccountValidationResponse> (theReponse, HttpStatus.OK);
 
             } else { // invalid email OR empty password
+
                 return null;
+
             }
 
         } else { // account already created
+
             return null;
+
         }
     }
 
@@ -318,22 +346,22 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @PutMapping ("/v1/removeuser") // debug
-    public boolean removeAccount (@RequestBody User user, @RequestParam String email) {
-        boolean result = false;
-        EmailValidationResponse validate = validateEmail(email);
-        if (!validate.isCreated()) { // account not found
-            return result;
-        } else { // account found
-            List<User> users = userRepository.findByEmail(email);
-            if (validatePassword(user, email).isResult()) { // requires correct password
-                userRepository.delete(users.get(0));
-                result = true;
-                return result;
-            } else { // incorrect password
-                return result;
-            }
-        }
-    }
+//    @PutMapping ("/v1/removeuser") // debug
+//    public boolean removeAccount (@RequestBody User user, @RequestParam String email) {
+//        boolean result = false;
+//        EmailValidationResponse validate = validateEmail(email);
+//        if (!validate.isCreated()) { // account not found
+//            return result;
+//        } else { // account found
+//            List<User> users = userRepository.findByEmail(email);
+//            if (validatePassword(user, email).isResult()) { // requires correct password
+//                userRepository.delete(users.get(0));
+//                result = true;
+//                return result;
+//            } else { // incorrect password
+//                return result;
+//            }
+//        }
+//    }
 
 }

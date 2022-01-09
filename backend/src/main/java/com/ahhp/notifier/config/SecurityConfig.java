@@ -17,7 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/v1/createaccount", "/v1/validatepassword").permitAll()
+                .authorizeRequests().antMatchers("/v1/createaccount**", "/v1/validatepassword**").permitAll()
 //                // all other requests need to be authenticated
 //                .anyRequest().authenticated().and()
                 .and().csrf().disable();

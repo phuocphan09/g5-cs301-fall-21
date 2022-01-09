@@ -13,16 +13,15 @@ public class NotifierApplication {
 		SpringApplication.run(NotifierApplication.class, args);
 
 		JWTDemo jwtDemo = new JWTDemo();
-
+//
 		String input = "{'email':'hoang@student.edu.vn'}";
-
-		String jwt = jwtDemo.createJWT(input, 69420);
-
+//
+		String jwt = jwtDemo.createJWT(input, 878878778);
+//
 		System.out.println(jwt);
 
-		Claims claims = jwtDemo.decodeJWT(jwt);
-
-		System.out.println(claims);
+//		Claims claims = jwtDemo.decodeJWT(jwt);
+//		System.out.println(claims);
 	}
 
 }

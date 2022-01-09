@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class PostController {
@@ -52,6 +54,17 @@ public class PostController {
         }
 
         return response;
+    }
+
+    @GetMapping("/v1/exampleAPI")
+    public String debugJWT () {
+
+        // if validated, comes here
+
+        // get email from SecurityContext
+        final String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        return email;
     }
 
 //    @GetMapping("/v1/getdisplaypost")

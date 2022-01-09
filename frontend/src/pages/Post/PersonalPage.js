@@ -31,7 +31,7 @@ const PersonalPage = () => {
     }, [])
 
     function handleAdd() {
-        navigate('/AddInterest')
+        navigate('/ActiveInterest')
     }
 
     function handleLogout() {

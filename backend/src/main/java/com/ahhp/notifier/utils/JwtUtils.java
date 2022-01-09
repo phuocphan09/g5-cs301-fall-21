@@ -1,4 +1,4 @@
-package com.ahhp.notifier.controller;
+package com.ahhp.notifier.utils;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -10,13 +10,11 @@ import java.util.Date;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestController;
 
-/*
-    Our simple static class that demonstrates how to create and decode JWTs.
- */
-
-public class JWTDemo {
+@Component
+public class JwtUtils {
 
     // The secret key. This should be in a property file NOT under source
     // control and not hard coded in real life. We're putting it here for
@@ -24,11 +22,11 @@ public class JWTDemo {
     private static String SECRET_KEY = "oeRaYY7Wo24sDqKSX3IM9ASGmdGPmkTd9jo1QTy4b7P9Ze5_9hKolVX8xNrQDcNRfVEdTZNOuOyqEGhXEbdJI-ZQ19k_o9MI0y3eZN2lp9jow55FfXMiINEdt1XR85VipRLSOkT6kSpzs2x-jbLDiz9iFVzkd81YKxMgPA7VfZeQUm4n-mOmnWMaVX30zGFU4L3oPBctYKkl4dYfqYWqRNfrgPJVi5DGFjywgxx0ASEiJHtV72paI3fDR2XwlSkyhhmY-ICjCRmsJN4fX1pdoL8a18-aQrvyu4j0Os6dVPYIoPvvY0SAZtWYKHfM15g7A3HD4cVREf9cUsprCRK93w";
     private static String token;
 
-    public JWTDemo (String token) {
+    public JwtUtils(String token) {
         this.token = token;
     }
 
-    public JWTDemo () {
+    public JwtUtils() {
 
     }
 

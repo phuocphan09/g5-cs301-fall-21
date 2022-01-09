@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 
 import org.springframework.http.HttpStatus;
 
@@ -344,6 +346,26 @@ public class UserController {
     // Get all users at once.
     public List<User> getAll() {
         return userRepository.findAll();
+    }
+
+    @GetMapping("/v1/logout")
+    public ResponseEntity<String> logOut(HttpServletResponse response) {
+
+//        final String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        // create token
+        Cookie cookie = new Cookie("Authorization", null);
+        cookie.setPath("/");  // The cookie is visible to all the pages in the directory you specify, and all the pages in that directory's subdirectories
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+
+        // return
+        return new ResponseEntity<String> ("ok", HttpStatus.OK);
+    }
+
+    @GetMapping("/v1/authenticatetoken")
+    public boolean authenticateToken() {
+        return true;
     }
 
 //    @PutMapping ("/v1/removeuser") // debug

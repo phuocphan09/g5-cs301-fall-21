@@ -62,13 +62,31 @@ public class JwtUtils {
         return builder.compact();
     }
 
-    public Claims decodeJWT() {
+    public boolean validateJWT() {
+
+        if (this.token == null) {
+            return false;
+        }
+
+        try {
+            Jws<Claims> claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(this.token);
+            if (claims.getBody().getExpiration().before(new Date())) {
+                return false;
+            }
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+//            throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
+            return false;
+        }
+    }
+
+    public String decodeJWT() {
 
         //This line will throw an exception if it is not a signed JWS (as expected)
         Claims claims = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
                 .parseClaimsJws(this.token).getBody();
-        return claims;
+        return claims.getSubject();
     }
 
 }

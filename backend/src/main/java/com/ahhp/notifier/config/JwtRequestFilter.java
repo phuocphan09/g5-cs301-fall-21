@@ -13,6 +13,9 @@ import java.io.IOException;
 
 import com.ahhp.notifier.utils.JwtUtils;
 
+import javax.servlet.http.Cookie;
+
+
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
@@ -21,6 +24,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        // bypass Filter if createaccount or validatepassword
         String requestURI = request.getRequestURI();
         if (requestURI.equals("/v1/createaccount") || requestURI.equals("/v1/validatepassword")) {
             filterChain.doFilter(request, response);
@@ -29,35 +33,38 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // get token from header
         final String token = request.getHeader("Authorization");
-        System.out.println(token);
+//        System.out.println(token);
 
+        // validate token
         JwtUtils jwt = new JwtUtils(token);
 
-        System.out.println(jwt.decodeJWT());
+        if (jwt.validateJWT()) {
 
-//        // check if token is expired or not
-//        // try catch create Claims
-          // if expired, return 401
-//        response.setStatus(401);
-//        return;
-          // return
-//
-        // if token is not expired
-        // check if token is validated
-        // if validated, do the followings
-            // final String email = decodeJWT(token)
-            // create new user
-            String email = "phuoc@fulbright.edu.vn";
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(email, null, null);
+            // token is validated
+
+            // get email from token
+            String email = jwt.decodeJWT();
 
             // set user info to the context
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, null, null);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // proceed to the next API
-        filterChain.doFilter(request, response);
+            // proceed to the next API
+            filterChain.doFilter(request, response);
 
-        // otherwise, do nothing
+        } else {
+
+            // token not validated --  expired or not valid or empty
+            response.setStatus(401);
+
+            // create token
+            Cookie cookie = new Cookie("Authorization", null);
+            cookie.setPath("/");  // The cookie is visible to all the pages in the directory you specify, and all the pages in that directory's subdirectories
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
+
+        }
+
     }
 
 

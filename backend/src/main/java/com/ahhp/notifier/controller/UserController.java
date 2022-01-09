@@ -178,17 +178,6 @@ public class UserController {
         }
     }
 
-    @ResponseStatus(value = HttpStatus.OK)
-//    @GetMapping(value = "/writeCookie")
-    public ResponseEntity writeCookie(String token) {
-
-        var cookie = ResponseCookie.from("Authorization", token).build();
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .build();
-    }
-
     /**
      * Get a list of active interests of a user.
      * @param email of the user, passed through the url param

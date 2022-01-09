@@ -26,7 +26,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // bypass Filter if createaccount or validatepassword
         String requestURI = request.getRequestURI();
-        if (requestURI.equals("/v1/createaccount") || requestURI.equals("/v1/validatepassword")) {
+        if (requestURI.equals("/v1/createaccount") || requestURI.equals("/v1/validatepassword") || requestURI.equals("/v1/validateemail")) {
             filterChain.doFilter(request, response);
             return;
         }

@@ -28,8 +28,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // bypass Filter if createaccount or validatepassword
         String requestURI = request.getRequestURI();
-        boolean matchedH2 = Pattern.compile("/h2-console.*").matcher(requestURI).matches();
-        System.out.println(matchedH2);
+        boolean matchedH2 = Pattern.compile("/h2*").matcher(requestURI).matches();
         if (requestURI.equals("/v1/createaccount") || requestURI.equals("/v1/validatepassword") || requestURI.equals("/v1/validateemail") || matchedH2) {
             filterChain.doFilter(request, response);
             return;
@@ -52,6 +51,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (jwt.validateJWT()) {
 
             // token is validated
+
+            System.out.println("token validated");
 
             // get email from token
             String email = jwt.decodeJWT();

@@ -141,14 +141,19 @@ public class UserController {
         theReponse.setResult(false);
         theReponse.setUser(email);
 
-        EmailValidationResponse validate = validateEmail(user.getEmail()); // validate email
+        System.out.println("hello");
+        System.out.println("hello");
+        System.out.println("hello");
+        System.out.println(email);
+
+        EmailValidationResponse validate = validateEmail(email); // validate email
 
         if (!validate.isCreated()) { // account not created
 
             if ((validate.isValid() && (user.getPassword().length()>0))) { // valid email address AND nonempty pw
 
                 String hashedString = SecurityUtils.hashPassword(user.getPassword());
-                user.setEmail(user.getEmail()); // set the email from url
+                user.setEmail(email); // set the email from url
                 user.setPassword(hashedString); // hash the password
 
                 userRepository.save(user); // save user to DB

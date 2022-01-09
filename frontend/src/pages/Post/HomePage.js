@@ -19,24 +19,24 @@ const HomePage = () => {
     let initialInterestList = []
     let initialPostList = []
 
-    useEffect(() => {
-        axios.get('http://localhost:8080/v1/getdisplaypost?email=' + userEmail)
-            .then(response => { console.log(response.content.id) })
-    }, [])
+    // useEffect(() => {
+    //     axios.get('/v1/getdisplaypost?email=' + userEmail)
+    //         .then(response => { console.log(response.content.id) })
+    // }, [])
 
     const [postList, setPostList] = useState(initialPostList)
 
-    useEffect(() => {
-        postList.map((postId) => (axios.get('http://localhost:8080/v1/getpost?postId=' + postId)
-            .then(response => {
-                setTitle(response.data.title)
-                setDescription(response.data.description)
-                setPoster(response.data.poster)
-                response.data.interestList.map((item) => {
-                    initialInterestList.push(item)
-                })
-            })))
-    }, [])
+    // useEffect(() => {
+    //     postList.map((postId) => (axios.get('/v1/getpost?postId=' + postId)
+    //         .then(response => {
+    //             setTitle(response.data.title)
+    //             setDescription(response.data.description)
+    //             setPoster(response.data.poster)
+    //             response.data.interestList.map((item) => {
+    //                 initialInterestList.push(item)
+    //             })
+    //         })))
+    // }, [])
 
     const [interestList, setInterestList] = useState(initialInterestList)
 

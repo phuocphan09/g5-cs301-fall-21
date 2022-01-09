@@ -1,11 +1,11 @@
 import axios from 'axios'
 
 const getAddable = (email) =>{
-    return axios.get("http://localhost:8080/v1/getaddableinterestlist?email=" + email)
+    return axios.get("/v1/getaddableinterestlist?email=" + email)
 }
 
 const getActiveInterest = (email) => {
-    return axios.get("http://localhost:8080/v1/getactiveinterestlist?email=" + email)
+    return axios.get("/v1/getactiveinterestlist?email=" + email)
 }
 
 const addNewInterest = (emailUser, newInterestName) =>{
@@ -17,7 +17,7 @@ const addNewInterest = (emailUser, newInterestName) =>{
         }
     }
     console.log(bodyText)
-    return axios.put("http://localhost:8080/v1/manipulateinterest",bodyText)
+    return axios.put("/v1/manipulateinterest",bodyText)
 }
 
 const removeInterest = (emailUser, removeInterestName) =>{
@@ -28,7 +28,7 @@ const removeInterest = (emailUser, removeInterestName) =>{
             interestName: removeInterestName
         }
     }
-    return axios.put("http://localhost:8080/v1/manipulateinterest",bodyText)
+    return axios.put("/v1/manipulateinterest",bodyText)
 }
 
 export default {getAddable, addNewInterest, removeInterest, getActiveInterest}

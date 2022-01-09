@@ -11,11 +11,17 @@ import com.ahhp.notifier.response.InterestListResponse;
 import com.ahhp.notifier.response.AccountValidationResponse;
 import com.ahhp.notifier.response.EmailValidationResponse;
 import com.ahhp.notifier.response.InterestManipulationResponse;
+import com.ahhp.notifier.utils.JwtUtils;
 import com.ahhp.notifier.utils.SecurityUtils;
 import com.ahhp.notifier.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +42,8 @@ public class UserController {
     private PostRepository postRepository;
     @Autowired
     private Utils utils;
+    @Autowired
+    private JwtUtils jwtUtils;
 
     /**
      * Validate the email to make sure it is a Fulbright email
@@ -103,34 +111,52 @@ public class UserController {
      * @return AccountValidationResponse.user the email passed in
      */
     @PostMapping ("/v1/createaccount")
-    public AccountValidationResponse createAccount (@RequestBody User user, @RequestParam String email) {
+    @ResponseBody
+    public ResponseEntity createAccount (@RequestBody User user, @RequestParam String email) {
 
-        AccountValidationResponse response = new AccountValidationResponse(); // create response object
-        response.setResult(false);
-        response.setUser(email);
+//        AccountValidationResponse response = new AccountValidationResponse(); // create response object
+//        response.setResult(false);
+//        response.setUser(email);
 
-        EmailValidationResponse validate = validateEmail(email); // validate email
+        EmailValidationResponse validate = validateEmail(user.getEmail()); // validate email
 
         if (!validate.isCreated()) { // account not created
 
             if ((validate.isValid() && (user.getPassword().length()>0))) { // valid email address AND nonempty pw
 
                 String hashedString = SecurityUtils.hashPassword(user.getPassword());
-                user.setEmail(email); // set the email from url
+                user.setEmail(user.getEmail()); // set the email from url
                 user.setPassword(hashedString); // hash the password
 
                 userRepository.save(user);
 
-                response.setResult(true);
+//                response.setResult(true);
+//                return response;
+
+                String token = jwtUtils.createJWT(email, 878878778);
+
+                ResponseEntity response = writeCookie(token);
+
                 return response;
 
             } else { // invalid email OR empty password
-                return response;
+                return null;
             }
 
         } else { // account already created
-            return response;
+            return null;
         }
+    }
+
+    @ResponseStatus(value = HttpStatus.OK)
+//    @GetMapping(value = "/writeCookie")
+    public ResponseEntity writeCookie(String token) {
+
+        var cookie = ResponseCookie.from("Authorization", token).build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .build();
     }
 
     /**

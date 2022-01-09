@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -29,7 +31,10 @@ public class MailingController {
         PostSubmissionResponse response = new PostSubmissionResponse();
         response.setAdded(false);
         response.setAdded(false);
-        List<Post> posts = postRepository.findByPosterAndTitle(postInput.getPoster(), postInput.getTitle());
+
+        final String poster = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        List<Post> posts = postRepository.findByPosterAndTitle(poster, postInput.getTitle());
 
         if (posts.size() > 0) { // post already submitted by the user
             response.setDetails("Post with the same title already created by this user.");
@@ -37,7 +42,7 @@ public class MailingController {
 
         } else { // post not submitted yet
             Post post = new Post(); // create Post entity
-            post.setPoster(postInput.getPoster()); // set poster
+            post.setPoster(poster); // set poster
             post.setTitle(postInput.getTitle()); // set title
             post.setDescription(postInput.getDescription()); // set description
             post.setTimeStamp(System.currentTimeMillis()); // set timestamp

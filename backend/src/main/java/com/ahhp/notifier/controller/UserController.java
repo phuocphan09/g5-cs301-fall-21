@@ -184,10 +184,12 @@ public class UserController {
      * @return InterestListResponse a list of active interests, and the response type
      */
     @GetMapping ("/v1/getactiveinterestlist")
-    public InterestListResponse getUserInterestList (@RequestParam String email) {
+    public InterestListResponse getUserInterestList () {
 
         InterestListResponse response = new InterestListResponse(); // create response object
         response.setResponseType("individual"); // set response type
+
+        final String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 
         List<User> users = userRepository.findByEmail(email);
 
@@ -210,14 +212,16 @@ public class UserController {
      * @return InterestListResponse a list of inactive interests, and the response type
      */
     @GetMapping("/v1/getaddableinterestlist")
-    public InterestListResponse getAddableInterestList (@RequestParam String email) throws InvalidParameterException {
+    public InterestListResponse getAddableInterestList() throws InvalidParameterException {
+
+        final String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 
         InterestListResponse response = new InterestListResponse(); // create response object
         response.setResponseType("individual"); // set response type
         List<User> users = userRepository.findByEmail(email);
 
         if (users.size() == 0) { // check if a user exists
-            throw new InvalidParameterException("Emai:" + email); // does not exist
+            throw new InvalidParameterException("Email:" + email); // does not exist
         }
 
         User user = users.get(0); // find the user in the database
@@ -236,7 +240,9 @@ public class UserController {
         response.setType(manipulation.getType());
         response.setResult("failed");
 
-        List<User> userList = userRepository.findByEmail(manipulation.getInfoPackage().getEmail());// find the user
+        final String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        List<User> userList = userRepository.findByEmail(email);// find the user
 
         if (userList.size()==0) { // no user found
 

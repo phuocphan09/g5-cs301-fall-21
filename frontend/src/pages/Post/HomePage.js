@@ -14,26 +14,29 @@ const HomePage = () => {
     // const userEmail = localStorage.getItem('user')
     const userEmail = "hoang@student.fulbright.edu.vn"
     const timestamp = useState('')
-    // const [title, setTitle] = useState('')
-    // const [description, setDescription] = useState('')
-    // const [poster, setPoster] = useState('')
     
-    let initialPostList = []
-    let initialPostStorage = []
     const [postList, setPostList] = useState([])
+
+    //test long description
+    const testDrive = {title: "nucati", description:"booboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboo",
+    poster:"hulu",interestList:["art"]}
 
     useEffect(() => {
         axios.get('http://localhost:8080/v1/getdisplaypost?email=' + userEmail)
-            .then(response => { 
-            response.data.content.map((item)=>{
-                initialPostList.push(item)
-            })
-            })
-        setPostList(initialPostList)
-    }, [])    
+            .then(response => {
+            let toAdd = response.data.content
 
-    
-    // const [interestList, setInterestList] = useState(initialInterestList)
+            //to be deleted
+            toAdd.push(testDrive)
+
+            toAdd.map((item)=>{
+                if (item.description.length>200){
+                    item.readMore = false;
+                }
+            })
+            setPostList(toAdd)
+            })
+    }, [])    
 
     function handleAdd() {
         navigate('/AddPost')
@@ -47,6 +50,52 @@ const HomePage = () => {
         navigate('/PersonalPage')
     }
 
+    function handleSeeMore(index){
+        let cloneState = [...postList]
+        cloneState[index].readMore = true
+        setPostList(cloneState)
+    }
+
+    function showPost(item,index){
+        if (item.readMore === false){
+            return <PostBox>
+                        <TextWrapper>
+                            <h1> {item.title} </h1>
+                            <line />
+                            <h2> {item.description.substring(0,200)} <SeeMoreButton onClick={()=>{handleSeeMore(index)}}> See More </SeeMoreButton> </h2>
+                            <line />
+                            <h2> Posted by: {item.poster} </h2>
+                        </TextWrapper>
+
+                        <InterestWrapper>
+                            {item.interestList.map((item1) => (
+                                <InterestLabel>
+                                    <h2> {item1} </h2>
+                                </InterestLabel>
+                            ))}
+                        </InterestWrapper>
+                    </PostBox>
+        } else{
+            return <PostBox>
+                        <TextWrapper>
+                            <h1> {item.title} </h1>
+                            <line />
+                            <h2> {item.description} </h2>
+                            <line />
+                            <h2> Posted by: {item.poster} </h2>
+                        </TextWrapper>
+
+                        <InterestWrapper>
+                            {item.interestList.map((item1) => (
+                                <InterestLabel>
+                                    <h2> {item1} </h2>
+                                </InterestLabel>
+                            ))}
+                        </InterestWrapper>
+                    </PostBox>
+        }
+    }
+
     return (
         <Container>
 
@@ -57,34 +106,19 @@ const HomePage = () => {
 
             <ColoredLine />
 
-            {console.log(postList)}
+            {postList.map((item,index) => (
+                showPost(item,index)
+            ))}
+            
+            <Block7>
 
-            {postList.map(item => {
-                {console.log("hello")}
-                <PostBox>
-                <TextWrapper>
-                    <h1> {item.title} </h1>
-                    <line />
-                    <h2> {item.description} </h2>
-                    <line />
-                    <h2> Posted by: {item.poster} </h2>
-                </TextWrapper>
-
-                {/* <InterestWrapper>
-                    {interestList.map((item) => (
-                        <InterestLabel>
-                            <h2> {item} </h2>
-                        </InterestLabel>
-                    ))}
-                </InterestWrapper> */}
-            </PostBox>
-            })}
+            </Block7>
             
             <Navigation>
-                <Home onClick={handleHome}> <RemoveIcon src={active_home} />
+                <Home onClick={handleHome}> <RemoveIcon1 src={active_home} />
                     <text> Home </text>
                 </Home>
-                <Personal onClick={handlePersonal}> <RemoveIcon src={inactive_personal} />
+                <Personal onClick={handlePersonal}> <RemoveIcon1 src={inactive_personal} />
                     <text> Personal </text>
                 </Personal>
             </Navigation>
@@ -92,7 +126,16 @@ const HomePage = () => {
         </Container>
     )
 }
-
+const Container2 = styled.div`
+    top: 20.24%;
+    left:0%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex:1;
+    gap:3.3vh;
+    transition: all 0.3s ease-out;
+`
 const Container = styled.div`
     top:0;
     left:0;
@@ -130,10 +173,20 @@ const AddInterest = styled.button`
         color: #006DFF;
     }
 `
+const SeeMoreButton = styled.button`
+    background-color: #ffffff;
+    border:none;
+    color:#006DFF;
+`
 
 const RemoveIcon = styled.img`
     width: 3vh;
     height: 3vh;
+    justify-content:center;
+`
+const RemoveIcon1 = styled.img`
+    width: 2.5vh;
+    height: 2.5vh;
     justify-content:center;
 `
 
@@ -154,7 +207,7 @@ const InterestWrapper = styled.div`
     inline-size: 90vw;
     width: 90vw;
     margin-right:1vw;
-    margin-left: 2vw;
+    margin-left: 3vw;
     margin-bottom: 5vw;
 `
 
@@ -214,15 +267,15 @@ const TextWrapper = styled.div`
         font-size: 2vh;
         text-align: left;
         margin-left: 1rem;
-        margin-right: 1rem;
+        margin-right: 1.8rem;
         overflow-wrap: break-word;
     }
     
     line {
         position: relative;
-        width: 80vw;
         margin-top: 2vh;
         margin-left: 2vw;
+        margin-right: 5vw;
         border: 0.5px solid #000000;
         background: #000000;
     }
@@ -243,17 +296,21 @@ const PostBox = styled.div`
 `;
 
 const Navigation = styled.div`
+    position:fixed;
     display: flex;
     flex-direction: row;    
-    justify-content: center;
-    align-items: center;
     width: 100vw;
-    height: 7.35vh;
+    min-height: 7.35vh;
     left: 0;
+    top:92.65vh;
     right:0;
-    top: 92.65vh;
     box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.15);
     background: #ffffff;
+`
+
+const Block7 = styled.div`
+min-height:7.35vh;
+min-width:100vw;
 `
 
 const Home = styled.button`

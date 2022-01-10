@@ -95,6 +95,7 @@ public class Utils {
 
         PostInput postInput = new PostInput();
 
+        postInput.setId(post.getId());
         postInput.setInterestList(toList(post.getInterestList()));
         postInput.setPoster(post.getPoster());
         postInput.setDescription(post.getDescription());
@@ -102,5 +103,16 @@ public class Utils {
         postInput.setTitle(post.getTitle());
 
         return postInput;
+    }
+
+    public boolean arrayContainsString(String[] array, String target) {
+
+        for (String string: array) {
+
+            if (string.equals(target)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -295,3 +295,6 @@ INTEREST [42001-200]
 2022-01-02 22:42:34 jdbc[13]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELETE *[*] FROM POST"; expected "identifier"; SQL statement:
 DELETE * FROM POST [42001-200]
+2022-01-07 22:33:05 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELETE *[*] FROM POST"; expected "identifier"; SQL statement:
+delete * from post [42001-200]

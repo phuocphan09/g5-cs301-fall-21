@@ -11,34 +11,29 @@ import axios from 'axios';
 const HomePage = () => {
 
     const navigate = useNavigate()
-    const userEmail = localStorage.getItem('user')
+    // const userEmail = localStorage.getItem('user')
+    const userEmail = "hoang@student.fulbright.edu.vn"
     const timestamp = useState('')
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
-    const [poster, setPoster] = useState('')
-    let initialInterestList = []
+    // const [title, setTitle] = useState('')
+    // const [description, setDescription] = useState('')
+    // const [poster, setPoster] = useState('')
+    
     let initialPostList = []
+    let initialPostStorage = []
+    const [postList, setPostList] = useState([])
 
     useEffect(() => {
         axios.get('http://localhost:8080/v1/getdisplaypost?email=' + userEmail)
-            .then(response => { console.log(response.content.id) })
-    }, [])
+            .then(response => { 
+            response.data.content.map((item)=>{
+                initialPostList.push(item)
+            })
+            })
+        setPostList(initialPostList)
+    }, [])    
 
-    const [postList, setPostList] = useState(initialPostList)
-
-    useEffect(() => {
-        postList.map((postId) => (axios.get('http://localhost:8080/v1/getpost?postId=' + postId)
-            .then(response => {
-                setTitle(response.data.title)
-                setDescription(response.data.description)
-                setPoster(response.data.poster)
-                response.data.interestList.map((item) => {
-                    initialInterestList.push(item)
-                })
-            })))
-    }, [])
-
-    const [interestList, setInterestList] = useState(initialInterestList)
+    
+    // const [interestList, setInterestList] = useState(initialInterestList)
 
     function handleAdd() {
         navigate('/AddPost')
@@ -62,60 +57,29 @@ const HomePage = () => {
 
             <ColoredLine />
 
-            <PostBox>
+            {console.log(postList)}
+
+            {postList.map(item => {
+                {console.log("hello")}
+                <PostBox>
                 <TextWrapper>
-                    <h1> {title} </h1>
+                    <h1> {item.title} </h1>
                     <line />
-                    <h2> {description} </h2>
+                    <h2> {item.description} </h2>
                     <line />
-                    <h2> Posted by: {poster} </h2>
+                    <h2> Posted by: {item.poster} </h2>
                 </TextWrapper>
 
-                <InterestWrapper>
+                {/* <InterestWrapper>
                     {interestList.map((item) => (
                         <InterestLabel>
                             <h2> {item} </h2>
                         </InterestLabel>
                     ))}
-                </InterestWrapper>
+                </InterestWrapper> */}
             </PostBox>
-
-            <PostBox>
-                <TextWrapper>
-                    <h1> {title} </h1>
-                    <line />
-                    <h2> {description} </h2>
-                    <line />
-                    <h2> Posted by: {poster} </h2>
-                </TextWrapper>
-
-                <InterestWrapper>
-                    {interestList.map((item) => (
-                        <InterestLabel>
-                            <h2> {item} </h2>
-                        </InterestLabel>
-                    ))}
-                </InterestWrapper>
-            </PostBox>
-
-            <PostBox>
-                <TextWrapper>
-                    <h1> {title} </h1>
-                    <line />
-                    <h2> {description} </h2>
-                    <line />
-                    <h2> Posted by: {poster} </h2>
-                </TextWrapper>
-
-                <InterestWrapper>
-                    {interestList.map((item) => (
-                        <InterestLabel>
-                            <h2> {item} </h2>
-                        </InterestLabel>
-                    ))}
-                </InterestWrapper>
-            </PostBox>
-
+            })}
+            
             <Navigation>
                 <Home onClick={handleHome}> <RemoveIcon src={active_home} />
                     <text> Home </text>
@@ -162,7 +126,7 @@ const AddInterest = styled.button`
         font-size: 2.7vh;
         line-height: 21px;
         display: flex;
-        align-text: center;
+        /* align-text: center; */
         color: #006DFF;
     }
 `

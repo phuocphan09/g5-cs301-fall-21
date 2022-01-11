@@ -24,7 +24,7 @@ const AddPost = () => {
 
     let intialInterestSet = []
     useEffect(() => {
-        axios.get('http://localhost:8080/v1/getallinterest')
+        axios.get('/v1/getallinterest')
             .then(response => {
                 console.log(response)
                 response.data.activeInterestList.map((item) => {
@@ -157,10 +157,9 @@ const AddPost = () => {
         else {
             let bodyTextInterest = []
             interestPicked.map(item => bodyTextInterest.push(item.interestName))
-            const userEmail = localStorage.getItem("user");
-            const bodyText = { poster: userEmail, title: pageTitle, description: topicDescription, interestList: bodyTextInterest }
+            const bodyText = { title: pageTitle, description: topicDescription, interestList: bodyTextInterest }
             console.log(bodyText)
-            axios.post("http://localhost:8080/v1/submitpost", bodyText)
+            axios.post("/v1/submitpost", bodyText)
                 .then(response => console.log(response.data.added))
             navigate("/ResultAddPost")
         }

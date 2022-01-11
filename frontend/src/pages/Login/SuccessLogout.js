@@ -7,7 +7,7 @@ const SuccessLogout = () => {
     const navigate = useNavigate()
     useEffect (() => {
         setTimeout (() => {
-            navigate('/InputEmail')
+            navigate('/login/InputEmail')
         }, 1000)
     })
 

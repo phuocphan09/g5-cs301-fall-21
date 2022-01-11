@@ -46,7 +46,7 @@ const InputPassword = (props) => {
             const resultOutput = response.data.result;
             setPasswordValidState(resultOutput)
             if (resultOutput === true){
-                navigate("/SuccessAuth")
+                navigate("/login/SuccessAuth")
             } else {
                 setValidState({color: "#FF5630", subtitle: "Your password is invalid. Please double-check"})
             }

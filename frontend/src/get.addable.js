@@ -1,34 +1,32 @@
 import axios from 'axios'
 
-const getAddable = (email) =>{
-    return axios.get("http://localhost:8080/v1/getaddableinterestlist?email=" + email)
+const getAddable = () =>{
+    return axios.get("/v1/getaddableinterestlist")
 }
 
-const getActiveInterest = (email) => {
-    return axios.get("http://localhost:8080/v1/getactiveinterestlist?email=" + email)
+const getActiveInterest = () => {
+    return axios.get("/v1/getactiveinterestlist")
 }
 
-const addNewInterest = (emailUser, newInterestName) =>{
+const addNewInterest = (newInterestName) =>{
     const bodyText = {
         type: "add",
         infoPackage: {
-            email: emailUser,
             interestName: newInterestName,
         }
     }
     console.log(bodyText)
-    return axios.put("http://localhost:8080/v1/manipulateinterest",bodyText)
+    return axios.put("/v1/manipulateinterest",bodyText)
 }
 
-const removeInterest = (emailUser, removeInterestName) =>{
+const removeInterest = (removeInterestName) =>{
     const bodyText = {
         type: "remove",
         infoPackage: {
-            email: emailUser,
             interestName: removeInterestName
         }
     }
-    return axios.put("http://localhost:8080/v1/manipulateinterest",bodyText)
+    return axios.put("/v1/manipulateinterest",bodyText)
 }
 
 export default {getAddable, addNewInterest, removeInterest, getActiveInterest}

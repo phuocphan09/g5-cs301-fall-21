@@ -4,8 +4,7 @@ import getAddable from '../../get.addable'
 const Test = () => {
     const pickStateNA = { color: '#006DFF', width: '18.13vw' }
     let initialInterestState = []
-    const userEmail = localStorage.getItem("user");
-    getAddable.getAddable(userEmail)
+    getAddable.getAddable()
         .then(response => {
             console.log(response.data)
             console.log(response.data.addableInteresList)

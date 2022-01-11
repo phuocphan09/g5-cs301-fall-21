@@ -14,7 +14,6 @@ const HomePage = () => {
     const userEmail = localStorage.getItem('user')
     
     const [postList, setPostList] = useState([])
-
     
     function secondsToHms(d1) {
         var currentTimeInSeconds=Math.floor(Date.now());

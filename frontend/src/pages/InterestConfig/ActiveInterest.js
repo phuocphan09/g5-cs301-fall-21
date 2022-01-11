@@ -26,8 +26,7 @@ const ActiveInterest = (props) => {
 
 
     useEffect(() => {
-        const userEmail = localStorage.getItem("user");
-        GetActive.getActiveInterest(userEmail)
+        GetActive.getActiveInterest()
             .then(response => {
                 console.log(response)
                 response.data.activeInterestList.map((itemAPI, indexAPI) => {
@@ -69,7 +68,7 @@ const ActiveInterest = (props) => {
 
         // console.log(newInterestItem.interestName)
 
-        GetActive.removeInterest(localStorage.getItem("user"), newInterestItem.interestName)
+        GetActive.removeInterest(newInterestItem.interestName)
             .then(response => console.log(response.data.result))
 
         let cloneInterest = interest

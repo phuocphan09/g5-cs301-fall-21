@@ -22,7 +22,7 @@ const ViewPost = () => {
 
     useEffect(() => {
         console.log(searchParams.get('postId'));
-        axios.get('http://localhost:8080/v1/getpost?id=' + searchParams.get('id'))
+        axios.get('/v1/getpost?id=' + searchParams.get('id'))
             .then(response => {
                 console.log(response)
 

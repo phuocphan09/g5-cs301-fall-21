@@ -1,26 +1,44 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import inactive_home from '../../assets/home_grey.svg'
 import active_personal from '../../assets/personal_blue.svg'
 import avatar from '../../assets/avatar.svg'
 import arrow from '../../assets/arrow.svg'
+import axios from "axios";
 
 
 const PersonalPage = () => {
 
     const navigate = useNavigate()
-    const userEmail = localStorage.getItem("user")
-    var name = userEmail.split("@")[0];
-    var firstname = name.split(".")[0];
-    var lastname = name.split(".")[1];
+    const [userEmail, setUserEmail] = useState('');
+    const [firstname, setFirstName] = useState('');
+    const [lastname, setLastName] = useState('');
+
+    useEffect(() => {
+        axios.get('/v1/authenticatetoken')
+
+            .then(response => {
+
+                const email = response.data;
+                let name = email.split("@")[0];
+
+                setFirstName(name.split(".")[0]);
+                setLastName(name.split(".")[1]);
+                setUserEmail(email);
+
+            })
+    }, [])
 
     function handleAdd() {
-        navigate('/AddInterest')
+        navigate('/ActiveInterest')
     }
 
     function handleLogout() {
-        navigate('/SuccessLogout')
+        axios.get('/v1/logout')
+            .then(response => {
+                navigate('/SuccessLogout')
+            })
     }
 
     function handleHome() {
@@ -32,7 +50,8 @@ const PersonalPage = () => {
     }
 
     return (
-        <Container>
+        <div> {(userEmail.length === 0) ? (<div></div>) :
+            (<Container>
 
             <AvatarWrapper>
                 <Avatar src={avatar} />
@@ -77,6 +96,8 @@ const PersonalPage = () => {
             </Navigation>
 
         </Container>
+            )} </div>
+
     )
 }
 

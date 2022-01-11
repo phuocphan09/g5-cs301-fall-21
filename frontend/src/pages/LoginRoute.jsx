@@ -3,14 +3,16 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import axios from "axios";
 
 
-const ProtectedRoute = (props) => {
+const LoginRoute = (props) => {
 
     const location = useLocation();
     const [state, setState] = useState({isAuth: false, isLoaded: false});
 
     useEffect(() => {
+        console.log("hello222");
         axios.get('/v1/authenticatetoken')
             .then(response => {
+                console.log(response.status);
                 setState({isAuth: response.status !== 401, isLoaded: true});
             })
     }, [])
@@ -19,18 +21,16 @@ const ProtectedRoute = (props) => {
 
     return <div>
         {
-        state.isLoaded ?
-
-            state.isAuth ?
-                    (location.pathname === '/') ?
+            state.isLoaded ?
+                state.isAuth ?
                     <Navigate to="/Homepage" />
-                    : <Outlet />
-            : <Navigate to="/login/InputEmail" />
-
-        : <div></div> // loading
+                    : (location.pathname === '/login/InputEmail') ?
+                        <Outlet />
+                    : <Navigate to="/login/InputEmail" />
+                : <div></div> // loading
 
         }
     </div>
 }
 
-export default ProtectedRoute
+export default LoginRoute;

@@ -13,7 +13,7 @@ import java.util.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class MailingController {
 

@@ -11,8 +11,7 @@ import axios from 'axios';
 const HomePage = () => {
 
     const navigate = useNavigate()
-    const userEmail = localStorage.getItem('user')
-    
+
     const [postList, setPostList] = useState([])
     
     function secondsToHms(d1) {
@@ -38,7 +37,7 @@ const HomePage = () => {
     }
 
     useEffect(() => {
-        axios.get('http://localhost:8080/v1/getdisplaypost?email=' + userEmail)
+        axios.get('/v1/getdisplaypost')
             .then(response => {
             let toAdd = response.data.content
 

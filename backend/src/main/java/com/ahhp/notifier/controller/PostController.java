@@ -19,7 +19,7 @@ import java.util.*;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class PostController {
 
@@ -68,7 +68,9 @@ public class PostController {
     }
 
     @GetMapping("/v1/getdisplaypost")
-    public PostRetrievalResponse getDisplayPost (@RequestParam String email) {
+    public PostRetrievalResponse getDisplayPost () {
+
+        final String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 
         PostRetrievalResponse response = new PostRetrievalResponse();
         response.setResult("failed");

@@ -83,7 +83,10 @@ public class PostController {
         User user = users.get(0);
         List<Interest> interests = utils.findInterestByUser(user, true); // get active interest
 
-        for (Post post: postRepository.findAllByOrderById()) { // for each post
+        List<Post> posts = postRepository.findAllByOrderById();
+        Collections.reverse(posts); // reverse order to get newest posts (largest id) first
+
+        for (Post post: posts) { // for each post
 
             for (Interest interest: interests) { // for each of the user's interest
 

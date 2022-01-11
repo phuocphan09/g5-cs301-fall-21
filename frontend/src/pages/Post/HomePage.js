@@ -11,28 +11,45 @@ import axios from 'axios';
 const HomePage = () => {
 
     const navigate = useNavigate()
-    // const userEmail = localStorage.getItem('user')
-    const userEmail = "hoang@student.fulbright.edu.vn"
-    const timestamp = useState('')
+    const userEmail = localStorage.getItem('user')
     
     const [postList, setPostList] = useState([])
 
-    //test long description
-    const testDrive = {title: "nucati", description:"booboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboobooboo",
-    poster:"hulu",interestList:["art"]}
+    
+    function secondsToHms(d1) {
+        var currentTimeInSeconds=Math.floor(Date.now());
+        d1 = Number(d1);
+        console.log(currentTimeInSeconds)
+        console.log(d1)
+        var d = currentTimeInSeconds-d1;
+        var h = Math.floor(d / 3600000);
+        var m = Math.floor(d % 3600000 / 60);
+        var s = Math.floor(d % 3600000 % 60);
+        
+        if (h < 24){
+            var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+            var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+            var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+            return hDisplay + mDisplay + sDisplay; 
+        } else {
+            var day = Math.floor(h/24)
+            var dayDisplay = day > 0 ? day + (day == 1 ? " day" : " days") : "";
+            return dayDisplay;
+        }
+    }
 
     useEffect(() => {
         axios.get('http://localhost:8080/v1/getdisplaypost?email=' + userEmail)
             .then(response => {
             let toAdd = response.data.content
 
-            //to be deleted
-            toAdd.push(testDrive)
-
             toAdd.map((item)=>{
                 if (item.description.length>200){
                     item.readMore = false;
+                } else {
+                    item.readMore = true;
                 }
+                item.convertedTime = secondsToHms(item.timeStamp)
             })
             setPostList(toAdd)
             })
@@ -82,7 +99,7 @@ const HomePage = () => {
                             <line />
                             <h2> {item.description} </h2>
                             <line />
-                            <h2> Posted by: {item.poster} </h2>
+                            <PosterBox> <TimeStamp> {item.convertedTime} ago |</TimeStamp> Posted by: {item.poster} </PosterBox>
                         </TextWrapper>
 
                         <InterestWrapper>
@@ -126,6 +143,9 @@ const HomePage = () => {
         </Container>
     )
 }
+const TimeStamp = styled.div`
+margin-right:1vw;
+`
 const Container2 = styled.div`
     top: 20.24%;
     left:0%;
@@ -279,6 +299,22 @@ const TextWrapper = styled.div`
         border: 0.5px solid #000000;
         background: #000000;
     }
+`
+
+const PosterBox = styled.div`
+    font-family: 'Source Sans Pro';
+    color: #000000;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 2vh;
+    text-align: left;
+    margin-left: 1rem;
+    margin-right: 1.8rem;
+    overflow-wrap: break-word;
+    display: flex;
+    flex-direction:row;
+    margin-bottom:1.5vh;
+    margin-top:1.5vh;
 `
 
 const PostBox = styled.div`

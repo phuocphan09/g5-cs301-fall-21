@@ -36,6 +36,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // get token from Cookies (in the header)
         Cookie[] cookies = request.getCookies();
+
+        if (cookies == null) {
+            send404(response);
+            return;
+        }
+
         String token = "";
         for(Cookie c : cookies){
             if("Authorization".equals(c.getName())) {
@@ -66,17 +72,21 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         } else {
 
-            // token not validated --  expired or not valid or empty
-            response.setStatus(401);
-
-            // create token
-            Cookie cookie = new Cookie("Authorization", null);
-            cookie.setPath("/");  // The cookie is visible to all the pages in the directory you specify, and all the pages in that directory's subdirectories
-            cookie.setHttpOnly(true);
-            response.addCookie(cookie);
+            send404(response);
 
         }
 
+    }
+
+    private void send404 (HttpServletResponse response) {
+        // token not validated --  expired or not valid or empty
+        response.setStatus(401);
+
+        // create token
+        Cookie cookie = new Cookie("Authorization", null);
+        cookie.setPath("/");  // The cookie is visible to all the pages in the directory you specify, and all the pages in that directory's subdirectories
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
     }
 
 

@@ -15,7 +15,7 @@ const CreateAccount = (props) => {
         color: "#006DFF",
         subtitle: "Use this to authorize your next logins"
     });
-    const initialValue = false
+    const initialValue = false;
     const [passwordValidState,setPasswordValidState]= useState(initialValue)
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);

@@ -38,7 +38,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         Cookie[] cookies = request.getCookies();
 
         if (cookies == null) {
-            send404(response);
+            send401 (response);
             return;
         }
 
@@ -72,13 +72,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         } else {
 
-            send404(response);
+            send401(response);
 
         }
 
     }
 
-    private void send404 (HttpServletResponse response) {
+    private void send401 (HttpServletResponse response) {
         // token not validated --  expired or not valid or empty
         response.setStatus(401);
 

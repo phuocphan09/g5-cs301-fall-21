@@ -23,7 +23,7 @@ const ProtectedRoute = (props) => {
 
             state.isAuth ?
                     (location.pathname === '/') ?
-                    <Navigate to="/Homepage" />
+                    <Navigate to="/HomePage" />
                     : <Outlet />
             : <Navigate to="/login/InputEmail" />
 

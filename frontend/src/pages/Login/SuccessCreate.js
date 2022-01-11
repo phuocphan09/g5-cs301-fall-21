@@ -1,15 +1,19 @@
 import { React, useEffect } from 'react'
 import { ReactComponent as SuccessIcon } from '../../assets/success_icon.svg'
 import styled from 'styled-components'
-import { useNavigate } from 'react-router-dom'
+import {Navigate, useNavigate} from 'react-router-dom'
 
 const SuccessCreate = () => {
-    const navigate = useNavigate()
+
+    const navigate = useNavigate();
+
     useEffect (() => {
         setTimeout (() => {
+            console.log('entered');
             navigate('/ActiveInterest')
+            console.log('navigated');
         }, 500)
-    })
+    }, [])
 
 
     return (
@@ -17,7 +21,7 @@ const SuccessCreate = () => {
             <SuccessIcon className='SuccessIcon' />
             <h1> Account successfully created </h1>
             <h2> Please wait, redirecting to your personal space... </h2>
-            {/* <Navigate to="/ActiveInterest" /> */}
+            {/*<Navigate to="/ActiveInterest" /> */}
         </Container>
     )
 }

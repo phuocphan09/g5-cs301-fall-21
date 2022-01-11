@@ -23,7 +23,7 @@ const LoginRoute = (props) => {
         {
             state.isLoaded ?
                 state.isAuth ?
-                    <Navigate to="/Homepage" />
+                    <Navigate to="/ActiveInterest" />
                     : (location.pathname === '/login/InputEmail') ?
                         <Outlet />
                     : <Navigate to="/login/InputEmail" />

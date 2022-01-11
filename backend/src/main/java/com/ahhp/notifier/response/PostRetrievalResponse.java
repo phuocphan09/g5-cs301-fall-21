@@ -6,6 +6,7 @@ import com.ahhp.notifier.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +17,7 @@ public class PostRetrievalResponse {
     PostRepository postRepository;
 
     private String result;
-    private Set<PostInput> content = new HashSet<PostInput>();
+    private List<PostInput> content = new ArrayList<PostInput>();
 
     public String getResult() {
         return result;
@@ -26,11 +27,11 @@ public class PostRetrievalResponse {
         this.result = result;
     }
 
-    public Set<PostInput> getContent() {
+    public List<PostInput> getContent() {
         return content;
     }
 
-    public void setContent(Set<PostInput> content) {
+    public void setContent(List<PostInput> content) {
         this.content = content;
     }
 }

@@ -52,46 +52,52 @@ const PersonalPage = () => {
     return (
         <div> {(userEmail.length === 0) ? (<div></div>) :
             (<Container>
-                <AvatarWrapper>
-                    <Avatar src={avatar}/>
-                    <TextWrapper>
-                        <h1> {firstname} {lastname} </h1>
-                        <h2> {userEmail} </h2>
-                    </TextWrapper>
-                </AvatarWrapper>
 
-                <line/>
+            <AvatarWrapper>
+                <Avatar src={avatar} />
+                <TextWrapper>
+                    <h1> {firstname} {lastname} </h1>
+                    <h2> {userEmail} </h2>
+                </TextWrapper>
+            </AvatarWrapper>
 
-                <ArrowButton onClick={handleAdd}>
-                    <TextWrapper>
-                        <h1>Configure your interest </h1>
-                        <h2> Choose which type of posts you want to be notified about </h2>
-                    </TextWrapper>
-                    <RemoveIcon src={arrow}/>
-                </ArrowButton>
+            <line />
 
-                <line/>
+            <ArrowButton onClick={handleAdd}>
+                <TextWrapper>
+                    <h1>Configure your interest </h1>
+                    <h2> Choose which type of posts you want to be notified about </h2>
+                </TextWrapper>
+                <RemoveIcon src={arrow} />
+            </ArrowButton>
 
-                <ArrowButton onClick={handleLogout}>
-                    <TextWrapper>
-                        <h1> Logout </h1>
-                    </TextWrapper>
-                    <RemoveIcon src={arrow}/>
-                </ArrowButton>
+            <line />
 
-                <line/>
+            <ArrowButton onClick={handleLogout}>
+                <TextWrapper>
+                    <h1> Logout </h1>
+                </TextWrapper>
+                <RemoveIcon src={arrow} />
+            </ArrowButton>
 
-                <Navigation>
-                    <Home onClick={handleHome}> <RemoveIcon src={inactive_home}/>
-                        <text> Home</text>
-                    </Home>
-                    <Personal onClick={handlePersonal}> <RemoveIcon src={active_personal}/>
-                        <text> Personal</text>
-                    </Personal>
-                </Navigation>
+            <line />
 
-            </Container>
+            <Block7>
+
+            </Block7>
+            
+            <Navigation>
+                <Home onClick={handleHome}> <RemoveIcon1 src={inactive_home} />
+                    <text> Home </text>
+                </Home>
+                <Personal onClick={handlePersonal}> <RemoveIcon1 src={active_personal} />
+                    <text> Personal </text>
+                </Personal>
+            </Navigation>
+
+        </Container>
             )} </div>
+
     )
 }
 
@@ -133,7 +139,18 @@ const AvatarWrapper = styled.div`
     justify-content: center;
     align-items: center;
 `
-
+const Navigation = styled.div`
+    position:fixed;
+    display: flex;
+    flex-direction: row;    
+    width: 100vw;
+    min-height: 7.35vh;
+    left: 0;
+    top:92.65vh;
+    right:0;
+    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.15);
+    background: #ffffff;
+`
 const ArrowButton = styled.button`
     width: 100vw;
     display:flex;
@@ -179,20 +196,15 @@ const TextWrapper = styled.div`
 
     }
 `
+const RemoveIcon1 = styled.img`
+    width: 2.5vh;
+    height: 2.5vh;
+    justify-content:center;
+`
 
-const Navigation = styled.div`
-    display: flex;
-    flex-direction: row;    
-    position: absolute;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 7.35vh;
-    left: 0;
-    right:0;
-    top: 92.65vh;
-    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.15);
-    background: #ffffff;
+const Block7 = styled.div`
+min-height:7.35vh;
+min-width:100vw;
 `
 
 const Home = styled.button`
@@ -203,6 +215,7 @@ const Home = styled.button`
     justify-content: center;
     background: #ffffff;
     border: 0px solid #ffffff;
+
 
     text {
         font-family: Source Sans Pro;
@@ -225,6 +238,7 @@ const Personal = styled.button`
     justify-content: center;
     background: #ffffff;
     border: 0px solid #ffffff;
+
 
     text {
         font-family: Source Sans Pro;

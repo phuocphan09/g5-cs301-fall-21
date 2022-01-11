@@ -67,50 +67,34 @@ public class PostController {
         return email;
     }
 
-//    @GetMapping("/v1/getdisplaypost")
-//    public PostRetrievalResponse getMultiplePost (@RequestParam String email) {
-//
-//        PostRetrievalResponse response = new PostRetrievalResponse();
-//        response.setResult("failed");
-//        List<Post> posts = postRepository.findByPoster("Imposter");
-//
-//        List<PostInput> postInputs = new ArrayList<PostInput>();
-//        for (Post post: posts) {
-//
-//            postInputs.add(utils.toPostInput(post));
-//        }
-//
-//        response.setContent(new HashSet<PostInput>(postInputs)); // hack to have an empty set
-//
-//        List<User> users = userRepository.findByEmail(email);
-//        if (users.size() == 0) {
-//            System.out.println("No user");
-//            return response;
-//        } // no user
-//
-//        List<Interest> interests = utils.findInterestByUser(users.get(0), true);
-//        System.out.println("Number of interests matched" + interests.size());
-//
-//        // oh boy this is gonna be O^2
-//        List<Post> posts = postRepository.findAll(); // get all posts
-//        for (Interest interest:interests) { // for each interest entry
-//
-//            for (Post post:posts) {
-//
-//                String[] interestList = utils.toList(post.getInterestList()); // get the interest list of the post
-//
-//                if (Arrays.stream(interestList).anyMatch(interest::equals)) { // interests match
-//
-//                    System.out.println();
-//                    if (!response.getContent().contains(post)) {
-//                        response.getContent().add(post);
-//                    }
-//                }
-//
-//            }
-//
-//        }
-//        return response;
-//    }
+    @GetMapping("/v1/getdisplaypost")
+    public PostRetrievalResponse getDisplayPost (@RequestParam String email) {
+
+        PostRetrievalResponse response = new PostRetrievalResponse();
+        response.setResult("failed");
+
+        List<User> users = userRepository.findByEmail(email);
+        if (users.size() == 0) { // no user
+            System.out.println("No user");
+            return response;}
+
+        User user = users.get(0);
+        List<Interest> interests = utils.findInterestByUser(user, true); // get active interest
+
+        for (Post post: postRepository.findAllByOrderById()) { // for each post
+
+            for (Interest interest: interests) { // for each of the user's interest
+
+                if (post.getInterestList().contains(interest.getInterestName()) &&
+                        !response.getContent().contains(post)) { // post's interests contains user's
+
+                    System.out.print("Found post: " + post.getTitle() + " for interest: " + interest.getInterestName()); // debug
+                    response.setResult("success");
+                    response.getContent().add(utils.toPostInput(post));
+                }
+            }
+        }
+        return response;
+    }
 
 }

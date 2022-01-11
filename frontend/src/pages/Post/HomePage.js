@@ -11,33 +11,48 @@ import axios from 'axios';
 const HomePage = () => {
 
     const navigate = useNavigate()
-    const timestamp = useState('')
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
-    const [poster, setPoster] = useState('')
-    let initialInterestList = []
-    let initialPostList = []
+    const userEmail = localStorage.getItem('user')
+    
+    const [postList, setPostList] = useState([])
+    
+    function secondsToHms(d1) {
+        var currentTimeInSeconds=Math.floor(Date.now());
+        d1 = Number(d1);
+        console.log(currentTimeInSeconds)
+        console.log(d1)
+        var d = currentTimeInSeconds-d1;
+        var h = Math.floor(d / 3600000);
+        var m = Math.floor(d % 3600000 / 60);
+        var s = Math.floor(d % 3600000 % 60);
+        
+        if (h < 24){
+            var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+            var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+            var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+            return hDisplay + mDisplay + sDisplay; 
+        } else {
+            var day = Math.floor(h/24)
+            var dayDisplay = day > 0 ? day + (day == 1 ? " day" : " days") : "";
+            return dayDisplay;
+        }
+    }
 
-    // useEffect(() => {
-    //     axios.get('/v1/getdisplaypost?email=' + userEmail)
-    //         .then(response => { console.log(response.content.id) })
-    // }, [])
+    useEffect(() => {
+        axios.get('http://localhost:8080/v1/getdisplaypost?email=' + userEmail)
+            .then(response => {
+            let toAdd = response.data.content
 
-    const [postList, setPostList] = useState(initialPostList)
-
-    // useEffect(() => {
-    //     postList.map((postId) => (axios.get('/v1/getpost?postId=' + postId)
-    //         .then(response => {
-    //             setTitle(response.data.title)
-    //             setDescription(response.data.description)
-    //             setPoster(response.data.poster)
-    //             response.data.interestList.map((item) => {
-    //                 initialInterestList.push(item)
-    //             })
-    //         })))
-    // }, [])
-
-    const [interestList, setInterestList] = useState(initialInterestList)
+            toAdd.map((item)=>{
+                if (item.description.length>200){
+                    item.readMore = false;
+                } else {
+                    item.readMore = true;
+                }
+                item.convertedTime = secondsToHms(item.timeStamp)
+            })
+            setPostList(toAdd)
+            })
+    }, [])    
 
     function handleAdd() {
         navigate('/AddPost')
@@ -51,6 +66,52 @@ const HomePage = () => {
         navigate('/PersonalPage')
     }
 
+    function handleSeeMore(index){
+        let cloneState = [...postList]
+        cloneState[index].readMore = true
+        setPostList(cloneState)
+    }
+
+    function showPost(item,index){
+        if (item.readMore === false){
+            return <PostBox>
+                        <TextWrapper>
+                            <h1> {item.title} </h1>
+                            <line />
+                            <h2> {item.description.substring(0,200)} <SeeMoreButton onClick={()=>{handleSeeMore(index)}}> See More </SeeMoreButton> </h2>
+                            <line />
+                            <h2> Posted by: {item.poster} </h2>
+                        </TextWrapper>
+
+                        <InterestWrapper>
+                            {item.interestList.map((item1) => (
+                                <InterestLabel>
+                                    <h2> {item1} </h2>
+                                </InterestLabel>
+                            ))}
+                        </InterestWrapper>
+                    </PostBox>
+        } else{
+            return <PostBox>
+                        <TextWrapper>
+                            <h1> {item.title} </h1>
+                            <line />
+                            <h2> {item.description} </h2>
+                            <line />
+                            <PosterBox> <TimeStamp> {item.convertedTime} ago |</TimeStamp> Posted by: {item.poster} </PosterBox>
+                        </TextWrapper>
+
+                        <InterestWrapper>
+                            {item.interestList.map((item1) => (
+                                <InterestLabel>
+                                    <h2> {item1} </h2>
+                                </InterestLabel>
+                            ))}
+                        </InterestWrapper>
+                    </PostBox>
+        }
+    }
+
     return (
         <Container>
 
@@ -61,65 +122,19 @@ const HomePage = () => {
 
             <ColoredLine />
 
-            <PostBox>
-                <TextWrapper>
-                    <h1> {title} </h1>
-                    <line />
-                    <h2> {description} </h2>
-                    <line />
-                    <h2> Posted by: {poster} </h2>
-                </TextWrapper>
+            {postList.map((item,index) => (
+                showPost(item,index)
+            ))}
+            
+            <Block7>
 
-                <InterestWrapper>
-                    {interestList.map((item) => (
-                        <InterestLabel>
-                            <h2> {item} </h2>
-                        </InterestLabel>
-                    ))}
-                </InterestWrapper>
-            </PostBox>
-
-            <PostBox>
-                <TextWrapper>
-                    <h1> {title} </h1>
-                    <line />
-                    <h2> {description} </h2>
-                    <line />
-                    <h2> Posted by: {poster} </h2>
-                </TextWrapper>
-
-                <InterestWrapper>
-                    {interestList.map((item) => (
-                        <InterestLabel>
-                            <h2> {item} </h2>
-                        </InterestLabel>
-                    ))}
-                </InterestWrapper>
-            </PostBox>
-
-            <PostBox>
-                <TextWrapper>
-                    <h1> {title} </h1>
-                    <line />
-                    <h2> {description} </h2>
-                    <line />
-                    <h2> Posted by: {poster} </h2>
-                </TextWrapper>
-
-                <InterestWrapper>
-                    {interestList.map((item) => (
-                        <InterestLabel>
-                            <h2> {item} </h2>
-                        </InterestLabel>
-                    ))}
-                </InterestWrapper>
-            </PostBox>
-
+            </Block7>
+            
             <Navigation>
-                <Home onClick={handleHome}> <RemoveIcon src={active_home} />
+                <Home onClick={handleHome}> <RemoveIcon1 src={active_home} />
                     <text> Home </text>
                 </Home>
-                <Personal onClick={handlePersonal}> <RemoveIcon src={inactive_personal} />
+                <Personal onClick={handlePersonal}> <RemoveIcon1 src={inactive_personal} />
                     <text> Personal </text>
                 </Personal>
             </Navigation>
@@ -127,7 +142,19 @@ const HomePage = () => {
         </Container>
     )
 }
-
+const TimeStamp = styled.div`
+margin-right:1vw;
+`
+const Container2 = styled.div`
+    top: 20.24%;
+    left:0%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex:1;
+    gap:3.3vh;
+    transition: all 0.3s ease-out;
+`
 const Container = styled.div`
     top:0;
     left:0;
@@ -161,14 +188,24 @@ const AddInterest = styled.button`
         font-size: 2.7vh;
         line-height: 21px;
         display: flex;
-        align-text: center;
+        /* align-text: center; */
         color: #006DFF;
     }
+`
+const SeeMoreButton = styled.button`
+    background-color: #ffffff;
+    border:none;
+    color:#006DFF;
 `
 
 const RemoveIcon = styled.img`
     width: 3vh;
     height: 3vh;
+    justify-content:center;
+`
+const RemoveIcon1 = styled.img`
+    width: 2.5vh;
+    height: 2.5vh;
     justify-content:center;
 `
 
@@ -189,7 +226,7 @@ const InterestWrapper = styled.div`
     inline-size: 90vw;
     width: 90vw;
     margin-right:1vw;
-    margin-left: 2vw;
+    margin-left: 3vw;
     margin-bottom: 5vw;
 `
 
@@ -249,18 +286,34 @@ const TextWrapper = styled.div`
         font-size: 2vh;
         text-align: left;
         margin-left: 1rem;
-        margin-right: 1rem;
+        margin-right: 1.8rem;
         overflow-wrap: break-word;
     }
     
     line {
         position: relative;
-        width: 80vw;
         margin-top: 2vh;
         margin-left: 2vw;
+        margin-right: 5vw;
         border: 0.5px solid #000000;
         background: #000000;
     }
+`
+
+const PosterBox = styled.div`
+    font-family: 'Source Sans Pro';
+    color: #000000;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 2vh;
+    text-align: left;
+    margin-left: 1rem;
+    margin-right: 1.8rem;
+    overflow-wrap: break-word;
+    display: flex;
+    flex-direction:row;
+    margin-bottom:1.5vh;
+    margin-top:1.5vh;
 `
 
 const PostBox = styled.div`
@@ -278,17 +331,21 @@ const PostBox = styled.div`
 `;
 
 const Navigation = styled.div`
+    position:fixed;
     display: flex;
     flex-direction: row;    
-    justify-content: center;
-    align-items: center;
     width: 100vw;
-    height: 7.35vh;
+    min-height: 7.35vh;
     left: 0;
+    top:92.65vh;
     right:0;
-    top: 92.65vh;
     box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.15);
     background: #ffffff;
+`
+
+const Block7 = styled.div`
+min-height:7.35vh;
+min-width:100vw;
 `
 
 const Home = styled.button`

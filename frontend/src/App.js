@@ -101,10 +101,10 @@ function App() {
               {/*<Route path="/ViewPost/:id" component={ViewPost} />*/}
               <Route path="/SuccessLogout" element={<SuccessLogout />} />
             </Route>
-            <Route path="/login" element={<LoginRoute />}>
-              <Route path="/login/SuccessAuth" element={<SuccessAuth />} />
-              <Route path="/login/SuccessCreate" element={<SuccessCreate />} />
-            </Route>
+            {/*<Route path="/login" element={<LoginRoute />}>*/}
+            {/*</Route>*/}
+            <Route path="/login/SuccessAuth" element={<SuccessAuth />} />
+            <Route path="/login/SuccessCreate" element={<SuccessCreate />} />
             <Route path="/login/InputEmail" element={<InputEmail props={changeInputEmail} />} />
             <Route path="/login/InputPassword" element={<InputPassword email={inputEmail} passwordInput={changeInputPassword} />} />
             <Route path="/login/CreateAccount" element={<CreateAccount email={inputEmail} passwordInput={changeInputPassword} />} />

@@ -13,25 +13,25 @@ const HomePage = () => {
     const navigate = useNavigate()
 
     const [postList, setPostList] = useState([])
-    
+
     function secondsToHms(d1) {
-        var currentTimeInSeconds=Math.floor(Date.now());
+        var currentTimeInSeconds = Math.floor(Date.now());
         d1 = Number(d1);
         console.log(currentTimeInSeconds)
         console.log(d1)
-        var d = currentTimeInSeconds-d1;
+        var d = currentTimeInSeconds - d1;
         var h = Math.floor(d / 3600000);
         var m = Math.floor(d % 3600000 / 60);
         var s = Math.floor(d % 3600000 % 60);
-        
-        if (h < 24){
-            var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
-            var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
-            var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
-            return hDisplay + mDisplay + sDisplay; 
+
+        if (h < 24) {
+            var hDisplay = h > 0 ? h + (h === 1 ? " hour, " : " hours, ") : "";
+            var mDisplay = m > 0 ? m + (m === 1 ? " minute, " : " minutes, ") : "";
+            var sDisplay = s > 0 ? s + (s === 1 ? " second" : " seconds") : "";
+            return hDisplay + mDisplay + sDisplay;
         } else {
-            var day = Math.floor(h/24)
-            var dayDisplay = day > 0 ? day + (day == 1 ? " day" : " days") : "";
+            var day = Math.floor(h / 24)
+            var dayDisplay = day > 0 ? day + (day === 1 ? " day" : " days") : "";
             return dayDisplay;
         }
     }
@@ -39,19 +39,19 @@ const HomePage = () => {
     useEffect(() => {
         axios.get('/v1/getdisplaypost')
             .then(response => {
-            let toAdd = response.data.content
+                let toAdd = response.data.content
 
-            toAdd.map((item)=>{
-                if (item.description.length>200){
-                    item.readMore = false;
-                } else {
-                    item.readMore = true;
-                }
-                item.convertedTime = secondsToHms(item.timeStamp)
+                toAdd.map((item) => {
+                    if (item.description.length > 200) {
+                        item.readMore = false;
+                    } else {
+                        item.readMore = true;
+                    }
+                    item.convertedTime = secondsToHms(item.timeStamp)
+                })
+                setPostList(toAdd)
             })
-            setPostList(toAdd)
-            })
-    }, [])    
+    }, [])
 
     function handleAdd() {
         navigate('/AddPost')
@@ -65,49 +65,49 @@ const HomePage = () => {
         navigate('/PersonalPage')
     }
 
-    function handleSeeMore(index){
+    function handleSeeMore(index) {
         let cloneState = [...postList]
         cloneState[index].readMore = true
         setPostList(cloneState)
     }
 
-    function showPost(item,index){
-        if (item.readMore === false){
+    function showPost(item, index) {
+        if (item.readMore === false) {
             return <PostBox>
-                        <TextWrapper>
-                            <h1> {item.title} </h1>
-                            <line />
-                            <h2> {item.description.substring(0,200)} <SeeMoreButton onClick={()=>{handleSeeMore(index)}}> See More </SeeMoreButton> </h2>
-                            <line />
-                            <h2> Posted by: {item.poster} </h2>
-                        </TextWrapper>
+                <TextWrapper>
+                    <h1> {item.title} </h1>
+                    <line />
+                    <h2> {item.description.substring(0, 200)} <SeeMoreButton onClick={() => { handleSeeMore(index) }}> See More </SeeMoreButton> </h2>
+                    <line />
+                    <h2> Posted by: {item.poster} </h2>
+                </TextWrapper>
 
-                        <InterestWrapper>
-                            {item.interestList.map((item1) => (
-                                <InterestLabel>
-                                    <h2> {item1} </h2>
-                                </InterestLabel>
-                            ))}
-                        </InterestWrapper>
-                    </PostBox>
-        } else{
+                <InterestWrapper>
+                    {item.interestList.map((item1) => (
+                        <InterestLabel>
+                            <h2> {item1} </h2>
+                        </InterestLabel>
+                    ))}
+                </InterestWrapper>
+            </PostBox>
+        } else {
             return <PostBox>
-                        <TextWrapper>
-                            <h1> {item.title} </h1>
-                            <line />
-                            <h2> {item.description} </h2>
-                            <line />
-                            <PosterBox> <TimeStamp> {item.convertedTime} ago |</TimeStamp> Posted by: {item.poster} </PosterBox>
-                        </TextWrapper>
+                <TextWrapper>
+                    <h1> {item.title} </h1>
+                    <line />
+                    <h2> {item.description} </h2>
+                    <line />
+                    <PosterBox> <TimeStamp> {item.convertedTime} ago |</TimeStamp> Posted by: {item.poster} </PosterBox>
+                </TextWrapper>
 
-                        <InterestWrapper>
-                            {item.interestList.map((item1) => (
-                                <InterestLabel>
-                                    <h2> {item1} </h2>
-                                </InterestLabel>
-                            ))}
-                        </InterestWrapper>
-                    </PostBox>
+                <InterestWrapper>
+                    {item.interestList.map((item1) => (
+                        <InterestLabel>
+                            <h2> {item1} </h2>
+                        </InterestLabel>
+                    ))}
+                </InterestWrapper>
+            </PostBox>
         }
     }
 
@@ -121,14 +121,14 @@ const HomePage = () => {
 
             <ColoredLine />
 
-            {postList.map((item,index) => (
-                showPost(item,index)
+            {postList.map((item, index) => (
+                showPost(item, index)
             ))}
-            
+
             <Block7>
 
             </Block7>
-            
+
             <Navigation>
                 <Home onClick={handleHome}> <RemoveIcon1 src={active_home} />
                     <text> Home </text>

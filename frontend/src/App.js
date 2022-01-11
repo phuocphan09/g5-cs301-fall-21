@@ -1,7 +1,7 @@
 import './App.css';
 import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
-import {Route, Routes, useNavigate} from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 // ProtectedRoute
 import ProtectedRoute from './pages/ProtectedRoute';
 import LoginRoute from './pages/LoginRoute';
@@ -34,33 +34,16 @@ function App() {
   // axios
   axios.interceptors.response.use(response => {
     return response;
-    console.log("success")
-    console.log(response.status);
   }, error => {
     console.log("error")
     console.log(error.response.status);
-    if ( error.response.status === 401 ) {
+    if (error.response.status === 401) {
       history.push({
         pathname: '/login/InputEmail',
         state: { redirect: true }
       });
     }
     return error;
-
-    // return Promise.reject(err);
-
-    // axios.interceptors.response.use(response => {
-    //     return response;
-    //     console.log("success")
-    //     console.log(response.status);
-    // }, error => {
-    //     console.log("error")
-    //     console.log(error.response.status);
-    //     if (error.response.status === 401) {
-    //         // navigate("/login/InputEmail");
-    //     }
-    //     return error;
-    // });
   });
 
   const [width, setWindowWidth] = useState(0)

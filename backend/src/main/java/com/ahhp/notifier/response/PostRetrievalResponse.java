@@ -17,7 +17,7 @@ public class PostRetrievalResponse {
     PostRepository postRepository;
 
     private String result;
-    private List<PostInput> content = new ArrayList<PostInput>();
+    private Set<PostInput> content = new HashSet<PostInput>();
 
     public String getResult() {
         return result;
@@ -27,11 +27,11 @@ public class PostRetrievalResponse {
         this.result = result;
     }
 
-    public List<PostInput> getContent() {
+    public Set<PostInput> getContent() {
         return content;
     }
 
-    public void setContent(List<PostInput> content) {
+    public void setContent(Set<PostInput> content) {
         this.content = content;
     }
 }

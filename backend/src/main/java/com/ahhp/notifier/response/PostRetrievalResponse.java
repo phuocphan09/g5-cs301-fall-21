@@ -14,7 +14,7 @@ public class PostRetrievalResponse {
     PostRepository postRepository;
 
     private String result;
-    private Set<PostInput> content = new LinkedHashSet<PostInput>();
+    private List<PostInput> content = new ArrayList<PostInput>();
 
     public String getResult() {
         return result;
@@ -24,11 +24,11 @@ public class PostRetrievalResponse {
         this.result = result;
     }
 
-    public Set<PostInput> getContent() {
+    public List<PostInput> getContent() {
         return content;
     }
 
-    public void setContent(Set<PostInput> content) {
+    public void setContent(List<PostInput> content) {
         this.content = content;
     }
 }

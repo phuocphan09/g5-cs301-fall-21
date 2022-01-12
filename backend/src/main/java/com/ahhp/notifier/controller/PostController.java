@@ -90,8 +90,8 @@ public class PostController {
 
             for (Interest interest: interests) { // for each of the user's interest
 
-                if (post.getInterestList().contains(interest.getInterestName())){// && post's interests contains user's
-                        //!response.getContent().contains(post)) { //
+                if (post.getInterestList().contains(interest.getInterestName())// && post's interests contains user's
+                        && !response.getContent().contains(post)) { //
 
                     System.out.print("Found post: " + post.getTitle() + " for interest: " + interest.getInterestName()); // debug
                     response.setResult("success");

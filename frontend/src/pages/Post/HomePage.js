@@ -17,18 +17,26 @@ const HomePage = () => {
     function secondsToHms(d1) {
         var currentTimeInSeconds = Math.floor(Date.now());
         d1 = Number(d1);
-        console.log(currentTimeInSeconds)
-        console.log(d1)
+        // console.log(currentTimeInSeconds)
+        // console.log(d1)
         var d = currentTimeInSeconds - d1;
         var h = Math.floor(d / 3600000);
         var m = Math.floor(d % 3600000 / 60);
         var s = Math.floor(d % 3600000 % 60);
 
         if (h < 24) {
-            var hDisplay = h > 0 ? h + (h === 1 ? " hour, " : " hours, ") : "";
-            var mDisplay = m > 0 ? m + (m === 1 ? " minute, " : " minutes, ") : "";
-            var sDisplay = s > 0 ? s + (s === 1 ? " second" : " seconds") : "";
-            return hDisplay + mDisplay + sDisplay;
+            if (h < 0) {
+                if (m < 0) {
+                    var sDisplay = s + (s === 1 ? "second" : "seconds")
+                    return sDisplay
+                } else {
+                    var mDisplay = m + (m === 1 ? "minute" : "minutes")
+                    return mDisplay
+                }
+            } else {
+                var hDisplay = h > 0 ? h + (h === 1 ? " hour " : " hours") : "";
+                return hDisplay;
+            }
         } else {
             var day = Math.floor(h / 24)
             var dayDisplay = day > 0 ? day + (day === 1 ? " day" : " days") : "";
@@ -40,7 +48,7 @@ const HomePage = () => {
         axios.get('/v1/getdisplaypost')
             .then(response => {
                 let toAdd = response.data.content
-
+                console.log(toAdd)
                 toAdd.map((item) => {
                     if (item.description.length > 200) {
                         item.readMore = false;
@@ -69,6 +77,7 @@ const HomePage = () => {
         let cloneState = [...postList]
         cloneState[index].readMore = true
         setPostList(cloneState)
+        console.log(postList)
     }
 
     function showPost(item, index) {
@@ -121,7 +130,7 @@ const HomePage = () => {
 
             <ColoredLine />
 
-            {postList.map((item, index) => (
+            {console.log(postList), postList.map((item, index) => (
                 showPost(item, index)
             ))}
 

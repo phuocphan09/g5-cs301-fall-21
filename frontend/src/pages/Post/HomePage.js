@@ -17,8 +17,8 @@ const HomePage = () => {
     function secondsToHms(d1) {
         var currentTimeInSeconds = Math.floor(Date.now());
         d1 = Number(d1);
-        console.log(currentTimeInSeconds)
-        console.log(d1)
+        // console.log(currentTimeInSeconds)
+        // console.log(d1)
         var d = currentTimeInSeconds - d1;
         var h = Math.floor(d / 3600000);
         var m = Math.floor(d % 3600000 / 60);
@@ -48,7 +48,7 @@ const HomePage = () => {
         axios.get('/v1/getdisplaypost')
             .then(response => {
                 let toAdd = response.data.content
-
+                console.log(toAdd)
                 toAdd.map((item) => {
                     if (item.description.length > 200) {
                         item.readMore = false;
@@ -77,6 +77,7 @@ const HomePage = () => {
         let cloneState = [...postList]
         cloneState[index].readMore = true
         setPostList(cloneState)
+        console.log(postList)
     }
 
     function showPost(item, index) {
@@ -129,7 +130,7 @@ const HomePage = () => {
 
             <ColoredLine />
 
-            {postList.map((item, index) => (
+            {console.log(postList), postList.map((item, index) => (
                 showPost(item, index)
             ))}
 

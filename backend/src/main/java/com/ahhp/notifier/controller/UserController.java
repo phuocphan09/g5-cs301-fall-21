@@ -342,6 +342,16 @@ public class UserController {
         return "Success";
     }
 
+    @PostMapping ("/v1/deleteinterest")
+    public String deleteInterest (@RequestBody Interest interest) {
+        try {
+            interestRepository.delete(interest);
+        } catch (Exception e) {
+            return e.toString();
+        }
+        return "Success";
+    }
+
     @GetMapping("/v1/getalluser") // debug
     // Get all users at once.
     public List<User> getAll() {

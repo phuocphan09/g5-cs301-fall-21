@@ -25,10 +25,18 @@ const HomePage = () => {
         var s = Math.floor(d % 3600000 % 60);
 
         if (h < 24) {
-            var hDisplay = h > 0 ? h + (h === 1 ? " hour, " : " hours, ") : "";
-            var mDisplay = m > 0 ? m + (m === 1 ? " minute, " : " minutes, ") : "";
-            var sDisplay = s > 0 ? s + (s === 1 ? " second" : " seconds") : "";
-            return hDisplay + mDisplay + sDisplay;
+            if ( h < 0 ) {
+                if (m < 0) {
+                    var sDisplay = s + (s===1 ? "second": "seconds")
+                    return sDisplay
+                } else{
+                    var mDisplay = m + ( m===1 ? "minute":"minutes")
+                    return mDisplay
+                }
+            } else {
+                var hDisplay = h > 0 ? h + (h === 1 ? " hour " : " hours") : "";
+                return hDisplay;
+            }
         } else {
             var day = Math.floor(h / 24)
             var dayDisplay = day > 0 ? day + (day === 1 ? " day" : " days") : "";

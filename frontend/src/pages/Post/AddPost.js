@@ -140,7 +140,9 @@ const AddPost = () => {
 
 
         setInterestPicked([...cloneInterestPicked])
+        console.log(interestPicked)
         setInterestToPick([...cloneInterestToPick])
+        console.log(interestToPick)
 
     }
 
@@ -166,7 +168,7 @@ const AddPost = () => {
     }
 
     if (pageState) {
-        console.log(pageTitle)
+        // console.log(pageTitle)
         return (
             <Container>
                 <Header1>Add a new post</Header1>

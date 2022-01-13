@@ -25,12 +25,12 @@ const HomePage = () => {
         var s = Math.floor(d % 3600000 % 60);
 
         if (h < 24) {
-            if (h < 0) {
+            if ( h < 0 ) {
                 if (m < 0) {
-                    var sDisplay = s + (s === 1 ? "second" : "seconds")
+                    var sDisplay = s + (s===1 ? "second": "seconds")
                     return sDisplay
-                } else {
-                    var mDisplay = m + (m === 1 ? "minute" : "minutes")
+                } else{
+                    var mDisplay = m + ( m===1 ? "minute":"minutes")
                     return mDisplay
                 }
             } else {

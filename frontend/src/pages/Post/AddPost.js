@@ -17,7 +17,7 @@ const AddPost = () => {
 
     const [pageTitle, setPageTitle] = useState('')
     const [topicDescription, setTopicDescription] = useState('')
-    // const [interestPicked, setInterestPicked] = useState([])
+    const [interestPicked, setInterestPicked] = useState([])
 
     const [dropIndex, setDropIndex] = useState(-1)
     const [pageState, setPageState] = useState(true)
@@ -28,7 +28,7 @@ const AddPost = () => {
             .then(response => {
                 console.log(response)
                 response.data.activeInterestList.map((item) => {
-                    intialInterestSet.push({ interestName: item.interestName, interestState: pickStateNR, chosenState: "topick" })
+                    intialInterestSet.push({ interestName: item.interestName, interestState: pickStateNR })
                 })
             })
     }, [])
@@ -50,9 +50,9 @@ const AddPost = () => {
         setInterestToPick([...e])
     }
 
-    // const changePicked = (e) => {
-    //     setInterestPicked([...e])
-    // }
+    const changePicked = (e) => {
+        setInterestPicked([...e])
+    }
 
     const changePage = (e) => {
         setPageState(e)
@@ -71,7 +71,6 @@ const AddPost = () => {
     }
 
     const showButton = (props) => {
-        console.log("hello")
         if (props.color === "#15B34E") {
             return <button>
                 <view >
@@ -93,31 +92,29 @@ const AddPost = () => {
 
     function handleRemove(props) {
 
-        let newInterestItem = interestToPick[props]
+        let newInterestItem = interestPicked[props]
         newInterestItem.interestState = pickStateR
 
-        let cloneInterest = interestToPick
+        let cloneInterest = interestPicked
         cloneInterest[props] = newInterestItem
 
 
         setDropIndex(props)
 
-        // let newAddbackInterestItem = { ...newInterestItem };
-        // newAddbackInterestItem.interestState = pickStateNR
-        // let addbackInterestClone = [...interestToPick]
-        // addbackInterestClone.push(newAddbackInterestItem)
+        let newAddbackInterestItem = { ...newInterestItem };
+        newAddbackInterestItem.interestState = pickStateNR
+        let addbackInterestClone = [...interestToPick]
+        addbackInterestClone.push(newAddbackInterestItem)
 
-        // setInterestToPick([...addbackInterestClone])
+        setInterestToPick([...addbackInterestClone])
     }
 
     useEffect(() => {
         if (dropIndex >= 0) {
             setTimeout(() => {
-                let cloneInterest = interestToPick
-                // cloneInterest.splice(dropIndex, 1)
-                cloneInterest[dropIndex].interestState = pickStateNR
-                cloneInterest[dropIndex].chosenState = "topick"
-                setInterestToPick(cloneInterest)
+                let cloneInterest = interestPicked
+                cloneInterest.splice(dropIndex, 1)
+                setInterestPicked(cloneInterest)
                 setDropIndex(-1)
             }, 500)
         }
@@ -131,19 +128,18 @@ const AddPost = () => {
         let searchString = props.title + props.description;
         searchString = searchString.toLocaleLowerCase()
 
-        // let cloneInterestPicked = [...interestPicked];
+        let cloneInterestPicked = [...interestPicked];
         let cloneInterestToPick = [...interestToPick]
         interestToPick.map((item, index) => {
             if (searchString.includes(item.interestName.toLocaleLowerCase())) {
-                // cloneInterestPicked.push(item)
-                // cloneInterestToPick.splice(cloneInterestToPick.indexOf(item), 1)
-                cloneInterestToPick[index].chosenState = "picked"
+                cloneInterestPicked.push(item)
+                cloneInterestToPick.splice(cloneInterestToPick.indexOf(item), 1)
+                console.log(cloneInterestToPick)
             }
         })
 
 
-        // setInterestPicked([...cloneInterestPicked])
-        
+        setInterestPicked([...cloneInterestPicked])
         setInterestToPick([...cloneInterestToPick])
 
     }
@@ -160,26 +156,13 @@ const AddPost = () => {
         if (pageTitle.length === 0 || topicDescription.length === 0) { setPageValidState({ colorTitle: '#FF0000', colorDescription: '#FF0000', title: 'A title is required', description: 'A description is reqired' }) }
         else {
             let bodyTextInterest = []
-            interestToPick.map(item => {
-                if (item.chosenState === "picked")
-                bodyTextInterest.push(item.interestName)})
+            interestPicked.map(item => bodyTextInterest.push(item.interestName))
             const bodyText = { title: pageTitle, description: topicDescription, interestList: bodyTextInterest }
             console.log(bodyText)
             axios.post("/v1/submitpost", bodyText)
                 .then(response => console.log(response.data.added))
             navigate("/ResultAddPost")
         }
-    }
-
-    function getPicked(){
-        let count = 0
-        interestToPick.map((item)=> {
-            if (item.chosenState === "picked"){
-                count += 1
-            }
-        })
-        return count
-
     }
 
     if (pageState) {
@@ -214,15 +197,12 @@ const AddPost = () => {
                 </Header5>
 
                 <Header6>
-                    { getPicked() !== 0 ? interestToPick.map((item, index) => 
-                        { if (item.chosenState === "picked") {
-                            {console.log(item)}
-                        return <InterestContainer buttonColor={item.interestState.color} buttonWidth={item.interestState.width}>
+                    {interestPicked.length !== 0 ? interestPicked.map((item, index) => (
+                        <InterestContainer buttonColor={item.interestState.color} buttonWidth={item.interestState.width}>
                             <text> {item.interestName} </text>
                             {showButton({ color: item.interestState.color, number: index })}
                         </InterestContainer>
-                    }}
-                    ) : <DashedBox><h4> Uh oh... you haven’t added any interests <br /> Select the above blue button to add one! </h4></DashedBox>}
+                    )) : <DashedBox><h4> Uh oh... you haven’t added any interests <br /> Select the above blue button to add one! </h4></DashedBox>}
                 </Header6>
 
                 <Block7>
@@ -238,8 +218,7 @@ const AddPost = () => {
 
         )
     } else {
-        //picked={{ pickedList: interestPicked, function2: changePicked }}
-        return <SearchBarPage pageStatefunc={changePage} toPick={{ toPickList: interestToPick, function1: changeToPick }} ></SearchBarPage>
+        return <SearchBarPage pageStatefunc={changePage} toPick={{ toPickList: interestToPick, function1: changeToPick }} picked={{ pickedList: interestPicked, function2: changePicked }}></SearchBarPage>
     }
 }
 

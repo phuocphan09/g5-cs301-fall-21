@@ -14,10 +14,10 @@ const SearchBar = (propsAPI) => {
     const pickStateR = { color: '#15B34E', width: '27vw' }
     const pickStateNR = { color: '#FF0000', width: '25vw' }
 
-    // const [interestSuggested, setInterestSuggested] = useState([])
+    const [interestSuggested, setInterestSuggested] = useState([])
     const [interestToPickS, setInterestToPickS] = useState(propsAPI.toPick.toPickList)
     const [dropIndex, setDropIndex] = useState(-1)
-    // const [interestAdded, setInterestAdded] = useState(propsAPI.picked.pickedList)
+    const [interestAdded, setInterestAdded] = useState(propsAPI.picked.pickedList)
 
 
     
@@ -26,25 +26,25 @@ const SearchBar = (propsAPI) => {
         propsAPI.toPick.function1(interestToPickS)
     },[interestToPickS])
 
-    // useEffect(()=>{
-    //     propsAPI.picked.function2(interestAdded)
-    // },[interestAdded])
+    useEffect(()=>{
+        propsAPI.picked.function2(interestAdded)
+    },[interestAdded])
 
-    // function handleButtonCSS(props){
-    //     let cloneProp = [...props]
-    //     cloneProp.map((item)=>{
-    //         if(item.interestState.color === '#FF0000'){
-    //             item.interestState = pickStateNA
-    //         }
-    //     })
-    //     console.log(cloneProp)
-    //     return cloneProp
-    // }
-    // const [modSuggested, setModSuggested] = useState()
+    function handleButtonCSS(props){
+        let cloneProp = [...props]
+        cloneProp.map((item)=>{
+            if(item.interestState.color === '#FF0000'){
+                item.interestState = pickStateNA
+            }
+        })
+        console.log(cloneProp)
+        return cloneProp
+    }
+    const [modSuggested, setModSuggested] = useState()
 
-    // useEffect(()=>{
-    //     setModSuggested(handleButtonCSS([...interestToPickS]))
-    // },[interestToPickS])
+    useEffect(()=>{
+        setModSuggested(handleButtonCSS([...interestSuggested]))
+    },[interestSuggested])
 
     // useEffect(()=>{
     //     setModToPick(handleButtonCSS(interestToPickS))
@@ -52,21 +52,21 @@ const SearchBar = (propsAPI) => {
 
     function handleAdd(props) {
 
-        let newInterestItem = interestToPickS[props]
+        let newInterestItem = {...interestSuggested[props]}
         newInterestItem.interestState = pickStateA
 
-        let cloneInterest = interestToPickS
+        let cloneInterest = interestSuggested
         cloneInterest[props] = newInterestItem
 
         setDropIndex(props)
 
-        // let newAddbackInterestItem = {...newInterestItem};
-        // newAddbackInterestItem.interestState = pickStateNR
+        let newAddbackInterestItem = {...newInterestItem};
+        newAddbackInterestItem.interestState = pickStateNR
 
-        // let addbackInterestClone = [...interestAdded]
-        // addbackInterestClone.push(newAddbackInterestItem)
+        let addbackInterestClone = [...interestAdded]
+        addbackInterestClone.push(newAddbackInterestItem)
 
-        // setInterestAdded([...addbackInterestClone])
+        setInterestAdded([...addbackInterestClone])
     }
     
     const showButton = (props) => {
@@ -91,13 +91,9 @@ const SearchBar = (propsAPI) => {
     useEffect(() => {
         if (dropIndex >= 0) {
             setTimeout(() => {
-                // let cloneInterest = interestSuggested
-                let cloneInterest = [...interestToPickS]
-                // cloneInterest.splice(dropIndex, 1)
-                // setInterestSuggested(cloneInterest)
-                cloneInterest[dropIndex].interestState = pickStateNR
-                cloneInterest[dropIndex].chosenState = "picked"
-                setInterestToPickS(cloneInterest)
+                let cloneInterest = interestSuggested
+                cloneInterest.splice(dropIndex, 1)
+                setInterestSuggested(cloneInterest)
                 setDropIndex(-1)
             }, 500)
         }
@@ -107,52 +103,29 @@ const SearchBar = (propsAPI) => {
     function searchFunctionSuggestMe(props){
         let searchString = props.target.value;
 
-        // let cloneInterestToSuggest = [...interestSuggested];
+        let cloneInterestToSuggest = [...interestSuggested];
         let cloneInterestToPick = [...interestToPickS];
 
         interestToPickS.map((item,index)=>{
-            if (searchString.includes(item.interestName.toLocaleLowerCase()) && item.chosenState === "topick"){
-                // cloneInterestToSuggest.push(item)
-                // cloneInterestToPick.splice(index,1)
-                cloneInterestToPick[index].interestState = pickStateNA;
-                cloneInterestToPick[index].chosenState = "suggest";
-            } else {
-                if (cloneInterestToPick[index].chosenState === "suggest"){
-                    cloneInterestToPick[index].chosenState = "topick"
-                }
+            if (searchString.includes(item.interestName.toLocaleLowerCase())){
+                cloneInterestToSuggest.push(item)
+                cloneInterestToPick.splice(index,1)
             }
         })
-        // let finalSuggest =[]
-        // cloneInterestToSuggest.map((item,index)=>{
-        //     if(!searchString.includes(item.interestName.toLocaleLowerCase())){
-        //         cloneInterestToPick.push(item)
-        //     } else {finalSuggest.push(item)}
-        // })
+        let finalSuggest =[]
+        cloneInterestToSuggest.map((item,index)=>{
+            if(!searchString.includes(item.interestName.toLocaleLowerCase())){
+                cloneInterestToPick.push(item)
+            } else {finalSuggest.push(item)}
+        })
         setInterestToPickS([...cloneInterestToPick])
-        // setInterestSuggested([...finalSuggest])
+        setInterestSuggested([...finalSuggest])
     }
 
     function handleSubmitTopic(){
-        let cloneInterestToPick = [...interestToPickS]
-        interestToPickS.map((item,index)=>{
-            if (item.chosenState === "suggest"){
-                interestToPickS[index].chosenState = "topick"
-                interestToPickS[index].interestState = pickStateNR
-            }
-        })
+        setInterestToPickS([])
         propsAPI.pageStatefunc(true)
     }
-
-    // function getsuggest(){
-    //     let count = 0
-    //     interestToPickS.map((item)=> {
-    //         if (item.chosenState === "picked"){
-    //             count += 1
-    //         }
-    //     })
-    //     return count
-
-    // }
     
     return (
         <Container>
@@ -164,14 +137,12 @@ const SearchBar = (propsAPI) => {
             <LineBreakCont src={line}></LineBreakCont>
 
             <SuggestionList>
-                {interestToPickS.map((item, index) => {
-                    if (item.chosenState === "suggest"){
-                    return <InterestContainer buttonColor={item.interestState.color} buttonWidth={item.interestState.width}>
+                {interestSuggested.map((item, index) => (
+                    <InterestContainer buttonColor={item.interestState.color} buttonWidth={item.interestState.width}>
                         <text> {item.interestName} </text>
                         {showButton({ color: item.interestState.color, number: index })}
                     </InterestContainer>
-                    } 
-                })}
+                )) }
             </SuggestionList>
             
             <SubmitButton onClick={()=> handleSubmitTopic()}>

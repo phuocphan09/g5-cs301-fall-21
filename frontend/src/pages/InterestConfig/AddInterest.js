@@ -56,7 +56,7 @@ const AddInterest = (props) => {
                 cloneInterest.splice(dropIndex, 1)
                 setInterest(cloneInterest)
                 setDropIndex(-1)
-            }, 500)
+            }, 300)
         }
 
     }, [dropIndex])

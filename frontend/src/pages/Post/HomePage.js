@@ -130,13 +130,11 @@ const HomePage = () => {
 
             <ColoredLine />
 
-            {console.log(postList), postList.map((item, index) => (
+            {console.log(postList), postList.length !== 0 ? postList.map((item, index) => (
                 showPost(item, index)
-            ))}
+            )) : <DashedBox><h4> Uh oh... you haven’t added any interests <br /> Configure your interest in the profile! </h4></DashedBox>}
 
-            <Block7>
-
-            </Block7>
+            <Block7 />
 
             <Navigation>
                 <Home onClick={handleHome}> <RemoveIcon1 src={active_home} />
@@ -200,6 +198,32 @@ const AddInterest = styled.button`
         color: #006DFF;
     }
 `
+
+const DashedBox = styled.div`
+    ${'' /* position: absolute; */}
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    border-radius: 5px;
+    align-items: center;
+    border: dashed 1px #6B6B6B;
+    margin-left: 9.3vw;
+    margin-right: 9.3vw;
+    margin-top: 25vh;
+    justify-content:center;
+
+    h4 {
+        font-family: 'Source Sans Pro';
+        width: 100%;
+        height: 100%;
+        color: #6B6B6B;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 2.25vh;
+        text-align: center;
+        ${'' /* margin: 1rem; */}
+    }
+`;
+
 const SeeMoreButton = styled.button`
     background-color: #ffffff;
     border:none;

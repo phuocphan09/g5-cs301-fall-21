@@ -27,6 +27,11 @@ public class EmailSender {
     @Autowired
     Utils utils;
 
+    /**
+     * Send a simple email without any formatting, contents specified in the post param.
+     * @param post the Post object containing the content of the post
+     * @param recipient the email of the recipient
+     */
     public void sendSimpleEmail(Post post, String recipient) {
 
         SimpleMailMessage mail = new SimpleMailMessage(); // create new mail
@@ -40,6 +45,13 @@ public class EmailSender {
 
     }
 
+    /**
+     * Send a mime email, with html formatting and everything.
+     * @param post the Post object containing the content of the post
+     * @param recipient the email of the recipient
+     * @param interests the list of interest matching the user and the post
+     * @throws MessagingException see documentation
+     */
     public void sendMimeMessage(Post post, String recipient, List<String> interests) throws MessagingException {
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -56,6 +68,12 @@ public class EmailSender {
         System.out.println("Mail sent");
     }
 
+    /**
+     * Form the header of the email, containing messages about sender and matching interests with the user.
+     * @param post the Post object containing the content of the post
+     * @param interests the list of interest matching the user and the post
+     * @return formarted text
+     */
     private String formatText (Post post, List<String> interests) {
 
         // add email header
@@ -71,15 +89,22 @@ public class EmailSender {
         return formatted;
     }
 
+    /**
+     * Send the email with contents of the post to every users with matching interest.
+     * @param interests list of interests tagged with the post
+     * @param post the Post object containing the content of the post
+     * @return the number of recipients sent
+     */
     public int sendEmail(String[] interests, Post post) {
 
         int recipientNum = 0;
         Map<String, List<String>> dict = new HashMap<String, List<String>>();
 
-        for (String interest:interests) {
+        // construct a list of matching interest for each user
+        for (String interest:interests) { // for each interest
 
             try {
-                List<User> users = utils.findUserByInterest(interest);
+                List<User> users = utils.findUserByInterest(interest); // utils handles all the fuss
                 recipientNum = users.size();
 
                 for (User user : users) {
@@ -93,9 +118,7 @@ public class EmailSender {
                         dict.put(user.getEmail(), new ArrayList<String>());
                         dict.get(user.getEmail()).add(interest); // add the interest list for the user
                     }
-
                 }
-
             } catch (Exception e) {
                 System.out.println(e.toString());
             }

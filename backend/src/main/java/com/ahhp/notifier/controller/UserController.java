@@ -54,7 +54,7 @@ public class UserController {
     private JwtUtils jwtUtils;
 
     /**
-     * Validate the email to make sure it is a Fulbright email
+     * Validate the email to make sure it is a Fulbright email.
      * @param email to be checked
      * @return EmailValidationResponse.valid is true if contains the required string
      * @return EmailValidationResponse.created is true if email matches an account in the database
@@ -83,7 +83,8 @@ public class UserController {
     }
 
     /**
-     * Validate the password of a user, complete with hashing and everything.
+     * Validate the password of a user, complete with hashing and everything
+     * returns a JWT for the user to authenticate in subsequent requests.
      * @param user a User body, containing the user password
      * @param email of the user
      * @return AccountValidationResponse.result is true if password is consistent with the database
@@ -127,11 +128,11 @@ public class UserController {
     }
 
     /**
-     *
+     * Create an account for a user in the database, returns a JWT for the user
+     * to authenticate in subsequent requests.
      * @param user a User body, containing the user password
      * @param email of the user account to be created
-     * @return AccountValidationResponse.result is "ok" if created successfully, "fail" otherwise
-     * @return AccountValidationResponse.user the email passed in
+     * @return AccountValidationResponse.result
      */
     @PostMapping ("/v1/createaccount")
     @ResponseBody
@@ -141,10 +142,11 @@ public class UserController {
         theReponse.setResult(false);
         theReponse.setUser(email);
 
-        System.out.println("hello");
-        System.out.println("hello");
-        System.out.println("hello");
-        System.out.println(email);
+        // for serious debugging purposes
+//        System.out.println("hello");
+//        System.out.println("hello");
+//        System.out.println("hello");
+//        System.out.println(email);
 
         EmailValidationResponse validate = validateEmail(email); // validate email
 
@@ -212,8 +214,7 @@ public class UserController {
     }
 
     /**
-     * Get a list of inactive interests of a user. In other words, addable interests.
-     * @param email of the user
+     * Get a list of inactive interests of a user specified in the JWT. In other words, addable interests.
      * @return InterestListResponse a list of inactive interests, and the response type
      */
     @GetMapping("/v1/getaddableinterestlist")
@@ -238,6 +239,12 @@ public class UserController {
         return response;
     }
 
+    /**
+     * Add or remove a user's interest in the database,
+     * depending on whether manipulation.getType() is 'add' or 'remove'.
+     * @param manipulation containing the interest object and what to do with it (add/remove)
+     * @return InterestManipulationResponse
+     */
     @PutMapping("/v1/manipulateinterest")
     public InterestManipulationResponse manipulateInterest (@RequestBody Manipulation manipulation) {
 
@@ -311,6 +318,38 @@ public class UserController {
         }
     }
 
+    /**
+     * Set the 'Authorization' field in HttpServletResponse's cookie to null,
+     * and set that user's JWT's loggedOut to True.
+     * @param response the HttpServletResponse entity to set
+     * @return ResponseEntity<String> standard response entity
+     */
+    @GetMapping("/v1/logout")
+    public ResponseEntity<String> logOut(HttpServletResponse response) {
+
+//        final String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        // create token
+        Cookie cookie = new Cookie("Authorization", null);
+        cookie.setPath("/");  // The cookie is visible to all the pages in the directory you specify, and all the pages in that directory's subdirectories
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+
+        // return
+        return new ResponseEntity<String> ("ok", HttpStatus.OK);
+    }
+
+    /**
+     * Returns a string True if the token is valid, which is always the case when this method is called.
+     * @return
+     */
+    @GetMapping("/v1/authenticatetoken")
+    public String authenticateToken() {
+
+        return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+    }
+
     @GetMapping("/v1/getallpost") // debug
     public List<Post> getAllPost() {
         List<Post> posts = postRepository.findAll();
@@ -342,7 +381,7 @@ public class UserController {
         return "Success";
     }
 
-    @PostMapping ("/v1/deleteinterest")
+    @PostMapping ("/v1/deleteinterest") // debug
     public String deleteInterest (@RequestBody Interest interest) {
         try {
             interestRepository.delete(interest);
@@ -357,45 +396,5 @@ public class UserController {
     public List<User> getAll() {
         return userRepository.findAll();
     }
-
-    @GetMapping("/v1/logout")
-    public ResponseEntity<String> logOut(HttpServletResponse response) {
-
-//        final String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-
-        // create token
-        Cookie cookie = new Cookie("Authorization", null);
-        cookie.setPath("/");  // The cookie is visible to all the pages in the directory you specify, and all the pages in that directory's subdirectories
-        cookie.setHttpOnly(true);
-        response.addCookie(cookie);
-
-        // return
-        return new ResponseEntity<String> ("ok", HttpStatus.OK);
-    }
-
-    @GetMapping("/v1/authenticatetoken")
-    public String authenticateToken() {
-
-        return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-
-    }
-
-//    @PutMapping ("/v1/removeuser") // debug
-//    public boolean removeAccount (@RequestBody User user, @RequestParam String email) {
-//        boolean result = false;
-//        EmailValidationResponse validate = validateEmail(email);
-//        if (!validate.isCreated()) { // account not found
-//            return result;
-//        } else { // account found
-//            List<User> users = userRepository.findByEmail(email);
-//            if (validatePassword(user, email).isResult()) { // requires correct password
-//                userRepository.delete(users.get(0));
-//                result = true;
-//                return result;
-//            } else { // incorrect password
-//                return result;
-//            }
-//        }
-//    }
 
 }

@@ -24,6 +24,12 @@ public class MailingController {
     @Autowired
     Utils utils;
 
+    /**
+     * Handles post submission and email sending.
+     * @param postInput the post to be saved to the database and sent as email to recipients
+     * @param send if True, send the email to recipients
+     * @return PostSubmissionResponse
+     */
     @PostMapping("/v1/submitpost")
     public PostSubmissionResponse submitPost(@RequestBody PostInput postInput,
                                              @RequestParam(defaultValue = "false") boolean send) {
@@ -49,13 +55,13 @@ public class MailingController {
 
             post.setInterestList(Arrays.toString(postInput.getInterestList())); // turn interestlist[] to a string
 
-            postRepository.save(post);
+            postRepository.save(post); // save the post to the database
 
             response.setAdded(true);
 
-            if (send) {
+            if (send) { // only send the post as email if explicitly required
 
-                // send the damn emails
+                // send the post and interest list to email sender
                 int userNum = emailSender.sendEmail(postInput.getInterestList(), post);
                 if (userNum > 0) { // more than 1 users to send
                     response.setEmailSent(true);

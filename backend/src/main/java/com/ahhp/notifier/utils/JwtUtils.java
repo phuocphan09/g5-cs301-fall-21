@@ -31,7 +31,12 @@ public class JwtUtils {
 
     }
 
-    //Sample method to construct a JWT
+    /**
+     * Construct a JWT based on the content supplied
+     * @param subject email of the user
+     * @param ttlMillis how long the JWT should remain valid, in Unix time
+     * @return a string - JWT
+     */
     public static String createJWT(String subject, long ttlMillis) {
 
         //The JWT signature algorithm we will be using to sign the token
@@ -62,6 +67,10 @@ public class JwtUtils {
         return builder.compact();
     }
 
+    /**
+     * Validate the validity of the supplied JWT.
+     * @return True if the JWT is intact and has not expired yet. False otherwise.
+     */
     public boolean validateJWT() {
 
         if (this.token == null || this.token.equals("")) {

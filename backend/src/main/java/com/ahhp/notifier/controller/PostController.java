@@ -31,13 +31,17 @@ public class PostController {
     Utils utils;
     String email;
 
-
+    /**
+     * Returns a single post from the postRepository with the specified postID,
+     * converted to PostRetrievalResponse to match the input post type from the frontend.
+     * @param id the id of the post to be retrieved
+     * @return PostRetrievalResponse
+     */
     @GetMapping("/v1/getpost")
     public PostRetrievalResponse getSinglePost (@RequestParam String id) {
 
         PostRetrievalResponse response = new PostRetrievalResponse();
         response.setResult("not found");
-        // response.setContent(postRepository.findByPoster("Imposter")); // hack to have an empty set
 
         Long postId = Long.valueOf(id);
         Optional<Post> post = postRepository.findById(postId); // get the post
@@ -46,7 +50,7 @@ public class PostController {
 
             Post realPost = post.get(); // unwrap post
 
-            response.getContent().add(utils.toPostInput(realPost));
+            response.getContent().add(utils.toPostInput(realPost)); // convert to PostInput formart
 
             response.setResult("success");
             return response;
@@ -56,6 +60,10 @@ public class PostController {
         return response;
     }
 
+    /**
+     * ???
+     * @return
+     */
     @GetMapping("/v1/exampleAPI")
     public String debugJWT () {
 
@@ -67,6 +75,12 @@ public class PostController {
         return email;
     }
 
+    /**
+     * Returns a list of posts that are relatable to a particular user, ordered from newest to oldest.
+     * Posts are retrieved from the repository as Post, then converted to PostInput
+     * to match frontend's configurations.
+     * @return PostRetrievalResponse
+     */
     @GetMapping("/v1/getdisplaypost")
     public PostRetrievalResponse getDisplayPost () {
 
@@ -75,7 +89,7 @@ public class PostController {
         PostRetrievalResponse response = new PostRetrievalResponse();
         response.setResult("failed");
 
-        List<User> users = userRepository.findByEmail(email);
+        List<User> users = userRepository.findByEmail(email); // get user from the email
         if (users.size() == 0) { // no user
             System.out.println("No user");
             return response;}
@@ -83,19 +97,19 @@ public class PostController {
         User user = users.get(0);
         List<Interest> interests = utils.findInterestByUser(user, true); // get active interest
 
-        List<Post> posts = postRepository.findAllByOrderById();
+        List<Post> posts = postRepository.findAllByOrderById(); // order the all the posts by id
         Collections.reverse(posts); // reverse order to get newest posts (largest id) first
 
         for (Post post: posts) { // for each post
 
             for (Interest interest: interests) { // for each of the user's interest
 
-                if (post.getInterestList().contains(interest.getInterestName())){// && post's interests contains user's
-                        //&& !response.getContent().contains(post)) { //
+                if (post.getInterestList().contains(interest.getInterestName())){ // post's interests contains user's
 
                     System.out.print("Found post: " + post.getTitle() + " for interest: " + interest.getInterestName()); // debug
                     response.setResult("success");
                     response.getContent().add(utils.toPostInput(post));
+
                     break; // only add one instance of a post
                 }
             }

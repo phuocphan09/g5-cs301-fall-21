@@ -6,6 +6,11 @@ import java.security.NoSuchAlgorithmException;
 
 public class SecurityUtils {
 
+    /**
+     * Returns the hash of the supplied String
+     * @param password the original String
+     * @return the hash of the supplied String
+     */
     public static String hashPassword(String password) {
         String ret = null;
         try {
@@ -18,5 +23,4 @@ public class SecurityUtils {
         }
         return ret;
     }
-
 }

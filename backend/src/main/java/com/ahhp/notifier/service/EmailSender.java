@@ -83,9 +83,13 @@ public class EmailSender {
                 post.getDescription() + "</p>";
 
         // add link to post
-        String linkToPost = "http://localhost:3000/viewpost?postid=" + post.getId();
-        formatted += "<a href='" + linkToPost + "'>" + "Link to post" + "</a>";
+        String linkToPost = "http://localhost:3000/viewpost?id=" + post.getId();
+        formatted += "<a href='" + linkToPost + "'>" + "Click here to view full post on Notifier" + "</a>";
 
+        // add link to configure interests
+        formatted += "<p>No longer want to receive emails about " +
+                interests.toString().substring(1,interests.toString().length()-1) + " ?</p>" +
+                "<a href='http://localhost:3000/ActiveInterest'> Click here to re-configure your interests.</a>";
         return formatted;
     }
 

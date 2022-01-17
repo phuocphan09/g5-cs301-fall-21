@@ -65,7 +65,8 @@ public class UserController {
         final EmailValidationResponse response = new EmailValidationResponse();
         response.setValid(false);
         response.setCreated(false);
-        String requiredString = "fulbright.edu.vn";
+        // String requiredString = "fulbright.edu.vn";
+        String requiredString = "@";
 
         if (email.contains(requiredString)) { // valid email
             response.setValid(true);
@@ -395,6 +396,29 @@ public class UserController {
     // Get all users at once.
     public List<User> getAll() {
         return userRepository.findAll();
+    }
+
+    @PutMapping("/v1/removeallpost")
+    public boolean removeAllPost() {
+        try {
+            postRepository.deleteAll();
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return false;
+        }
+    }
+
+    @PutMapping("/v1/removeuser")
+    public boolean removeUser(@RequestParam String email) {
+        List<User> users = userRepository.findByEmail(email);
+        try {
+            userRepository.delete(users.get(0));
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return false;
+        }
     }
 
 }

@@ -58,7 +58,7 @@ public class EmailSender {
 
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
-        mimeMessageHelper.setFrom(username);
+        mimeMessageHelper.setFrom("The Notifier <notifier0000001@gmail.com>");
         mimeMessageHelper.setTo(recipient);
         mimeMessageHelper.setSubject(post.getTitle());
         String formattedText = formatText(post, interests);

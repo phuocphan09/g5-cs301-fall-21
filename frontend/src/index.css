@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'SF Pro Display Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('SF Pro Display Regular'), url('./fonts/SF-Pro-Display-Regular.otf') format('otf');
+  }
+
+@font-face {
+  font-family: 'SF Pro Display Bold';
+  font-style: normal;
+  font-weight: normal;
+  src: local('SF Pro Display Bold'), url('./fonts/SF-Pro-Display-Semibold.otf') format('otf');
+  }

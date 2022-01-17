@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import inactive_home from '../../assets/home_grey.svg'
@@ -53,49 +53,49 @@ const PersonalPage = () => {
         <div> {(userEmail.length === 0) ? (<div></div>) :
             (<Container>
 
-            <AvatarWrapper>
-                <Avatar src={avatar} />
-                <TextWrapper>
-                    <h1> {firstname} {lastname} </h1>
-                    <h2> {userEmail} </h2>
-                </TextWrapper>
-            </AvatarWrapper>
+                <AvatarWrapper>
+                    <Avatar src={avatar} />
+                    <TextWrapper>
+                        <h1> {firstname} {lastname} </h1>
+                        <h2> {userEmail} </h2>
+                    </TextWrapper>
+                </AvatarWrapper>
 
-            <line />
+                <line />
 
-            <ArrowButton onClick={handleAdd}>
-                <TextWrapper>
-                    <h1>Configure your interest </h1>
-                    <h2> Choose which type of posts you want to be notified about </h2>
-                </TextWrapper>
-                <RemoveIcon src={arrow} />
-            </ArrowButton>
+                <ArrowButton onClick={handleAdd}>
+                    <TextWrapper>
+                        <h1>Configure your interest </h1>
+                        <h2> Choose which type of posts you want to be notified about </h2>
+                    </TextWrapper>
+                    <RemoveIcon src={arrow} />
+                </ArrowButton>
 
-            <line />
+                <line />
 
-            <ArrowButton onClick={handleLogout}>
-                <TextWrapper>
-                    <h1> Logout </h1>
-                </TextWrapper>
-                <RemoveIcon src={arrow} />
-            </ArrowButton>
+                <ArrowButton onClick={handleLogout}>
+                    <TextWrapper>
+                        <br />
+                        <h1> Logout </h1>
+                        <br />
+                    </TextWrapper>
+                    <RemoveIcon src={arrow} />
+                </ArrowButton>
 
-            <line />
+                <line />
 
-            <Block7>
+                <Block7 />
 
-            </Block7>
-            
-            <Navigation>
-                <Home onClick={handleHome}> <RemoveIcon1 src={inactive_home} />
-                    <text> Home </text>
-                </Home>
-                <Personal onClick={handlePersonal}> <RemoveIcon1 src={active_personal} />
-                    <text> Personal </text>
-                </Personal>
-            </Navigation>
+                <Navigation>
+                    <Home onClick={handleHome}> <RemoveIcon1 src={inactive_home} />
+                        <text> Home </text>
+                    </Home>
+                    <Personal onClick={handlePersonal}> <RemoveIcon1 src={active_personal} />
+                        <text> Personal </text>
+                    </Personal>
+                </Navigation>
 
-        </Container>
+            </Container>
             )} </div>
 
     )
@@ -180,7 +180,7 @@ const TextWrapper = styled.div`
         font-weight: bold;
         font-size: 3vh;
         text-align: left;
-        margin-bottom: 0rem;
+        ${'' /* margin-bottom: 0; */}
         flex-wrap:wrap;
 
     }
@@ -192,6 +192,7 @@ const TextWrapper = styled.div`
         font-style: normal;
         font-weight: normal;
         font-size: 2vh;
+        margin-top: 0rem;
         text-align: left;
 
     }

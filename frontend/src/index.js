@@ -6,6 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import history from './history'
 import CustomRouter from "./CustomRouter";
+// import './fonts/sf-ui-display-bold-58646a511e3d9.woff'
+// import './fonts/sf-ui-display-medium-58646be638f96.woff'
 
 ReactDOM.render(
   <CustomRouter history={history}>

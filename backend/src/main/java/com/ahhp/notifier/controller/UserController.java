@@ -65,8 +65,8 @@ public class UserController {
         final EmailValidationResponse response = new EmailValidationResponse();
         response.setValid(false);
         response.setCreated(false);
-        // String requiredString = "fulbright.edu.vn";
-        String requiredString = "@";
+        String requiredString = "fulbright.edu.vn";
+        // String requiredString = "@";
 
         if (email.contains(requiredString)) { // valid email
             response.setValid(true);

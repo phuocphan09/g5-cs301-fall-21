@@ -165,7 +165,7 @@ const AddPost = () => {
                 bodyTextInterest.push(item.interestName)})
             const bodyText = { title: pageTitle, description: topicDescription, interestList: bodyTextInterest }
             console.log(bodyText)
-            axios.post("/v1/submitpost", bodyText)
+            axios.post("/v1/submitpost?send=true", bodyText)
                 .then(response => console.log(response.data.added))
             navigate("/ResultAddPost")
         }
